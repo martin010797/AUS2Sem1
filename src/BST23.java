@@ -33,14 +33,33 @@ public class BST23<T extends  Comparable<T>> {
                         //if (leaf == _root)
                         if (areNodesEqual(_root, leaf)){
                             //ked je node korenom
-                            //TODO ZLE! prerobit
                             BST23Node newRoot = new BST23Node(middle);
+                            BST23Node newRightSon = new BST23Node(max);
+
+                            newRoot.set_left1(leaf);
+                            newRoot.set_right1(newRightSon);
+
+                            newRightSon.set_left1(leaf.get_left2());
+                            newRightSon.set_right1(leaf.get_right2());
+                            newRightSon.set_parent(newRoot);
+
+                            leaf.set_parent(newRoot);
+                            leaf.set_isThreeNode(false);
+                            leaf.set_data2(null);
+                            leaf.set_data1(min);
+                            leaf.set_left2(null);
+                            leaf.set_right2(null);
+
+                            _root = newRoot;
+                            return true;
+                            //ZLE
+                            /*BST23Node newRoot = new BST23Node(middle);
                             if (pNode.get_data1().compareTo(min) == 0){
                                 //pridavany node je najmensi z troch prvkov
                                 BST23Node newLeftSon = new BST23Node(min);
                                 /*newRoot.set_left(newLeftSon);
                                 newRoot.set_right(_root);*/
-                                newRoot.set_left1(newLeftSon);
+                                /*newRoot.set_left1(newLeftSon);
                                 newRoot.set_right1(_root);
 
                                 newLeftSon.set_parent(newRoot);
@@ -67,7 +86,7 @@ public class BST23<T extends  Comparable<T>> {
                                 _root.set_parent(newRoot);
                                 _root.set_right(null);
                                 _root = newRoot;
-                            }
+                            }*/
                         }else {
                             //node nie je korenom
                             if (!leaf.get_parent().isThreeNode()){

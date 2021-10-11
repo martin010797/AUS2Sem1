@@ -1,7 +1,4 @@
 public class BST23Node<T extends Comparable<T>> {
-    private BST23Node _left;
-    private BST23Node _right;
-    private BST23Node _middle;
     private BST23Node _left1;
     private BST23Node _right1;
     private BST23Node _left2;
@@ -12,9 +9,6 @@ public class BST23Node<T extends Comparable<T>> {
     private boolean _isThreeNode;
 
     public BST23Node(T pData1){
-        _left = null;
-        _right = null;
-        _middle = null;
         _data1 = pData1;
         _data2 = null;
         _isThreeNode = false;
@@ -24,7 +18,7 @@ public class BST23Node<T extends Comparable<T>> {
         _right2 = null;
     }
 
-    public BST23Node(BST23Node pLeft,
+    /*public BST23Node(BST23Node pLeft,
                      BST23Node pRight,
                      BST23Node pMiddle,
                      BST23Node pParent,
@@ -38,23 +32,7 @@ public class BST23Node<T extends Comparable<T>> {
         _data1 = pData1;
         _data2 = pData2;
         _isThreeNode = pIsThreeNode;
-    }
-
-    public BST23Node get_left() {
-        return _left;
-    }
-
-    public void set_left(BST23Node _left) {
-        this._left = _left;
-    }
-
-    public BST23Node get_right() {
-        return _right;
-    }
-
-    public void set_right(BST23Node _right) {
-        this._right = _right;
-    }
+    }*/
 
     public BST23Node get_parent() {
         return _parent;
@@ -62,14 +40,6 @@ public class BST23Node<T extends Comparable<T>> {
 
     public void set_parent(BST23Node _parent) {
         this._parent = _parent;
-    }
-
-    public BST23Node get_middle() {
-        return _middle;
-    }
-
-    public void set_middle(BST23Node _middle) {
-        this._middle = _middle;
     }
 
     public T get_data1() {

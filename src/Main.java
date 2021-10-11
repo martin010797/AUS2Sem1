@@ -1,7 +1,6 @@
 public class Main {
 
     public static void main(String[] args) {
-
-        System.out.println("hello");
+        BST23<TestingData> tree = new BST23<>();
     }
 }
