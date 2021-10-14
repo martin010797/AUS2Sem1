@@ -133,6 +133,26 @@ public class BST23<T extends  Comparable<T>> {
 
                                     leaf = leaf.get_parent();
                                     pNode.set_data1(middle);
+                                }else if(leaf.get_parent().get_right1() == leaf){
+                                    //leaf je v strede
+                                    BST23Node newNode = new BST23Node(max);
+                                    newNode.set_parent(leaf.get_parent());
+                                    newNode.set_left1(leaf.get_left2());
+                                    newNode.set_right1(leaf.get_right2());
+                                    if (leaf.get_left2() != null && leaf.get_right2() != null){
+                                        leaf.get_left2().set_parent(newNode);
+                                        leaf.get_right2().set_parent(newNode);
+                                    }
+                                    leaf.set_left2(null);
+                                    leaf.set_right2(null);
+
+                                    leaf.get_parent().set_left2(newNode);
+                                    leaf.set_data2(null);
+                                    leaf.set_data1(min);
+                                    leaf.set_isThreeNode(false);
+
+                                    leaf = leaf.get_parent();
+                                    pNode.set_data1(middle);
                                 }else {
                                     //leaf je lavy potomok
                                     BST23Node newNode = new BST23Node(max);

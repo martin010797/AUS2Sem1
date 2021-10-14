@@ -17,12 +17,16 @@ public class GeneratorOfData {
                 randomIndex = ThreadLocalRandom.current().nextInt(0, values.size() - 1);
             }
             TestData d = new TestData(values.get(randomIndex));
+            //TestData d = new TestData(numberOfValues-i);
             values.remove(randomIndex);
             TestingData data = new TestingData(d);
             if(!tree.insert(data)){
                 System.out.println("nevlozene");
             }else {
                 System.out.println("Vlozene cislo " + data.get_data1().getKey());
+            }
+            if (tree.find(data) == null){
+                System.out.println(data.get_data1().getKey() + " neulozene spravne");
             }
         }
         for (int i = 0; i < numberOfValues; i++){
