@@ -5,6 +5,37 @@ public class BST23<T extends  Comparable<T>> {
         _root = null;
     }
 
+    public boolean delete(BST23Node pNode){
+        BST23Node deletedNode = find(pNode);
+        if (deletedNode != null){
+            if (deletedNode == _root && isLeaf(deletedNode) && !deletedNode.isThreeNode()){
+                //jediny prvok v strome tak sa zmaze referencia na root
+                _root = null;
+                return true;
+            }
+            if (deletedNode.isThreeNode() && isLeaf(deletedNode)){
+                if (pNode.get_data1().compareTo(deletedNode.get_data1()) == 0){
+                    deletedNode.set_data1(deletedNode.get_data2());
+                    deletedNode.set_data2(null);
+                    deletedNode.set_isThreeNode(false);
+                    return true;
+                }else if (pNode.get_data1().compareTo(deletedNode.get_data2()) == 0){
+                    deletedNode.set_data2(null);
+                    deletedNode.set_isThreeNode(false);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isLeaf(BST23Node node){
+        if (node.get_left1() == null && node.get_right1() == null && node.get_right2() == null){
+            return true;
+        }
+        return false;
+    }
+
     public boolean insert(BST23Node pNode){
         if (_root == null){
             _root = pNode;
