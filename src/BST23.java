@@ -25,8 +25,90 @@ public class BST23<T extends  Comparable<T>> {
                     return true;
                 }
             }
+            BST23Node alterNode = findInOrderNode(deletedNode, pNode);
+            if (alterNode != null && alterNode.isThreeNode()){
+                //jeho nasledovnik je 3 vrchol
+                if (pNode.get_data1().compareTo(deletedNode.get_data1()) == 0){
+                    deletedNode.set_data1(alterNode.get_data1());
+                    alterNode.set_data1(alterNode.get_data2());
+                    alterNode.set_data2(null);
+                    alterNode.set_isThreeNode(false);
+                    return true;
+                }else if (pNode.get_data1().compareTo(deletedNode.get_data2()) == 0){
+                    deletedNode.set_data2(alterNode.get_data1());
+                    alterNode.set_data1(alterNode.get_data2());
+                    alterNode.set_data2(null);
+                    alterNode.set_isThreeNode(false);
+                    return true;
+                }
+            }
+            //vymazanie prvku a tym vytvorenie prazdneho miesta v alter node
+            if (pNode.get_data1().compareTo(deletedNode.get_data1()) == 0){
+                deletedNode.set_data1(alterNode.get_data1());
+            }else if (pNode.get_data1().compareTo(deletedNode.get_data2()) == 0){
+                deletedNode.set_data2(alterNode.get_data1());
+                return true;
+            }
+            while (alterNode != null){
+                BST23Node brotherNode = findBrother(alterNode);
+                if (brotherNode.isThreeNode()){
+                    //TODO pokracovat
+
+                }
+            }
         }
         return false;
+    }
+
+    public BST23Node findBrother(BST23Node node){
+        if (node.get_parent().get_left1() == node){
+            //node pre ktoreho hladam brata je uplne lavym synom jeho otca
+            if (node.get_parent().get_right1() != null){
+                return node.get_parent().get_right1();
+            }
+        }else if(node.get_parent().get_right1() == node){
+            //node pre ktoreho hladam brata je pravym synom pre prvy prvok v node jeho otca
+            if (node.get_parent().get_right2() == null){
+                //otec ma len dvoch synov
+                return node.get_parent().get_left1();
+            }else {
+                //otec ma troch synov cize mam na vyber dvoch bratov
+                //uprednostnujem 3 vrchol
+                if (node.get_parent().get_left1().isThreeNode()){
+                    return node.get_parent().get_left1();
+                }else{
+                    return node.get_parent().get_right2();
+                }
+            }
+        }else if(node.get_parent().get_right2() != null && node.get_parent().get_right2() == node){
+            //node pre ktoreho hladam brata je pravym synom pre druhy prvok v node jeho otca
+            if (node.get_parent().get_right2() != null){
+                return node.get_parent().get_right2();
+            }
+        }
+        return null;
+    }
+
+    public BST23Node findInOrderNode(BST23Node node, BST23Node nodeData){
+        if (isLeaf(node)){
+            return node;
+        }
+        if (nodeData.get_data1().compareTo(node.get_data1()) == 0){
+            //data ktore mazem su nalavo
+            BST23Node temp = node.get_right1();
+            while (!isLeaf(temp)){
+                temp.get_left1();
+            }
+            return temp;
+        }else if(nodeData.get_data1().compareTo(node.get_data2()) == 0){
+            //data ktore mazem su napravo
+            BST23Node temp = node.get_right2();
+            while (!isLeaf(temp)){
+                temp.get_left1();
+            }
+            return temp;
+        }
+        return null;
     }
 
     public boolean isLeaf(BST23Node node){
