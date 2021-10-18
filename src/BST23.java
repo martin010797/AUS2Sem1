@@ -52,8 +52,93 @@ public class BST23<T extends  Comparable<T>> {
             while (alterNode != null){
                 BST23Node brotherNode = findBrother(alterNode);
                 if (brotherNode.isThreeNode()){
-                    //TODO pokracovat
+                    //Ko presuniem na prazdne miesto a z brata presuniem do otca
+                    if (alterNode.get_parent().get_left1() == alterNode){
+                        //prazdne miesto je vlavo od otca takze sa vykonava lava rotacia
+                        alterNode.set_data1(alterNode.get_parent().get_data1());
+                        alterNode.get_parent().set_data1(brotherNode.get_data1());
 
+                        brotherNode.set_data1(brotherNode.get_data2());
+                        brotherNode.set_data2(null);
+                        brotherNode.set_isThreeNode(false);
+                        //TODO overit potom ci synov spravne meni
+                        if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
+                                (brotherNode.get_left1() != null)) {
+                            //ak maju v aj jeho brat synov tak uprav referecnie
+                            alterNode.set_right1(brotherNode.get_left1());
+                            brotherNode.get_left1().set_parent(alterNode);
+                            brotherNode.set_left1(brotherNode.get_right1());
+                            brotherNode.set_right1(brotherNode.get_right2());
+                            brotherNode.set_right2(null);
+                            brotherNode.set_left2(null);
+                        }
+                        return true;
+                    }
+                    if(alterNode.get_parent().get_right2() != null && alterNode.get_parent().get_right2() == alterNode){
+                        //prazdne miesto je napravo od otca takze sa vykonava prava rotacia
+                        alterNode.set_data1(alterNode.get_parent().get_data2());
+                        alterNode.get_parent().set_data2(brotherNode.get_data2());
+
+                        brotherNode.set_data2(null);
+                        brotherNode.set_isThreeNode(false);
+                        //TODO overit potom ci synov spravne meni
+                        if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
+                                (brotherNode.get_left1() != null)) {
+                            //ak maju v aj jeho brat synov tak uprav referecnie
+                            alterNode.set_left1(brotherNode.get_right2());
+                            brotherNode.get_right2().set_parent(alterNode);
+                            brotherNode.set_right2(null);
+                            brotherNode.set_left2(null);
+                        }
+                        return true;
+                    }
+                    if (alterNode.get_parent().get_left1() == brotherNode){
+                        //brat je nalavo od otca, cize prazdne miesto je v strede takze sa vykonava prava rotacia
+                        alterNode.set_data1(alterNode.get_parent().get_data1());
+                        alterNode.get_parent().set_data1(brotherNode.get_data2());
+
+                        brotherNode.set_data2(null);
+                        brotherNode.set_isThreeNode(false);
+                        //TODO overit potom ci synov spravne meni
+                        if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
+                                (brotherNode.get_left1() != null)){
+                            //ak maju v aj jeho brat synov tak uprav referecnie
+                            if (alterNode.get_left1() != null && alterNode.get_right1() == null){
+                                alterNode.set_right1(alterNode.get_left1());
+                                alterNode.set_left1(null);
+                            }
+                            alterNode.set_left1(brotherNode.get_right2());
+                            brotherNode.get_right2().set_parent(alterNode);
+                            brotherNode.set_right2(null);
+                            brotherNode.set_left2(null);
+                        }
+                        return true;
+                    }
+                    if (alterNode.get_parent().get_right2() != null && alterNode.get_parent().get_right2() == brotherNode){
+                        //brat je napravo od otcovho druheho prvku, cize prazdne miesto je v strede takze sa vykonava lava rotacia
+                        alterNode.set_data1(alterNode.get_parent().get_data2());
+                        alterNode.get_parent().set_data2(brotherNode.get_data1());
+
+                        brotherNode.set_data1(brotherNode.get_data2());
+                        brotherNode.set_data2(null);
+                        brotherNode.set_isThreeNode(false);
+                        //TODO overit potom ci synov spravne meni
+                        if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
+                                (brotherNode.get_left1() != null)){
+                            //ak maju v aj jeho brat synov tak uprav referecnie
+                            if (alterNode.get_right1() != null && alterNode.get_left1() == null){
+                                alterNode.set_left1(alterNode.get_right1());
+                                alterNode.set_right1(null);
+                            }
+                            alterNode.set_right1(brotherNode.get_left1());
+                            brotherNode.get_left1().set_parent(alterNode);
+                            brotherNode.set_left1(brotherNode.get_right1());
+                            brotherNode.set_right1(brotherNode.get_right2());
+                            brotherNode.set_right2(null);
+                            brotherNode.set_left2(null);
+                        }
+                        return true;
+                    }
                 }
             }
         }
