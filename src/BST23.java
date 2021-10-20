@@ -47,7 +47,7 @@ public class BST23<T extends  Comparable<T>> {
                 deletedNode.set_data1(alterNode.get_data1());
             }else if (pNode.get_data1().compareTo(deletedNode.get_data2()) == 0){
                 deletedNode.set_data2(alterNode.get_data1());
-                return true;
+                //return true;
             }
             while (alterNode != null){
                 if(alterNode == _root){
@@ -186,8 +186,8 @@ public class BST23<T extends  Comparable<T>> {
                                 }
                                 if (brotherNode.get_parent().get_parent() == null){
                                     //prazdne miesto je v koreni
-                                    _root = brotherNode.get_parent();
-                                    brotherNode.get_parent().set_parent(null);
+                                    _root = brotherNode;
+                                    brotherNode.set_parent(null);
                                     return true;
                                 }
                             }
@@ -213,8 +213,8 @@ public class BST23<T extends  Comparable<T>> {
                                 }
                                 if (brotherNode.get_parent().get_parent() == null){
                                     //prazdne miesto je v koreni
-                                    _root = brotherNode.get_parent();
-                                    brotherNode.get_parent().set_parent(null);
+                                    _root = brotherNode;
+                                    brotherNode.set_parent(null);
                                     return true;
                                 }
                             }
@@ -329,8 +329,8 @@ public class BST23<T extends  Comparable<T>> {
             }
         }else if(node.get_parent().get_right2() != null && node.get_parent().get_right2() == node){
             //node pre ktoreho hladam brata je pravym synom pre druhy prvok v node jeho otca
-            if (node.get_parent().get_right2() != null){
-                return node.get_parent().get_right2();
+            if (node.get_parent().get_left2() != null){
+                return node.get_parent().get_left2();
             }
         }
         return null;

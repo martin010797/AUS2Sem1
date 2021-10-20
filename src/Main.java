@@ -2,7 +2,9 @@ public class Main {
 
     public static void main(String[] args) {
         GeneratorOfData generator = new GeneratorOfData();
-        generator.testInsert(100000);
+        //generator.testInsert(100000);
+        generator.testDelete(10);
+
         /*BST23<TestData> tree = new BST23<>();
         TestData d = new TestData(2);
         TestData d2 = new TestData(6);
