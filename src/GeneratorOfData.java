@@ -33,7 +33,10 @@ public class GeneratorOfData {
             TestData d = new TestData(i+1);
             TestingData data = new TestingData(d);
             if (tree.find(data) == null){
-                System.out.println(data.get_data1().getKey() + " not found");
+                System.out.println(data.get_data1().getKey() + " nenajdene");
+            }
+            if (i == numberOfValues-1){
+                System.out.println(" Vsetky vlozene prvky najdene");
             }
         }
 
@@ -45,6 +48,38 @@ public class GeneratorOfData {
         for (int i = 0; i < numberOfValues; i++){
             values.add(i+1);
         }
+
+        for (int i = 0; i < numberOfValues; i++){
+            int randomIndex;
+            if (values.size() == 1){
+                randomIndex = 0;
+            }else {
+                randomIndex = ThreadLocalRandom.current().nextInt(0, values.size() - 1);
+            }
+            TestData d = new TestData(values.get(randomIndex));
+            values.remove(randomIndex);
+            TestingData data = new TestingData(d);
+            if(!tree.insert(data)){
+                System.out.println("nevlozene");
+            }else {
+                System.out.println("Vlozene cislo " + data.get_data1().getKey());
+            }
+            if (tree.find(data) == null){
+                System.out.println(data.get_data1().getKey() + " neulozene spravne");
+            }
+        }
+
+        for (int i = 0; i < numberOfValues; i++){
+            TestData d = new TestData(i+1);
+            TestingData data = new TestingData(d);
+            if (tree.delete(data) == false){
+                System.out.println(data.get_data1().getKey() + " nevymazane");
+            }
+            if (i == numberOfValues-1){
+                System.out.println(" Vsetko vymazane");
+            }
+        }
+        /*
         TestData d = new TestData(2);
         TestData d2 = new TestData(6);
         TestData d3 = new TestData(1);
@@ -106,6 +141,6 @@ public class GeneratorOfData {
         tree.delete(delData7);
         tree.delete(delData8);
         tree.delete(delData9);
-        tree.delete(delData10);
+        tree.delete(delData10);*/
     }
 }
