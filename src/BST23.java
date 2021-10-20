@@ -50,6 +50,20 @@ public class BST23<T extends  Comparable<T>> {
                 return true;
             }
             while (alterNode != null){
+                if(alterNode == _root){
+                    if (alterNode.get_left1() == null && alterNode.get_right1() == null){
+                        _root = null;
+                        return true;
+                    }else if (alterNode.get_left1() != null && alterNode.get_right1() == null){
+                        _root = alterNode.get_left1();
+                        _root.set_parent(null);
+                        return true;
+                    }else if(alterNode.get_left1() == null && alterNode.get_right1() != null){
+                        _root = alterNode.get_right1();
+                        _root.set_parent(null);
+                        return true;
+                    }
+                }
                 BST23Node brotherNode = findBrother(alterNode);
                 if (brotherNode.isThreeNode()){
                     //Ko presuniem na prazdne miesto a z brata presuniem do otca
@@ -61,7 +75,8 @@ public class BST23<T extends  Comparable<T>> {
                         brotherNode.set_data1(brotherNode.get_data2());
                         brotherNode.set_data2(null);
                         brotherNode.set_isThreeNode(false);
-                        //TODO overit potom ci synov spravne meni
+
+                        //nastavenie referencii
                         if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
                                 (brotherNode.get_left1() != null)) {
                             //ak maju v aj jeho brat synov tak uprav referecnie
@@ -81,7 +96,8 @@ public class BST23<T extends  Comparable<T>> {
 
                         brotherNode.set_data2(null);
                         brotherNode.set_isThreeNode(false);
-                        //TODO overit potom ci synov spravne meni
+
+                        //nastavenie referencii
                         if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
                                 (brotherNode.get_left1() != null)) {
                             //ak maju v aj jeho brat synov tak uprav referecnie
@@ -99,7 +115,8 @@ public class BST23<T extends  Comparable<T>> {
 
                         brotherNode.set_data2(null);
                         brotherNode.set_isThreeNode(false);
-                        //TODO overit potom ci synov spravne meni
+
+                        //nastavenie referencii
                         if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
                                 (brotherNode.get_left1() != null)){
                             //ak maju v aj jeho brat synov tak uprav referecnie
@@ -122,7 +139,8 @@ public class BST23<T extends  Comparable<T>> {
                         brotherNode.set_data1(brotherNode.get_data2());
                         brotherNode.set_data2(null);
                         brotherNode.set_isThreeNode(false);
-                        //TODO overit potom ci synov spravne meni
+
+                        //nastavenie referencii
                         if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
                                 (brotherNode.get_left1() != null)){
                             //ak maju v aj jeho brat synov tak uprav referecnie
@@ -138,6 +156,77 @@ public class BST23<T extends  Comparable<T>> {
                             brotherNode.set_left2(null);
                         }
                         return true;
+                    }
+                }else {
+                    //brat je len dvojvrchol
+                    if (isLeaf(alterNode)) {
+                        //v je list tak netreba riesit upravu referencii synov
+                        if (!alterNode.get_parent().isThreeNode()) {
+                            if (alterNode.get_parent().get_right1() == brotherNode){
+                                //v' je pravy syn
+                                brotherNode.set_data2(brotherNode.get_data1());
+                                brotherNode.set_data1(alterNode.get_parent().get_data1());
+                                brotherNode.set_isThreeNode(true);
+                                alterNode.set_data1(null);
+                                alterNode.get_parent().set_left1(brotherNode);
+                                alterNode.get_parent().set_right1(null);
+                            }else {
+                                //v' je lavy syn
+                                brotherNode.set_data2(alterNode.get_data1());
+                                brotherNode.set_isThreeNode(true);
+                                alterNode.set_data1(null);
+                                alterNode.get_parent().set_right1(null);
+                                alterNode.get_parent().set_left1(brotherNode);
+                            }
+                            alterNode = alterNode.get_parent();
+                        }else {
+                            if (alterNode.get_parent().get_right1() == alterNode ||
+                                    alterNode.get_parent().get_right2() == alterNode){
+                                //v je v strede alebo uplne napravo
+                                if (alterNode.get_parent().get_right2() == brotherNode){
+                                    //v' je uplne napravo
+                                    brotherNode.set_data2(brotherNode.get_data1());
+                                    brotherNode.set_data1(alterNode.get_parent().get_data2());
+                                    brotherNode.set_isThreeNode(true);
+                                    alterNode.get_parent().set_data2(null);
+                                    alterNode.get_parent().set_isThreeNode(false);
+                                    alterNode.get_parent().set_right1(brotherNode);
+                                    alterNode.get_parent().set_left2(null);
+                                    alterNode.get_parent().set_right2(null);
+                                    return true;
+                                }else {
+                                    //v' je v strede
+                                    brotherNode.set_data2(alterNode.get_parent().get_data2());
+                                    brotherNode.set_isThreeNode(true);
+                                    alterNode.get_parent().set_data2(null);
+                                    alterNode.get_parent().set_isThreeNode(false);
+                                    alterNode.get_parent().set_left2(null);
+                                    alterNode.get_parent().set_right2(null);
+                                    return true;
+                                }
+                            }else {
+                                //v je uplne nalavo
+                                brotherNode.set_data2(brotherNode.get_data1());
+                                brotherNode.set_data1(alterNode.get_parent().get_data1());
+                                brotherNode.set_isThreeNode(true);
+                                alterNode.get_parent().set_data1(alterNode.get_parent().get_data2());
+                                alterNode.get_parent().set_data2(null);
+                                alterNode.get_parent().set_isThreeNode(false);
+                                alterNode.get_parent().set_left1(brotherNode);
+                                alterNode.get_parent().set_right1(alterNode.get_parent().get_right2());
+                                alterNode.get_parent().set_left2(null);
+                                alterNode.get_parent().set_right2(null);
+                                return true;
+                            }
+                        }
+                    } else {
+                        //v nie je list
+                        if (alterNode.get_left1() != null && alterNode.get_right1() == null){
+                            //v ma syna nalavo
+                            
+                        }else {
+                            //v ma syna napravo
+                        }
                     }
                 }
             }
