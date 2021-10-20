@@ -159,73 +159,106 @@ public class BST23<T extends  Comparable<T>> {
                     }
                 }else {
                     //brat je len dvojvrchol
-                    if (isLeaf(alterNode)) {
-                        //v je list tak netreba riesit upravu referencii synov
-                        if (!alterNode.get_parent().isThreeNode()) {
-                            if (alterNode.get_parent().get_right1() == brotherNode){
-                                //v' je pravy syn
-                                brotherNode.set_data2(brotherNode.get_data1());
-                                brotherNode.set_data1(alterNode.get_parent().get_data1());
-                                brotherNode.set_isThreeNode(true);
-                                alterNode.set_data1(null);
-                                alterNode.get_parent().set_left1(brotherNode);
-                                alterNode.get_parent().set_right1(null);
-                            }else {
-                                //v' je lavy syn
-                                brotherNode.set_data2(alterNode.get_data1());
-                                brotherNode.set_isThreeNode(true);
-                                alterNode.set_data1(null);
-                                alterNode.get_parent().set_right1(null);
-                                alterNode.get_parent().set_left1(brotherNode);
-                            }
-                            alterNode = alterNode.get_parent();
-                        }else {
-                            if (alterNode.get_parent().get_right1() == alterNode ||
-                                    alterNode.get_parent().get_right2() == alterNode){
-                                //v je v strede alebo uplne napravo
-                                if (alterNode.get_parent().get_right2() == brotherNode){
-                                    //v' je uplne napravo
-                                    brotherNode.set_data2(brotherNode.get_data1());
-                                    brotherNode.set_data1(alterNode.get_parent().get_data2());
-                                    brotherNode.set_isThreeNode(true);
-                                    alterNode.get_parent().set_data2(null);
-                                    alterNode.get_parent().set_isThreeNode(false);
-                                    alterNode.get_parent().set_right1(brotherNode);
-                                    alterNode.get_parent().set_left2(null);
-                                    alterNode.get_parent().set_right2(null);
-                                    return true;
+                    if (!alterNode.get_parent().isThreeNode()) {
+                        //otec je dvojvrchol
+                        if (alterNode.get_parent().get_right1() == brotherNode){
+                            //v' je pravy syn
+                            brotherNode.set_data2(brotherNode.get_data1());
+                            brotherNode.set_data1(alterNode.get_parent().get_data1());
+                            brotherNode.set_isThreeNode(true);
+                            alterNode.set_data1(null);
+                            alterNode.get_parent().set_data1(null);
+                            alterNode.get_parent().set_left1(brotherNode);
+                            alterNode.get_parent().set_right1(null);
+
+                            if (!isLeaf(alterNode)){
+                                //upravy referencii ak nie su listy
+                                brotherNode.set_right2(brotherNode.get_right1());
+                                brotherNode.set_left2(brotherNode.get_left1());
+                                brotherNode.set_right1(brotherNode.get_left1());
+                                if (alterNode.get_left1() != null){
+                                    brotherNode.set_left1(alterNode.get_left1());
                                 }else {
-                                    //v' je v strede
-                                    brotherNode.set_data2(alterNode.get_parent().get_data2());
-                                    brotherNode.set_isThreeNode(true);
-                                    alterNode.get_parent().set_data2(null);
-                                    alterNode.get_parent().set_isThreeNode(false);
-                                    alterNode.get_parent().set_left2(null);
-                                    alterNode.get_parent().set_right2(null);
+                                    brotherNode.set_left1(alterNode.get_right1());
+                                }
+                                if (brotherNode.get_left1() != null){
+                                    brotherNode.get_left1().set_parent(brotherNode);
+                                }
+                                if (brotherNode.get_parent().get_parent() == null){
+                                    //prazdne miesto je v koreni
+                                    _root = brotherNode.get_parent();
+                                    brotherNode.get_parent().set_parent(null);
                                     return true;
                                 }
-                            }else {
-                                //v je uplne nalavo
+                            }
+                        }else {
+                            //v' je lavy syn
+                            brotherNode.set_data2(alterNode.get_parent().get_data1());
+                            brotherNode.set_isThreeNode(true);
+                            alterNode.set_data1(null);
+                            alterNode.get_parent().set_data1(null);
+                            alterNode.get_parent().set_right1(null);
+                            alterNode.get_parent().set_left1(brotherNode);
+
+                            if (!isLeaf(alterNode)){
+                                //upravy referencii ak nie su listy
+                                brotherNode.set_left2(brotherNode.get_right1());
+                                if (alterNode.get_left1() != null){
+                                    brotherNode.set_right2(alterNode.get_left1());
+                                }else {
+                                    brotherNode.set_right2(alterNode.get_right1());
+                                }
+                                if (brotherNode.get_right2() != null){
+                                    brotherNode.get_right2().set_parent(brotherNode);
+                                }
+                                if (brotherNode.get_parent().get_parent() == null){
+                                    //prazdne miesto je v koreni
+                                    _root = brotherNode.get_parent();
+                                    brotherNode.get_parent().set_parent(null);
+                                    return true;
+                                }
+                            }
+                        }
+                        alterNode = alterNode.get_parent();
+                    }else {
+                        //otec je trojvrchol
+                        if (alterNode.get_parent().get_right1() == alterNode ||
+                                alterNode.get_parent().get_right2() == alterNode){
+                            //v je v strede alebo uplne napravo
+                            if (alterNode.get_parent().get_right2() == brotherNode){
+                                //v' je uplne napravo
                                 brotherNode.set_data2(brotherNode.get_data1());
-                                brotherNode.set_data1(alterNode.get_parent().get_data1());
+                                brotherNode.set_data1(alterNode.get_parent().get_data2());
                                 brotherNode.set_isThreeNode(true);
-                                alterNode.get_parent().set_data1(alterNode.get_parent().get_data2());
                                 alterNode.get_parent().set_data2(null);
                                 alterNode.get_parent().set_isThreeNode(false);
-                                alterNode.get_parent().set_left1(brotherNode);
-                                alterNode.get_parent().set_right1(alterNode.get_parent().get_right2());
+                                alterNode.get_parent().set_right1(brotherNode);
+                                alterNode.get_parent().set_left2(null);
+                                alterNode.get_parent().set_right2(null);
+                                return true;
+                            }else {
+                                //v' je v strede
+                                brotherNode.set_data2(alterNode.get_parent().get_data2());
+                                brotherNode.set_isThreeNode(true);
+                                alterNode.get_parent().set_data2(null);
+                                alterNode.get_parent().set_isThreeNode(false);
                                 alterNode.get_parent().set_left2(null);
                                 alterNode.get_parent().set_right2(null);
                                 return true;
                             }
-                        }
-                    } else {
-                        //v nie je list
-                        if (alterNode.get_left1() != null && alterNode.get_right1() == null){
-                            //v ma syna nalavo
-                            
                         }else {
-                            //v ma syna napravo
+                            //v je uplne nalavo
+                            brotherNode.set_data2(brotherNode.get_data1());
+                            brotherNode.set_data1(alterNode.get_parent().get_data1());
+                            brotherNode.set_isThreeNode(true);
+                            alterNode.get_parent().set_data1(alterNode.get_parent().get_data2());
+                            alterNode.get_parent().set_data2(null);
+                            alterNode.get_parent().set_isThreeNode(false);
+                            alterNode.get_parent().set_left1(brotherNode);
+                            alterNode.get_parent().set_right1(alterNode.get_parent().get_right2());
+                            alterNode.get_parent().set_left2(null);
+                            alterNode.get_parent().set_right2(null);
+                            return true;
                         }
                     }
                 }
