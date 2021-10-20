@@ -235,6 +235,20 @@ public class BST23<T extends  Comparable<T>> {
                                 alterNode.get_parent().set_right1(brotherNode);
                                 alterNode.get_parent().set_left2(null);
                                 alterNode.get_parent().set_right2(null);
+                                if (!isLeaf(alterNode)){
+                                    //upravy referencii ak nie su listy
+                                    brotherNode.set_right2(brotherNode.get_right1());
+                                    brotherNode.set_left2(brotherNode.get_left1());
+                                    brotherNode.set_right1(brotherNode.get_left1());
+                                    if (alterNode.get_left1() != null){
+                                        brotherNode.set_left1(alterNode.get_left1());
+                                    }else {
+                                        brotherNode.set_left1(alterNode.get_right1());
+                                    }
+                                    if (brotherNode.get_left1() != null){
+                                        brotherNode.get_left1().set_parent(brotherNode);
+                                    }
+                                }
                                 return true;
                             }else {
                                 //v' je v strede
@@ -244,6 +258,18 @@ public class BST23<T extends  Comparable<T>> {
                                 alterNode.get_parent().set_isThreeNode(false);
                                 alterNode.get_parent().set_left2(null);
                                 alterNode.get_parent().set_right2(null);
+                                if (!isLeaf(alterNode)){
+                                    //upravy referencii ak nie su listy
+                                    brotherNode.set_left2(brotherNode.get_right1());
+                                    if (alterNode.get_left1() != null){
+                                        brotherNode.set_right2(alterNode.get_left1());
+                                    }else {
+                                        brotherNode.set_right2(alterNode.get_right1());
+                                    }
+                                    if (brotherNode.get_right2() != null){
+                                        brotherNode.get_right2().set_parent(brotherNode);
+                                    }
+                                }
                                 return true;
                             }
                         }else {
@@ -258,6 +284,20 @@ public class BST23<T extends  Comparable<T>> {
                             alterNode.get_parent().set_right1(alterNode.get_parent().get_right2());
                             alterNode.get_parent().set_left2(null);
                             alterNode.get_parent().set_right2(null);
+                            if (!isLeaf(alterNode)){
+                                //upravy referencii ak nie su listy
+                                brotherNode.set_right2(brotherNode.get_right1());
+                                brotherNode.set_left2(brotherNode.get_left1());
+                                brotherNode.set_right1(brotherNode.get_left1());
+                                if (alterNode.get_left1() != null){
+                                    brotherNode.set_left1(alterNode.get_left1());
+                                }else {
+                                    brotherNode.set_left1(alterNode.get_right1());
+                                }
+                                if (brotherNode.get_left1() != null){
+                                    brotherNode.get_left1().set_parent(brotherNode);
+                                }
+                            }
                             return true;
                         }
                     }
