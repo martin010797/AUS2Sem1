@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GeneratorOfData {
 
     public void testInsert(int numberOfValues){
+        //dorobit test na kombiovanie operácii insert aj delete
         BST23<TestData> tree = new BST23<>();
         ArrayList<Integer> values = new ArrayList<Integer>();
         for (int i = 0; i < numberOfValues; i++){
@@ -38,6 +39,13 @@ public class GeneratorOfData {
             if (i == numberOfValues-1){
                 System.out.println(" Vsetky vlozene prvky najdene");
             }
+        }
+
+        //overovanie vzdialenosti vsetkych listov od korena
+        if (testDepth(tree.get_root())) {
+            System.out.println("Hlbka vsetkych listov je rovnaka.");
+        }else {
+            System.out.println("Hlbka vsetkych listov nie je rovnaka!");
         }
 
     }
@@ -75,6 +83,12 @@ public class GeneratorOfData {
             if (tree.delete(data) == false){
                 System.out.println(data.get_data1().getKey() + " nevymazane");
             }
+            //overovanie vzdialenosti vsetkych listov od korena
+            /*if (testDepth(tree.get_root())) {
+                System.out.println("Hlbka vsetkych listov je rovnaka.");
+            }else {
+                System.out.println("Hlbka vsetkych listov nie je rovnaka!");
+            }*/
             if (i == numberOfValues-1){
                 System.out.println(" Vsetko vymazane");
             }
@@ -142,5 +156,156 @@ public class GeneratorOfData {
         tree.delete(delData8);
         tree.delete(delData9);
         tree.delete(delData10);*/
+    }
+
+    public boolean testDepth(BST23Node root){
+        int depth = 1;
+        int totalDepth = 0;
+        BST23Node prev = null;
+        BST23Node temp = root;
+        while (temp != null){
+            if (!temp.isThreeNode()){
+                if (temp.get_left1() == null && temp.get_right1() == null){
+                    //ak je listom
+                    if (totalDepth == 0) {
+                        totalDepth = depth;
+                    }
+                    if (totalDepth != depth){
+                        //listy nemaju rovnaku hlbku
+                        return false;
+                    }
+                    if (totalDepth == depth){
+                        prev = temp;
+                        temp = prev.get_parent();
+                        depth--;
+                    }
+                }else {
+                    //ak nie je listom
+                    if (prev == temp.get_left1()){
+                        prev = temp;
+                        temp = prev.get_right1();
+                        depth++;
+                    }else if(prev == temp.get_parent()){
+                        prev = temp;
+                        temp = prev.get_left1();
+                        depth++;
+                    }else if(prev == temp.get_right1()){
+                        prev = temp;
+                        temp = prev.get_parent();
+                        depth--;
+                    }
+                }
+            }else {
+                if (temp.get_left1() == null &&
+                        temp.get_right1() == null &&
+                        temp.get_left2() == null &&
+                        temp.get_right2() == null){
+                    //je listom
+                    if (totalDepth == 0) {
+                        totalDepth = depth;
+                    }
+                    if (totalDepth != depth){
+                        //listy nemaju rovnaku hlbku
+                        return false;
+                    }
+                    if (totalDepth == depth){
+                        prev = temp;
+                        temp = prev.get_parent();
+                        depth--;
+                    }
+                }else {
+                    //nie je listom
+                    if (prev == temp.get_parent()){
+                        prev = temp;
+                        temp = prev.get_left1();
+                        depth++;
+                    }else if (prev == temp.get_left1()){
+                        prev = temp;
+                        temp = prev.get_right1();
+                        depth++;
+                    }else if (prev == temp.get_right1()){
+                        prev = temp;
+                        temp = prev.get_right2();
+                        depth++;
+                    }else if (prev == temp.get_right2()){
+                        prev = temp;
+                        temp = prev.get_parent();
+                        depth--;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public void testRandomOperation(int numberOfValues){
+        BST23<TestData> tree = new BST23<>();
+        ArrayList<Integer> valuesForInsert = new ArrayList<Integer>();
+        for (int i = 0; i < numberOfValues; i++){
+            valuesForInsert.add(i+1);
+        }
+        ArrayList<Integer> valuesInserted = new ArrayList<Integer>();
+        for (int i = 0; i < numberOfValues; i++){
+            double typeOfOperation = Math.random();
+            if (typeOfOperation < 0.5){
+                //insert
+                int randomIndex;
+                if (valuesForInsert.size() == 1){
+                    randomIndex = 0;
+                }else {
+                    randomIndex = ThreadLocalRandom.current().nextInt(0, valuesForInsert.size() - 1);
+                }
+                Integer value = valuesForInsert.get(randomIndex);
+                //TestData d = new TestData(valuesForInsert.get(randomIndex));
+                TestData d = new TestData(value);
+                valuesForInsert.remove(randomIndex);
+                TestingData data = new TestingData(d);
+                if(!tree.insert(data)){
+                    System.out.println("nevlozene");
+                }else {
+                    //System.out.println("Vlozene cislo " + data.get_data1().getKey());
+                    System.out.println("Vlozene cislo " + value);
+                    valuesInserted.add(value);
+                }
+                if (tree.find(data) == null){
+                    System.out.println(value + " neulozene spravne");
+                }
+                //overovanie vzdialenosti vsetkych listov od korena
+                /*if (testDepth(tree.get_root())) {
+                    System.out.println("Po vlozeni je hlbka vsetkych listov rovnaka.");
+                }else {
+                    System.out.println("Po vlozeni nie je hlbka vsetkych listov rovnaka!");
+                }*/
+            }else {
+                //delete
+                if (tree.get_root() == null){
+                    System.out.println("Nie je co mazat");
+                }else {
+                    int randomIndex;
+                    if (valuesInserted.size() == 1){
+                        randomIndex = 0;
+                    }else {
+                        randomIndex = ThreadLocalRandom.current().nextInt(0, valuesInserted.size() - 1);
+                    }
+                    Integer value = valuesInserted.get(randomIndex);
+                    //TestData d = new TestData(valuesInserted.get(randomIndex));
+                    TestData d = new TestData(value);
+                    TestingData data = new TestingData(d);
+                    if (!tree.delete(data)){
+                        System.out.println(value + " nevymazane");
+                    }else {
+                        System.out.println("Vymazane cislo " + value);
+                        valuesInserted.remove(randomIndex);
+                    }
+                    //overovanie vzdialenosti vsetkych listov od korena
+                    /*if (testDepth(tree.get_root())) {
+                        System.out.println("Po mazani prvku je hlbka vsetkych listov rovnaka.");
+                    }else {
+                        System.out.println("Po mazani prvku nie je hlbka vsetkych listov rovnaka!");
+                    }*/
+                }
+            }
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 public class BST23<T extends  Comparable<T>> {
+
     private BST23Node<T> _root;
 
     public BST23(){
@@ -739,5 +740,9 @@ public class BST23<T extends  Comparable<T>> {
             }
             return null;
         }
+    }
+
+    public BST23Node<T> get_root() {
+        return _root;
     }
 }
