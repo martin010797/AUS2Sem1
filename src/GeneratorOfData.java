@@ -298,12 +298,6 @@ public class GeneratorOfData {
                     if (tree.find(data) == null){
                         System.out.println(value + " neulozene spravne");
                     }
-                    //overovanie vzdialenosti vsetkych listov od korena
-                /*if (testDepth(tree.get_root())) {
-                    System.out.println("Po vlozeni je hlbka vsetkych listov rovnaka.");
-                }else {
-                    System.out.println("Po vlozeni nie je hlbka vsetkych listov rovnaka!");
-                }*/
                 }else {
                     //delete
                     if (tree.get_root() == null){
@@ -326,18 +320,26 @@ public class GeneratorOfData {
                             System.out.println("Vymazane cislo " + value);
                             valuesInserted.remove(randomIndex);
                         }
-                        //overovanie vzdialenosti vsetkych listov od korena
-                    /*if (testDepth(tree.get_root())) {
-                        System.out.println("Po mazani prvku je hlbka vsetkych listov rovnaka.");
-                    }else {
-                        System.out.println("Po mazani prvku nie je hlbka vsetkych listov rovnaka!");
-                    }*/
                     }
                 }
             }
 
         }
-
+        if (testDepth(tree.get_root())) {
+            System.out.println("Po testovani operacii je hlbka vsetkych listov rovnaka.");
+        }else {
+            System.out.println("Po testovani operacii nie je hlbka vsetkych listov rovnaka!");
+        }
+        int notFound = 0;
+        for (Integer value: valuesInserted) {
+            TestData d = new TestData(value);
+            TestingData data = new TestingData(d);
+            if (tree.find(data) == null){
+                System.out.println(data.get_data1().getKey() + " nenajdene");
+                notFound++;
+            }
+        }
+        System.out.println("Pocet nenajdenych prvkov po operaciach: " + notFound);
     }
 
     public void test(){
