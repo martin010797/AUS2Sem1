@@ -4,6 +4,7 @@ public class Main {
         GeneratorOfData generator = new GeneratorOfData();
         //generator.testInsert(100000);
         //generator.testDelete(100000);
-        generator.testRandomOperation(100);
+        generator.testRandomOperation(300000);
+        //generator.test();
     }
 }

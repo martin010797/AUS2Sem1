@@ -48,7 +48,6 @@ public class BST23<T extends  Comparable<T>> {
                 deletedNode.set_data1(alterNode.get_data1());
             }else if (pNode.get_data1().compareTo(deletedNode.get_data2()) == 0){
                 deletedNode.set_data2(alterNode.get_data1());
-                //return true;
             }
             while (alterNode != null){
                 if(alterNode == _root){
@@ -80,6 +79,9 @@ public class BST23<T extends  Comparable<T>> {
                         //nastavenie referencii
                         if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
                                 (brotherNode.get_left1() != null)) {
+                            /*if (alterNode.get_right1() != null && alterNode.get_left1() == null){
+                                System.out.println("chyba ");
+                            }*/
                             //ak maju v aj jeho brat synov tak uprav referecnie
                             alterNode.set_right1(brotherNode.get_left1());
                             brotherNode.get_left1().set_parent(alterNode);
@@ -101,6 +103,11 @@ public class BST23<T extends  Comparable<T>> {
                         //nastavenie referencii
                         if ((alterNode.get_left1() != null || alterNode.get_right1() != null) &&
                                 (brotherNode.get_left1() != null)) {
+                            if (alterNode.get_left1() != null && alterNode.get_right1() == null){
+                                alterNode.set_right1(alterNode.get_left1());
+                                alterNode.set_left1(null);
+                                System.out.println("chyba 3!!!!");
+                            }
                             //ak maju v aj jeho brat synov tak uprav referecnie
                             alterNode.set_left1(brotherNode.get_right2());
                             brotherNode.get_right2().set_parent(alterNode);
@@ -345,14 +352,14 @@ public class BST23<T extends  Comparable<T>> {
             //data ktore mazem su nalavo
             BST23Node temp = node.get_right1();
             while (!isLeaf(temp)){
-                temp.get_left1();
+                temp = temp.get_left1();
             }
             return temp;
         }else if(nodeData.get_data1().compareTo(node.get_data2()) == 0){
             //data ktore mazem su napravo
             BST23Node temp = node.get_right2();
             while (!isLeaf(temp)){
-                temp.get_left1();
+                temp = temp.get_left1();
             }
             return temp;
         }

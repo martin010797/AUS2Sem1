@@ -246,9 +246,11 @@ public class GeneratorOfData {
         }
         ArrayList<Integer> valuesInserted = new ArrayList<Integer>();
         for (int i = 0; i < numberOfValues; i++){
-            double typeOfOperation = Math.random();
-            if (typeOfOperation < 0.5){
-                //insert
+            if (i == numberOfValues -1){
+                System.out.println("Posledna operacia");
+            }
+            if (i < 100){
+                //prvych 100 sa bude len vkladat
                 int randomIndex;
                 if (valuesForInsert.size() == 1){
                     randomIndex = 0;
@@ -261,7 +263,7 @@ public class GeneratorOfData {
                 valuesForInsert.remove(randomIndex);
                 TestingData data = new TestingData(d);
                 if(!tree.insert(data)){
-                    System.out.println("nevlozene");
+                    System.out.println("cislo " + value + " nevlozene");
                 }else {
                     //System.out.println("Vlozene cislo " + data.get_data1().getKey());
                     System.out.println("Vlozene cislo " + value);
@@ -270,42 +272,139 @@ public class GeneratorOfData {
                 if (tree.find(data) == null){
                     System.out.println(value + " neulozene spravne");
                 }
-                //overovanie vzdialenosti vsetkych listov od korena
+            }else {
+                double typeOfOperation = Math.random();
+                System.out.println(i + ". operacia: " + typeOfOperation);
+                if (typeOfOperation < 0.5){
+                    //insert
+                    int randomIndex;
+                    if (valuesForInsert.size() == 1){
+                        randomIndex = 0;
+                    }else {
+                        randomIndex = ThreadLocalRandom.current().nextInt(0, valuesForInsert.size() - 1);
+                    }
+                    Integer value = valuesForInsert.get(randomIndex);
+                    //TestData d = new TestData(valuesForInsert.get(randomIndex));
+                    TestData d = new TestData(value);
+                    valuesForInsert.remove(randomIndex);
+                    TestingData data = new TestingData(d);
+                    if(!tree.insert(data)){
+                        System.out.println("cislo " + value + " nevlozene");
+                    }else {
+                        //System.out.println("Vlozene cislo " + data.get_data1().getKey());
+                        System.out.println("Vlozene cislo " + value);
+                        valuesInserted.add(value);
+                    }
+                    if (tree.find(data) == null){
+                        System.out.println(value + " neulozene spravne");
+                    }
+                    //overovanie vzdialenosti vsetkych listov od korena
                 /*if (testDepth(tree.get_root())) {
                     System.out.println("Po vlozeni je hlbka vsetkych listov rovnaka.");
                 }else {
                     System.out.println("Po vlozeni nie je hlbka vsetkych listov rovnaka!");
                 }*/
-            }else {
-                //delete
-                if (tree.get_root() == null){
-                    System.out.println("Nie je co mazat");
                 }else {
-                    int randomIndex;
-                    if (valuesInserted.size() == 1){
-                        randomIndex = 0;
+                    //delete
+                    if (tree.get_root() == null){
+                        System.out.println("Nie je co mazat");
                     }else {
-                        randomIndex = ThreadLocalRandom.current().nextInt(0, valuesInserted.size() - 1);
-                    }
-                    Integer value = valuesInserted.get(randomIndex);
-                    //TestData d = new TestData(valuesInserted.get(randomIndex));
-                    TestData d = new TestData(value);
-                    TestingData data = new TestingData(d);
-                    if (!tree.delete(data)){
-                        System.out.println(value + " nevymazane");
-                    }else {
-                        System.out.println("Vymazane cislo " + value);
-                        valuesInserted.remove(randomIndex);
-                    }
-                    //overovanie vzdialenosti vsetkych listov od korena
+                        int randomIndex;
+                        if (valuesInserted.size() == 1){
+                            randomIndex = 0;
+                        }else {
+                            randomIndex = ThreadLocalRandom.current().nextInt(0, valuesInserted.size() - 1);
+                        }
+                        Integer value = valuesInserted.get(randomIndex);
+                        //TestData d = new TestData(valuesInserted.get(randomIndex));
+                        TestData d = new TestData(value);
+                        TestingData data = new TestingData(d);
+                        System.out.println("pojde sa mazat " + value);
+                        if (!tree.delete(data)){
+                            System.out.println(value + " nevymazane");
+                        }else {
+                            System.out.println("Vymazane cislo " + value);
+                            valuesInserted.remove(randomIndex);
+                        }
+                        //overovanie vzdialenosti vsetkych listov od korena
                     /*if (testDepth(tree.get_root())) {
                         System.out.println("Po mazani prvku je hlbka vsetkych listov rovnaka.");
                     }else {
                         System.out.println("Po mazani prvku nie je hlbka vsetkych listov rovnaka!");
                     }*/
+                    }
                 }
             }
+
         }
 
+    }
+
+    public void test(){
+        BST23<TestData> tree = new BST23<>();
+
+        TestData di = new TestData(4);
+        TestData di2 = new TestData(24);
+        TestData di3 = new TestData(26);
+        TestData di4 = new TestData(42);
+        TestData di5 = new TestData(94);
+        TestData di6 = new TestData(74);
+        TestData di7 = new TestData(97);
+        TestData di8 = new TestData(28);
+        TestData di9 = new TestData(25);
+        TestData di10 = new TestData(86);
+        TestData di11 = new TestData(19);
+        TestData di12 = new TestData(77);
+        TestData di13 = new TestData(44);
+        TestData di14 = new TestData(14);
+        TestingData data1 = new TestingData(di);
+        TestingData data2 = new TestingData(di2);
+        TestingData data3 = new TestingData(di3);
+        TestingData data4 = new TestingData(di4);
+        TestingData data5 = new TestingData(di5);
+        TestingData data6 = new TestingData(di6);
+        TestingData data7 = new TestingData(di7);
+        TestingData data8 = new TestingData(di8);
+        TestingData data9 = new TestingData(di9);
+        TestingData data10 = new TestingData(di10);
+        TestingData data11 = new TestingData(di11);
+        TestingData data12 = new TestingData(di12);
+        TestingData data13 = new TestingData(di13);
+        TestingData data14 = new TestingData(di14);
+
+        TestData delD = new TestData(24);
+        TestData delD2 = new TestData(4);
+        TestData delD3 = new TestData(42);
+        TestData delD4 = new TestData(74);
+        TestingData delData1 = new TestingData(delD);
+        TestingData delData2 = new TestingData(delD2);
+        TestingData delData3 = new TestingData(delD3);
+        TestingData delData4 = new TestingData(delD4);
+
+        tree.insert(data1);
+        tree.insert(data2);
+        tree.insert(data3);
+
+        tree.delete(delData1);
+
+        tree.insert(data4);
+        tree.insert(data5);
+        tree.insert(data6);
+        tree.insert(data7);
+        tree.insert(data8);
+        tree.insert(data9);
+        tree.insert(data10);
+        tree.insert(data11);
+
+        tree.delete(delData2);
+
+        tree.insert(data12);
+        tree.insert(data13);
+
+        tree.delete(delData3);
+
+        tree.insert(data14);
+
+        tree.delete(delData4);
     }
 }
