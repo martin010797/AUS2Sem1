@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class BST23<T extends  Comparable<T>, V> {
 
     private BST23Node<T,V> _root;
@@ -872,6 +874,46 @@ public class BST23<T extends  Comparable<T>, V> {
             }
             return null;
         }
+    }
+
+    public ArrayList<BST23Node> intervalSearch(BST23Node minNode, BST23Node maxNode){
+        ArrayList<BST23Node> listOfFoundNodes = new ArrayList<>();
+        BST23Node starterNode = find(minNode);
+        if (starterNode != null){
+            //node s klucom sa v strome nachadza
+
+        }else {
+            //node s klucom sa nenachadza v strome
+        }
+        /*
+        if (isLeaf(node)){
+            return node;
+        }
+        if (nodeData.get_data1().compareTo(node.get_data1()) == 0){
+            //data ktore mazem su nalavo
+            BST23Node temp = node.get_right1();
+            while (!isLeaf(temp)){
+                temp = temp.get_left1();
+            }
+            return temp;
+        }else if(nodeData.get_data1().compareTo(node.get_data2()) == 0){
+            //data ktore mazem su napravo
+            BST23Node temp = node.get_right2();
+            while (!isLeaf(temp)){
+                temp = temp.get_left1();
+            }
+            return temp;
+        }
+        return null;
+         */
+    }
+
+    private boolean belongsToInterval(BST23Node minNode, BST23Node maxNode, BST23Node testedNode){
+        if (testedNode.get_data1().compareTo(minNode.get_data1()) <= 0 &&
+                testedNode.get_data1().compareTo(maxNode.get_data1()) >= 0){
+            return true;
+        }else
+            return false;
     }
 
     public BST23Node<T,V> get_root() {
