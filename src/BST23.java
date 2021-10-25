@@ -106,7 +106,6 @@ public class BST23<T extends  Comparable<T>> {
                             if (alterNode.get_left1() != null && alterNode.get_right1() == null){
                                 alterNode.set_right1(alterNode.get_left1());
                                 alterNode.set_left1(null);
-                                System.out.println("chyba 3!!!!");
                             }
                             //ak maju v aj jeho brat synov tak uprav referecnie
                             alterNode.set_left1(brotherNode.get_right2());

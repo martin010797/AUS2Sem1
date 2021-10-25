@@ -238,7 +238,7 @@ public class GeneratorOfData {
         return true;
     }
 
-    public void testRandomOperation(int numberOfValues){
+    public void testRandomOperation(int numberOfValues, double probabilityOfInsert){
         BST23<TestData> tree = new BST23<>();
         ArrayList<Integer> valuesForInsert = new ArrayList<Integer>();
         for (int i = 0; i < numberOfValues; i++){
@@ -246,11 +246,13 @@ public class GeneratorOfData {
         }
         ArrayList<Integer> valuesInserted = new ArrayList<Integer>();
         for (int i = 0; i < numberOfValues; i++){
-            if (i == numberOfValues -1){
+            /*if (i == numberOfValues -1){
                 System.out.println("Posledna operacia");
-            }
-            if (i < 100){
-                //prvych 100 sa bude len vkladat
+            }*/
+            double typeOfOperation = Math.random();
+            System.out.println(i + ". operacia: " + typeOfOperation);
+            if (typeOfOperation < probabilityOfInsert){
+                //insert
                 int randomIndex;
                 if (valuesForInsert.size() == 1){
                     randomIndex = 0;
@@ -273,53 +275,26 @@ public class GeneratorOfData {
                     System.out.println(value + " neulozene spravne");
                 }
             }else {
-                double typeOfOperation = Math.random();
-                System.out.println(i + ". operacia: " + typeOfOperation);
-                if (typeOfOperation < 0.5){
-                    //insert
+                //delete
+                if (tree.get_root() == null){
+                    System.out.println("Nie je co mazat");
+                }else {
                     int randomIndex;
-                    if (valuesForInsert.size() == 1){
+                    if (valuesInserted.size() == 1){
                         randomIndex = 0;
                     }else {
-                        randomIndex = ThreadLocalRandom.current().nextInt(0, valuesForInsert.size() - 1);
+                        randomIndex = ThreadLocalRandom.current().nextInt(0, valuesInserted.size() - 1);
                     }
-                    Integer value = valuesForInsert.get(randomIndex);
-                    //TestData d = new TestData(valuesForInsert.get(randomIndex));
+                    Integer value = valuesInserted.get(randomIndex);
+                    //TestData d = new TestData(valuesInserted.get(randomIndex));
                     TestData d = new TestData(value);
-                    valuesForInsert.remove(randomIndex);
                     TestingData data = new TestingData(d);
-                    if(!tree.insert(data)){
-                        System.out.println("cislo " + value + " nevlozene");
+                    System.out.println("pojde sa mazat " + value);
+                    if (!tree.delete(data)){
+                        System.out.println(value + " nevymazane");
                     }else {
-                        //System.out.println("Vlozene cislo " + data.get_data1().getKey());
-                        System.out.println("Vlozene cislo " + value);
-                        valuesInserted.add(value);
-                    }
-                    if (tree.find(data) == null){
-                        System.out.println(value + " neulozene spravne");
-                    }
-                }else {
-                    //delete
-                    if (tree.get_root() == null){
-                        System.out.println("Nie je co mazat");
-                    }else {
-                        int randomIndex;
-                        if (valuesInserted.size() == 1){
-                            randomIndex = 0;
-                        }else {
-                            randomIndex = ThreadLocalRandom.current().nextInt(0, valuesInserted.size() - 1);
-                        }
-                        Integer value = valuesInserted.get(randomIndex);
-                        //TestData d = new TestData(valuesInserted.get(randomIndex));
-                        TestData d = new TestData(value);
-                        TestingData data = new TestingData(d);
-                        System.out.println("pojde sa mazat " + value);
-                        if (!tree.delete(data)){
-                            System.out.println(value + " nevymazane");
-                        }else {
-                            System.out.println("Vymazane cislo " + value);
-                            valuesInserted.remove(randomIndex);
-                        }
+                        System.out.println("Vymazane cislo " + value);
+                        valuesInserted.remove(randomIndex);
                     }
                 }
             }
