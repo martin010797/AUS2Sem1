@@ -1,7 +1,7 @@
-public class TestData implements Comparable<TestData> {
+public class TestKey implements Comparable<TestKey> {
     private int key;
 
-    public TestData(int pKey){
+    public TestKey(int pKey){
         key = pKey;
     }
 
@@ -14,7 +14,7 @@ public class TestData implements Comparable<TestData> {
     }
 
     @Override
-    public int compareTo(TestData o) {
+    public int compareTo(TestKey o) {
         if (key < o.key){
             return 1;
         }else if (key > o.key){

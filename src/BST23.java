@@ -1,6 +1,6 @@
-public class BST23<T extends  Comparable<T>> {
+public class BST23<T extends  Comparable<T>, V> {
 
-    private BST23Node<T> _root;
+    private BST23Node<T,V> _root;
 
     public BST23(){
         _root = null;
@@ -17,11 +17,14 @@ public class BST23<T extends  Comparable<T>> {
             if (deletedNode.isThreeNode() && isLeaf(deletedNode)){
                 if (pNode.get_data1().compareTo(deletedNode.get_data1()) == 0){
                     deletedNode.set_data1(deletedNode.get_data2());
+                    deletedNode.set_value1(deletedNode.get_value2());
                     deletedNode.set_data2(null);
+                    deletedNode.set_value2(null);
                     deletedNode.set_isThreeNode(false);
                     return true;
                 }else if (pNode.get_data1().compareTo(deletedNode.get_data2()) == 0){
                     deletedNode.set_data2(null);
+                    deletedNode.set_value2(null);
                     deletedNode.set_isThreeNode(false);
                     return true;
                 }
@@ -31,14 +34,20 @@ public class BST23<T extends  Comparable<T>> {
                 //jeho nasledovnik je 3 vrchol
                 if (pNode.get_data1().compareTo(deletedNode.get_data1()) == 0){
                     deletedNode.set_data1(alterNode.get_data1());
+                    deletedNode.set_value1(alterNode.get_value1());
                     alterNode.set_data1(alterNode.get_data2());
+                    alterNode.set_value1(alterNode.get_value2());
                     alterNode.set_data2(null);
+                    alterNode.set_value2(null);
                     alterNode.set_isThreeNode(false);
                     return true;
                 }else if (pNode.get_data1().compareTo(deletedNode.get_data2()) == 0){
                     deletedNode.set_data2(alterNode.get_data1());
+                    deletedNode.set_value2(alterNode.get_value1());
                     alterNode.set_data1(alterNode.get_data2());
+                    alterNode.set_value1(alterNode.get_value2());
                     alterNode.set_data2(null);
+                    alterNode.set_value2(null);
                     alterNode.set_isThreeNode(false);
                     return true;
                 }
@@ -46,8 +55,10 @@ public class BST23<T extends  Comparable<T>> {
             //vymazanie prvku a tym vytvorenie prazdneho miesta v alter node
             if (pNode.get_data1().compareTo(deletedNode.get_data1()) == 0){
                 deletedNode.set_data1(alterNode.get_data1());
+                deletedNode.set_value1(alterNode.get_value1());
             }else if (pNode.get_data1().compareTo(deletedNode.get_data2()) == 0){
                 deletedNode.set_data2(alterNode.get_data1());
+                deletedNode.set_value2(alterNode.get_value1());
             }
             while (alterNode != null){
                 if(alterNode == _root){
@@ -70,10 +81,14 @@ public class BST23<T extends  Comparable<T>> {
                     if (alterNode.get_parent().get_left1() == alterNode){
                         //prazdne miesto je vlavo od otca takze sa vykonava lava rotacia
                         alterNode.set_data1(alterNode.get_parent().get_data1());
+                        alterNode.set_value1(alterNode.get_parent().get_value1());
                         alterNode.get_parent().set_data1(brotherNode.get_data1());
+                        alterNode.get_parent().set_value1(brotherNode.get_value1());
 
                         brotherNode.set_data1(brotherNode.get_data2());
+                        brotherNode.set_value1(brotherNode.get_value2());
                         brotherNode.set_data2(null);
+                        brotherNode.set_value2(null);
                         brotherNode.set_isThreeNode(false);
 
                         //nastavenie referencii
@@ -95,9 +110,12 @@ public class BST23<T extends  Comparable<T>> {
                     if(alterNode.get_parent().get_right2() != null && alterNode.get_parent().get_right2() == alterNode){
                         //prazdne miesto je napravo od otca takze sa vykonava prava rotacia
                         alterNode.set_data1(alterNode.get_parent().get_data2());
+                        alterNode.set_value1(alterNode.get_parent().get_value2());
                         alterNode.get_parent().set_data2(brotherNode.get_data2());
+                        alterNode.get_parent().set_value2(brotherNode.get_value2());
 
                         brotherNode.set_data2(null);
+                        brotherNode.set_value2(null);
                         brotherNode.set_isThreeNode(false);
 
                         //nastavenie referencii
@@ -118,9 +136,12 @@ public class BST23<T extends  Comparable<T>> {
                     if (alterNode.get_parent().get_left1() == brotherNode){
                         //brat je nalavo od otca, cize prazdne miesto je v strede takze sa vykonava prava rotacia
                         alterNode.set_data1(alterNode.get_parent().get_data1());
+                        alterNode.set_value1(alterNode.get_parent().get_value1());
                         alterNode.get_parent().set_data1(brotherNode.get_data2());
+                        alterNode.get_parent().set_value1(brotherNode.get_value2());
 
                         brotherNode.set_data2(null);
+                        brotherNode.set_value2(null);
                         brotherNode.set_isThreeNode(false);
 
                         //nastavenie referencii
@@ -141,10 +162,14 @@ public class BST23<T extends  Comparable<T>> {
                     if (alterNode.get_parent().get_right2() != null && alterNode.get_parent().get_right2() == brotherNode){
                         //brat je napravo od otcovho druheho prvku, cize prazdne miesto je v strede takze sa vykonava lava rotacia
                         alterNode.set_data1(alterNode.get_parent().get_data2());
+                        alterNode.set_value1(alterNode.get_parent().get_value2());
                         alterNode.get_parent().set_data2(brotherNode.get_data1());
+                        alterNode.get_parent().set_value2(brotherNode.get_value1());
 
                         brotherNode.set_data1(brotherNode.get_data2());
+                        brotherNode.set_value1(brotherNode.get_value2());
                         brotherNode.set_data2(null);
+                        brotherNode.set_value2(null);
                         brotherNode.set_isThreeNode(false);
 
                         //nastavenie referencii
@@ -171,10 +196,14 @@ public class BST23<T extends  Comparable<T>> {
                         if (alterNode.get_parent().get_right1() == brotherNode){
                             //v' je pravy syn
                             brotherNode.set_data2(brotherNode.get_data1());
+                            brotherNode.set_value2(brotherNode.get_value1());
                             brotherNode.set_data1(alterNode.get_parent().get_data1());
+                            brotherNode.set_value1(alterNode.get_parent().get_value1());
                             brotherNode.set_isThreeNode(true);
                             alterNode.set_data1(null);
+                            alterNode.set_value1(null);
                             alterNode.get_parent().set_data1(null);
+                            alterNode.get_parent().set_value1(null);
                             alterNode.get_parent().set_left1(brotherNode);
                             alterNode.get_parent().set_right1(null);
 
@@ -201,9 +230,12 @@ public class BST23<T extends  Comparable<T>> {
                         }else {
                             //v' je lavy syn
                             brotherNode.set_data2(alterNode.get_parent().get_data1());
+                            brotherNode.set_value2(alterNode.get_parent().get_value1());
                             brotherNode.set_isThreeNode(true);
                             alterNode.set_data1(null);
+                            alterNode.set_value1(null);
                             alterNode.get_parent().set_data1(null);
+                            alterNode.get_parent().set_value1(null);
                             alterNode.get_parent().set_right1(null);
                             alterNode.get_parent().set_left1(brotherNode);
 
@@ -235,9 +267,12 @@ public class BST23<T extends  Comparable<T>> {
                             if (alterNode.get_parent().get_right2() == brotherNode){
                                 //v' je uplne napravo
                                 brotherNode.set_data2(brotherNode.get_data1());
+                                brotherNode.set_value2(brotherNode.get_value1());
                                 brotherNode.set_data1(alterNode.get_parent().get_data2());
+                                brotherNode.set_value1(alterNode.get_parent().get_value2());
                                 brotherNode.set_isThreeNode(true);
                                 alterNode.get_parent().set_data2(null);
+                                alterNode.get_parent().set_value2(null);
                                 alterNode.get_parent().set_isThreeNode(false);
                                 alterNode.get_parent().set_right1(brotherNode);
                                 alterNode.get_parent().set_left2(null);
@@ -260,8 +295,10 @@ public class BST23<T extends  Comparable<T>> {
                             }else {
                                 //v' je v strede
                                 brotherNode.set_data2(alterNode.get_parent().get_data2());
+                                brotherNode.set_value2(alterNode.get_parent().get_value2());
                                 brotherNode.set_isThreeNode(true);
                                 alterNode.get_parent().set_data2(null);
+                                alterNode.get_parent().set_value2(null);
                                 alterNode.get_parent().set_isThreeNode(false);
                                 alterNode.get_parent().set_left2(null);
                                 alterNode.get_parent().set_right2(null);
@@ -282,10 +319,14 @@ public class BST23<T extends  Comparable<T>> {
                         }else {
                             //v je uplne nalavo
                             brotherNode.set_data2(brotherNode.get_data1());
+                            brotherNode.set_value2(brotherNode.get_value1());
                             brotherNode.set_data1(alterNode.get_parent().get_data1());
+                            brotherNode.set_value1(alterNode.get_parent().get_value1());
                             brotherNode.set_isThreeNode(true);
                             alterNode.get_parent().set_data1(alterNode.get_parent().get_data2());
+                            alterNode.get_parent().set_value1(alterNode.get_parent().get_value2());
                             alterNode.get_parent().set_data2(null);
+                            alterNode.get_parent().set_value2(null);
                             alterNode.get_parent().set_isThreeNode(false);
                             alterNode.get_parent().set_left1(brotherNode);
                             alterNode.get_parent().set_right1(alterNode.get_parent().get_right2());
@@ -384,22 +425,28 @@ public class BST23<T extends  Comparable<T>> {
                     leaf.set_isThreeNode(true);
                     if (leaf.get_data1().compareTo(pNode.get_data1()) > 0){
                         leaf.set_data2(pNode.get_data1());
+                        leaf.set_value2(pNode.get_value1());
                         return true;
                     }else if(leaf.get_data1().compareTo(pNode.get_data1()) < 0){
                         leaf.set_data2(leaf.get_data1());
+                        leaf.set_value2(leaf.get_value1());
                         leaf.set_data1(pNode.get_data1());
+                        leaf.set_value1(pNode.get_value1());
                         return true;
                     }
                 }else {
                     //list je trojvrchol
                     while (leaf != null){
                         T min = getMin(leaf, pNode);
+                        V minValue= getMinValue(leaf, pNode);
                         T max = getMax(leaf, pNode);
+                        V maxValue = getMaxValue(leaf, pNode);
                         T middle = getMiddle(leaf, pNode);
+                        V middleValue = getMiddleValue(leaf, pNode);
                         if (leaf == _root){
                             //ked je node korenom
-                            BST23Node newRoot = new BST23Node(middle);
-                            BST23Node newRightSon = new BST23Node(max);
+                            BST23Node newRoot = new BST23Node(middle, middleValue);
+                            BST23Node newRightSon = new BST23Node(max, maxValue);
 
                             newRoot.set_left1(leaf);
                             newRoot.set_right1(newRightSon);
@@ -411,7 +458,9 @@ public class BST23<T extends  Comparable<T>> {
                             leaf.set_parent(newRoot);
                             leaf.set_isThreeNode(false);
                             leaf.set_data2(null);
+                            leaf.set_value2(null);
                             leaf.set_data1(min);
+                            leaf.set_value1(minValue);
                             if (leaf.get_right2() != null && leaf.get_left2() != null){
                                 leaf.get_right2().set_parent(newRightSon);
                                 leaf.get_left2().set_parent(newRightSon);
@@ -427,7 +476,7 @@ public class BST23<T extends  Comparable<T>> {
                                 //pokial je otec dvojvrchol
                                 if (leaf.get_parent().get_left1() == leaf){
                                     //ak je lavy potomok otca
-                                    BST23Node newNode = new BST23Node(max);
+                                    BST23Node newNode = new BST23Node(max, maxValue);
                                     newNode.set_parent(leaf.get_parent());
                                     newNode.set_left1(leaf.get_left2());
                                     newNode.set_right1(leaf.get_right2());
@@ -439,19 +488,23 @@ public class BST23<T extends  Comparable<T>> {
                                     leaf.set_right2(null);
 
                                     leaf.get_parent().set_data2(leaf.get_parent().get_data1());
+                                    leaf.get_parent().set_value2(leaf.get_parent().get_value1());
                                     leaf.get_parent().set_data1(middle);
+                                    leaf.get_parent().set_value1(middleValue);
                                     leaf.get_parent().set_isThreeNode(true);
                                     leaf.get_parent().set_right2(leaf.get_parent().get_right1());
                                     leaf.get_parent().set_right1(newNode);
                                     leaf.get_parent().set_left2(newNode);
 
                                     leaf.set_data2(null);
+                                    leaf.set_value2(null);
                                     leaf.set_data1(min);
+                                    leaf.set_value1(minValue);
                                     leaf.set_isThreeNode(false);
                                     return true;
                                 }else{
                                     //ak je pravy potomok
-                                    BST23Node newNode = new BST23Node(min);
+                                    BST23Node newNode = new BST23Node(min, minValue);
                                     newNode.set_parent(leaf.get_parent());
                                     newNode.set_left1(leaf.get_left1());
                                     newNode.set_right1(leaf.get_right1());
@@ -461,6 +514,7 @@ public class BST23<T extends  Comparable<T>> {
                                     }
 
                                     leaf.get_parent().set_data2(middle);
+                                    leaf.get_parent().set_value2(middleValue);
                                     leaf.get_parent().set_isThreeNode(true);
                                     leaf.get_parent().set_right2(leaf.get_parent().get_right1());
                                     leaf.get_parent().set_right1(newNode);
@@ -471,7 +525,9 @@ public class BST23<T extends  Comparable<T>> {
                                     leaf.set_right2(null);
 
                                     leaf.set_data2(null);
+                                    leaf.set_value2(null);
                                     leaf.set_data1(max);
+                                    leaf.set_value1(maxValue);
                                     leaf.set_isThreeNode(false);
                                     return true;
                                 }
@@ -479,7 +535,7 @@ public class BST23<T extends  Comparable<T>> {
                                 //pokial je otec trojvrchol(doslo by k preteceniu)
                                 if(leaf.get_parent().get_right2() == leaf){
                                     //leaf je pravy potomok
-                                    BST23Node newNode = new BST23Node(min);
+                                    BST23Node newNode = new BST23Node(min, minValue);
                                     newNode.set_parent(leaf.get_parent());
                                     newNode.set_left1(leaf.get_left1());
                                     newNode.set_right1(leaf.get_right1());
@@ -495,14 +551,17 @@ public class BST23<T extends  Comparable<T>> {
                                     leaf.set_right2(null);
 
                                     leaf.set_data2(null);
+                                    leaf.set_value2(null);
                                     leaf.set_data1(max);
+                                    leaf.set_value1(maxValue);
                                     leaf.set_isThreeNode(false);
 
                                     leaf = leaf.get_parent();
                                     pNode.set_data1(middle);
+                                    pNode.set_value1(middleValue);
                                 }else if(leaf.get_parent().get_right1() == leaf){
                                     //leaf je v strede
-                                    BST23Node newNode = new BST23Node(max);
+                                    BST23Node newNode = new BST23Node(max, maxValue);
                                     newNode.set_parent(leaf.get_parent());
                                     newNode.set_left1(leaf.get_left2());
                                     newNode.set_right1(leaf.get_right2());
@@ -515,14 +574,17 @@ public class BST23<T extends  Comparable<T>> {
 
                                     leaf.get_parent().set_left2(newNode);
                                     leaf.set_data2(null);
+                                    leaf.set_value2(null);
                                     leaf.set_data1(min);
+                                    leaf.set_value1(minValue);
                                     leaf.set_isThreeNode(false);
 
                                     leaf = leaf.get_parent();
                                     pNode.set_data1(middle);
+                                    pNode.set_value1(middleValue);
                                 }else {
                                     //leaf je lavy potomok
-                                    BST23Node newNode = new BST23Node(max);
+                                    BST23Node newNode = new BST23Node(max, maxValue);
                                     newNode.set_parent(leaf.get_parent());
                                     newNode.set_left1(leaf.get_left2());
                                     newNode.set_right1(leaf.get_right2());
@@ -535,11 +597,14 @@ public class BST23<T extends  Comparable<T>> {
 
                                     leaf.get_parent().set_right1(newNode);
                                     leaf.set_data2(null);
+                                    leaf.set_value2(null);
                                     leaf.set_data1(min);
+                                    leaf.set_value1(minValue);
                                     leaf.set_isThreeNode(false);
 
                                     leaf = leaf.get_parent();
                                     pNode.set_data1(middle);
+                                    pNode.set_value1(middleValue);
                                 }
                             }
                         }
@@ -604,6 +669,23 @@ public class BST23<T extends  Comparable<T>> {
         return min;
     }
 
+    private V getMinValue(BST23Node threeNode, BST23Node addedNode){
+        T minKey;
+        V min;
+        if (threeNode.get_data1().compareTo(threeNode.get_data2()) > 0){
+            //overit spravnost pretypovania
+            min = (V) threeNode.get_value1();
+            minKey = (T) threeNode.get_data1();
+        }else {
+            min = (V) threeNode.get_value2();
+            minKey = (T) threeNode.get_data2();
+        }
+        if (addedNode.get_data1().compareTo(minKey) > 0){
+            min = (V) addedNode.get_value1();
+        }
+        return min;
+    }
+
     private T getMax(BST23Node threeNode, BST23Node addedNode){
         T max;
         if (threeNode.get_data1().compareTo(threeNode.get_data2()) < 0){
@@ -614,6 +696,22 @@ public class BST23<T extends  Comparable<T>> {
         }
         if (addedNode.get_data1().compareTo(max) < 0){
             max = (T) addedNode.get_data1();
+        }
+        return max;
+    }
+    private V getMaxValue(BST23Node threeNode, BST23Node addedNode){
+        V max;
+        T maxKey;
+        if (threeNode.get_data1().compareTo(threeNode.get_data2()) < 0){
+            //overit spravnost pretypovania
+            max = (V) threeNode.get_value1();
+            maxKey = (T) threeNode.get_data1();
+        }else {
+            max = (V) threeNode.get_value2();
+            maxKey = (T) threeNode.get_data2();
+        }
+        if (addedNode.get_data1().compareTo(maxKey) < 0){
+            max = (V) addedNode.get_value1();
         }
         return max;
     }
@@ -632,6 +730,34 @@ public class BST23<T extends  Comparable<T>> {
         if (addedNode.get_data1().compareTo(smaller) < 0){
             if(addedNode.get_data1().compareTo(bigger) > 0){
                 return (T) addedNode.get_data1();
+            }else {
+                return bigger;
+            }
+        }else {
+            return smaller;
+        }
+    }
+
+    private V getMiddleValue(BST23Node threeNode, BST23Node addedNode){
+        V smaller;
+        T smallerKey;
+        V bigger;
+        T biggerKey;
+        if (threeNode.get_data1().compareTo(threeNode.get_data2()) > 0){
+            //overit spravnost pretypovania
+            smaller = (V) threeNode.get_value1();
+            smallerKey = (T) threeNode.get_data1();
+            bigger = (V) threeNode.get_value2();
+            biggerKey = (T) threeNode.get_data2();
+        }else {
+            smaller = (V) threeNode.get_value2();
+            smallerKey = (T) threeNode.get_data2();
+            bigger = (V) threeNode.get_value1();
+            biggerKey = (T) threeNode.get_data1();
+        }
+        if (addedNode.get_data1().compareTo(smallerKey) < 0){
+            if(addedNode.get_data1().compareTo(biggerKey) > 0){
+                return (V) addedNode.get_value1();
             }else {
                 return bigger;
             }
@@ -748,7 +874,7 @@ public class BST23<T extends  Comparable<T>> {
         }
     }
 
-    public BST23Node<T> get_root() {
+    public BST23Node<T,V> get_root() {
         return _root;
     }
 }

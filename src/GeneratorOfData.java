@@ -5,7 +5,7 @@ public class GeneratorOfData {
 
     public void testInsert(int numberOfValues){
         //dorobit test na kombiovanie operácii insert aj delete
-        BST23<TestData> tree = new BST23<>();
+        BST23<TestKey, TestingObjectValue> tree = new BST23<>();
         ArrayList<Integer> values = new ArrayList<Integer>();
         for (int i = 0; i < numberOfValues; i++){
             values.add(i+1);
@@ -17,10 +17,11 @@ public class GeneratorOfData {
             }else {
                 randomIndex = ThreadLocalRandom.current().nextInt(0, values.size() - 1);
             }
-            TestData d = new TestData(values.get(randomIndex));
+            TestKey d = new TestKey(values.get(randomIndex));
+            TestingObjectValue v = new TestingObjectValue("Martin", "NEG");
             //TestData d = new TestData(numberOfValues-i);
             values.remove(randomIndex);
-            TestingData data = new TestingData(d);
+            TestingData data = new TestingData(d,v);
             if(!tree.insert(data)){
                 System.out.println("nevlozene");
             }else {
@@ -31,7 +32,7 @@ public class GeneratorOfData {
             }
         }
         for (int i = 0; i < numberOfValues; i++){
-            TestData d = new TestData(i+1);
+            TestKey d = new TestKey(i+1);
             TestingData data = new TestingData(d);
             if (tree.find(data) == null){
                 System.out.println(data.get_data1().getKey() + " nenajdene");
@@ -51,7 +52,7 @@ public class GeneratorOfData {
     }
 
     public void testDelete(int numberOfValues){
-        BST23<TestData> tree = new BST23<>();
+        BST23<TestKey, TestingObjectValue> tree = new BST23<>();
         ArrayList<Integer> values = new ArrayList<Integer>();
         for (int i = 0; i < numberOfValues; i++){
             values.add(i+1);
@@ -64,9 +65,10 @@ public class GeneratorOfData {
             }else {
                 randomIndex = ThreadLocalRandom.current().nextInt(0, values.size() - 1);
             }
-            TestData d = new TestData(values.get(randomIndex));
+            TestKey d = new TestKey(values.get(randomIndex));
+            TestingObjectValue v = new TestingObjectValue("Martin", "NEG");
             values.remove(randomIndex);
-            TestingData data = new TestingData(d);
+            TestingData data = new TestingData(d,v);
             if(!tree.insert(data)){
                 System.out.println("nevlozene");
             }else {
@@ -78,8 +80,9 @@ public class GeneratorOfData {
         }
 
         for (int i = 0; i < numberOfValues; i++){
-            TestData d = new TestData(i+1);
-            TestingData data = new TestingData(d);
+            TestKey d = new TestKey(i+1);
+            TestingObjectValue v = new TestingObjectValue("Martin", "NEG");
+            TestingData data = new TestingData(d,v);
             if (tree.delete(data) == false){
                 System.out.println(data.get_data1().getKey() + " nevymazane");
             }
@@ -239,7 +242,7 @@ public class GeneratorOfData {
     }
 
     public void testRandomOperation(int numberOfValues, double probabilityOfInsert){
-        BST23<TestData> tree = new BST23<>();
+        BST23<TestKey, TestingObjectValue> tree = new BST23<>();
         ArrayList<Integer> valuesForInsert = new ArrayList<Integer>();
         for (int i = 0; i < numberOfValues; i++){
             valuesForInsert.add(i+1);
@@ -261,9 +264,11 @@ public class GeneratorOfData {
                 }
                 Integer value = valuesForInsert.get(randomIndex);
                 //TestData d = new TestData(valuesForInsert.get(randomIndex));
-                TestData d = new TestData(value);
+                TestKey d = new TestKey(value);
+                String name = "Martin"+value;
+                TestingObjectValue v = new TestingObjectValue(name, "NEG");
                 valuesForInsert.remove(randomIndex);
-                TestingData data = new TestingData(d);
+                TestingData data = new TestingData(d,v);
                 if(!tree.insert(data)){
                     System.out.println("cislo " + value + " nevlozene");
                 }else {
@@ -287,8 +292,10 @@ public class GeneratorOfData {
                     }
                     Integer value = valuesInserted.get(randomIndex);
                     //TestData d = new TestData(valuesInserted.get(randomIndex));
-                    TestData d = new TestData(value);
-                    TestingData data = new TestingData(d);
+                    TestKey d = new TestKey(value);
+                    String name = "Martin"+value;
+                    TestingObjectValue v = new TestingObjectValue(name, "NEG");
+                    TestingData data = new TestingData(d,v);
                     System.out.println("pojde sa mazat " + value);
                     if (!tree.delete(data)){
                         System.out.println(value + " nevymazane");
@@ -307,7 +314,7 @@ public class GeneratorOfData {
         }
         int notFound = 0;
         for (Integer value: valuesInserted) {
-            TestData d = new TestData(value);
+            TestKey d = new TestKey(value);
             TestingData data = new TestingData(d);
             if (tree.find(data) == null){
                 System.out.println(data.get_data1().getKey() + " nenajdene");
@@ -317,23 +324,23 @@ public class GeneratorOfData {
         System.out.println("Pocet nenajdenych prvkov po operaciach: " + notFound);
     }
 
-    public void test(){
-        BST23<TestData> tree = new BST23<>();
+    /*public void test(){
+        BST23<TestKey> tree = new BST23<>();
 
-        TestData di = new TestData(4);
-        TestData di2 = new TestData(24);
-        TestData di3 = new TestData(26);
-        TestData di4 = new TestData(42);
-        TestData di5 = new TestData(94);
-        TestData di6 = new TestData(74);
-        TestData di7 = new TestData(97);
-        TestData di8 = new TestData(28);
-        TestData di9 = new TestData(25);
-        TestData di10 = new TestData(86);
-        TestData di11 = new TestData(19);
-        TestData di12 = new TestData(77);
-        TestData di13 = new TestData(44);
-        TestData di14 = new TestData(14);
+        TestKey di = new TestKey(4);
+        TestKey di2 = new TestKey(24);
+        TestKey di3 = new TestKey(26);
+        TestKey di4 = new TestKey(42);
+        TestKey di5 = new TestKey(94);
+        TestKey di6 = new TestKey(74);
+        TestKey di7 = new TestKey(97);
+        TestKey di8 = new TestKey(28);
+        TestKey di9 = new TestKey(25);
+        TestKey di10 = new TestKey(86);
+        TestKey di11 = new TestKey(19);
+        TestKey di12 = new TestKey(77);
+        TestKey di13 = new TestKey(44);
+        TestKey di14 = new TestKey(14);
         TestingData data1 = new TestingData(di);
         TestingData data2 = new TestingData(di2);
         TestingData data3 = new TestingData(di3);
@@ -349,10 +356,10 @@ public class GeneratorOfData {
         TestingData data13 = new TestingData(di13);
         TestingData data14 = new TestingData(di14);
 
-        TestData delD = new TestData(24);
-        TestData delD2 = new TestData(4);
-        TestData delD3 = new TestData(42);
-        TestData delD4 = new TestData(74);
+        TestKey delD = new TestKey(24);
+        TestKey delD2 = new TestKey(4);
+        TestKey delD3 = new TestKey(42);
+        TestKey delD4 = new TestKey(74);
         TestingData delData1 = new TestingData(delD);
         TestingData delData2 = new TestingData(delD2);
         TestingData delData3 = new TestingData(delD3);
@@ -383,5 +390,5 @@ public class GeneratorOfData {
         tree.insert(data14);
 
         tree.delete(delData4);
-    }
+    }*/
 }

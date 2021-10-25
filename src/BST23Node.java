@@ -1,4 +1,4 @@
-public class BST23Node<T extends Comparable<T>> {
+public class BST23Node<T extends Comparable<T>, V> {
     private BST23Node _left1;
     private BST23Node _right1;
     private BST23Node _left2;
@@ -6,10 +6,24 @@ public class BST23Node<T extends Comparable<T>> {
     private BST23Node _parent;
     private T _data1;
     private T _data2;
+    private V _value1;
+    private V _value2;
     private boolean _isThreeNode;
+
+    public BST23Node(T pData1, V pValue1){
+        _data1 = pData1;
+        _value1 = pValue1;
+        _data2 = null;
+        _isThreeNode = false;
+        _left1 = null;
+        _right1 = null;
+        _left2 = null;
+        _right2 = null;
+    }
 
     public BST23Node(T pData1){
         _data1 = pData1;
+        _value1 = null;
         _data2 = null;
         _isThreeNode = false;
         _left1 = null;
@@ -96,5 +110,21 @@ public class BST23Node<T extends Comparable<T>> {
 
     public void set_right2(BST23Node _right2) {
         this._right2 = _right2;
+    }
+
+    public V get_value1() {
+        return _value1;
+    }
+
+    public void set_value1(V _value1) {
+        this._value1 = _value1;
+    }
+
+    public V get_value2() {
+        return _value2;
+    }
+
+    public void set_value2(V _value2) {
+        this._value2 = _value2;
     }
 }
