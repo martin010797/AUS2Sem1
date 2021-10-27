@@ -324,8 +324,8 @@ public class GeneratorOfData {
         System.out.println("Pocet nenajdenych prvkov po operaciach: " + notFound);
     }
 
-    /*public void test(){
-        BST23<TestKey> tree = new BST23<>();
+    public void test(){
+        BST23<TestKey, TestingObjectValue> tree = new BST23<>();
 
         TestKey di = new TestKey(4);
         TestKey di2 = new TestKey(24);
@@ -341,35 +341,49 @@ public class GeneratorOfData {
         TestKey di12 = new TestKey(77);
         TestKey di13 = new TestKey(44);
         TestKey di14 = new TestKey(14);
-        TestingData data1 = new TestingData(di);
-        TestingData data2 = new TestingData(di2);
-        TestingData data3 = new TestingData(di3);
-        TestingData data4 = new TestingData(di4);
-        TestingData data5 = new TestingData(di5);
-        TestingData data6 = new TestingData(di6);
-        TestingData data7 = new TestingData(di7);
-        TestingData data8 = new TestingData(di8);
-        TestingData data9 = new TestingData(di9);
-        TestingData data10 = new TestingData(di10);
-        TestingData data11 = new TestingData(di11);
-        TestingData data12 = new TestingData(di12);
-        TestingData data13 = new TestingData(di13);
-        TestingData data14 = new TestingData(di14);
+        TestingObjectValue v1 = new TestingObjectValue("Martin4", "NEG");
+        TestingObjectValue v2 = new TestingObjectValue("Martin24", "NEG");
+        TestingObjectValue v3 = new TestingObjectValue("Martin26", "NEG");
+        TestingObjectValue v4 = new TestingObjectValue("Martin42", "NEG");
+        TestingObjectValue v5 = new TestingObjectValue("Martin94", "NEG");
+        TestingObjectValue v6 = new TestingObjectValue("Martin74", "NEG");
+        TestingObjectValue v7 = new TestingObjectValue("Martin97", "NEG");
+        TestingObjectValue v8 = new TestingObjectValue("Martin28", "NEG");
+        TestingObjectValue v9 = new TestingObjectValue("Martin25", "NEG");
+        TestingObjectValue v10 = new TestingObjectValue("Martin86", "NEG");
+        TestingObjectValue v11 = new TestingObjectValue("Martin19", "NEG");
+        TestingObjectValue v12 = new TestingObjectValue("Martin77", "NEG");
+        TestingObjectValue v13 = new TestingObjectValue("Martin44", "NEG");
+        TestingObjectValue v14 = new TestingObjectValue("Martin14", "NEG");
+        TestingData data1 = new TestingData(di,v1);
+        TestingData data2 = new TestingData(di2,v2);
+        TestingData data3 = new TestingData(di3,v3);
+        TestingData data4 = new TestingData(di4,v4);
+        TestingData data5 = new TestingData(di5,v5);
+        TestingData data6 = new TestingData(di6,v6);
+        TestingData data7 = new TestingData(di7,v7);
+        TestingData data8 = new TestingData(di8,v8);
+        TestingData data9 = new TestingData(di9,v9);
+        TestingData data10 = new TestingData(di10,v10);
+        TestingData data11 = new TestingData(di11,v11);
+        TestingData data12 = new TestingData(di12,v12);
+        TestingData data13 = new TestingData(di13,v13);
+        TestingData data14 = new TestingData(di14,v14);
 
-        TestKey delD = new TestKey(24);
+        /*TestKey delD = new TestKey(24);
         TestKey delD2 = new TestKey(4);
         TestKey delD3 = new TestKey(42);
         TestKey delD4 = new TestKey(74);
         TestingData delData1 = new TestingData(delD);
         TestingData delData2 = new TestingData(delD2);
         TestingData delData3 = new TestingData(delD3);
-        TestingData delData4 = new TestingData(delD4);
+        TestingData delData4 = new TestingData(delD4);*/
 
         tree.insert(data1);
         tree.insert(data2);
         tree.insert(data3);
 
-        tree.delete(delData1);
+        //tree.delete(delData1);
 
         tree.insert(data4);
         tree.insert(data5);
@@ -380,15 +394,25 @@ public class GeneratorOfData {
         tree.insert(data10);
         tree.insert(data11);
 
-        tree.delete(delData2);
+        //tree.delete(delData2);
 
         tree.insert(data12);
         tree.insert(data13);
 
-        tree.delete(delData3);
+        //tree.delete(delData3);
 
         tree.insert(data14);
 
-        tree.delete(delData4);
-    }*/
+        TestKey minKey = new TestKey(20);
+        TestKey maxKey = new TestKey(22);
+        TestingObjectValue minValue = new TestingObjectValue("Martin24", "NEG");
+        TestingObjectValue maxValue = new TestingObjectValue("Martin28", "NEG");
+        TestingData minTest = new TestingData(minKey,minValue);
+        TestingData maxTest = new TestingData(maxKey,maxValue);
+        ArrayList<BST23Node> listOfFoundNodes = tree.intervalSearch(minTest,maxTest);
+        for (int i = 0; i < listOfFoundNodes.size(); i++){
+            System.out.println(listOfFoundNodes.get(i).get_data1());
+        }
+        //tree.delete(delData4);
+    }
 }
