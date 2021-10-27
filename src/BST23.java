@@ -932,30 +932,6 @@ public class BST23<T extends  Comparable<T>, V> {
                 }
             }
         }
-        /*if (temp == null){
-            //minimalny node sa nenachadzal v strome tak sa pridava najmensi mozny ktory je od neho vacsi
-            if (belongsToInterval(minNode, maxNode, (T) prev.get_data1())){
-                //prvy kluc patri do intervalu
-                BST23Node newNode = new BST23Node(prev.get_data1(), prev.get_value1());
-                listOfFoundNodes.add(newNode);
-            }
-            if (prev.isThreeNode()){
-                if (belongsToInterval(minNode, maxNode, (T) prev.get_data2())) {
-                    //druhy kluc patri do intervalu
-                    BST23Node newNode = new BST23Node(prev.get_data2(), prev.get_value2());
-                    listOfFoundNodes.add(newNode);
-                }
-            }
-        }else {
-            //minimalny node sa nachadzal v strome
-            if (prev.isThreeNode() &&
-                    belongsToInterval(minNode, maxNode, (T) prev.get_data1()) &&
-                            belongsToInterval(minNode, maxNode, (T) prev.get_data2())){
-                //aj druhy kluc patri do intervalu
-                BST23Node newNode = new BST23Node(prev.get_data2(), prev.get_value2());
-                listOfFoundNodes.add(newNode);
-            }
-        }*/
         if (belongsToInterval(minNode, maxNode, (T) prev.get_data1())){
             //prvy kluc patri do intervalu
             BST23Node newNode = new BST23Node(prev.get_data1(), prev.get_value1());
@@ -963,31 +939,40 @@ public class BST23<T extends  Comparable<T>, V> {
         }
         NodeAndKey inOrderNode = findInOrderIntervalSearch(prev, (T) prev.get_data1());
         while (inOrderNode != null){
-
+            if (belongsToInterval(minNode, maxNode, (T) inOrderNode.getKey())){
+                if (inOrderNode.getNode().isThreeNode()){
+                    if (inOrderNode.getNode().get_data1().compareTo((T) inOrderNode.getKey()) == 0){
+                        //prve data
+                        BST23Node newNode =
+                                new BST23Node(inOrderNode.getNode().get_data1(), inOrderNode.getNode().get_value1());
+                        listOfFoundNodes.add(newNode);
+                        inOrderNode = findInOrderIntervalSearch(
+                                inOrderNode.getNode(),
+                                (T) inOrderNode.getNode().get_data1());
+                    }else if (inOrderNode.getNode().get_data2().compareTo((T) inOrderNode.getKey()) == 0){
+                        //druhe data
+                        BST23Node newNode =
+                                new BST23Node(inOrderNode.getNode().get_data2(), inOrderNode.getNode().get_value2());
+                        listOfFoundNodes.add(newNode);
+                        inOrderNode = findInOrderIntervalSearch(
+                                inOrderNode.getNode(),
+                                (T) inOrderNode.getNode().get_data2());
+                    }
+                }else {
+                    if (inOrderNode.getNode().get_data1().compareTo((T) inOrderNode.getKey()) == 0){
+                        BST23Node newNode =
+                                new BST23Node(inOrderNode.getNode().get_data1(), inOrderNode.getNode().get_value1());
+                        listOfFoundNodes.add(newNode);
+                        inOrderNode = findInOrderIntervalSearch(
+                                inOrderNode.getNode(),
+                                (T) inOrderNode.getNode().get_data1());
+                    }
+                }
+            }else {
+                break;
+            }
         }
         return listOfFoundNodes;
-
-        /*
-        if (isLeaf(node)){
-            return node;
-        }
-        if (nodeData.get_data1().compareTo(node.get_data1()) == 0){
-            //data ktore mazem su nalavo
-            BST23Node temp = node.get_right1();
-            while (!isLeaf(temp)){
-                temp = temp.get_left1();
-            }
-            return temp;
-        }else if(nodeData.get_data1().compareTo(node.get_data2()) == 0){
-            //data ktore mazem su napravo
-            BST23Node temp = node.get_right2();
-            while (!isLeaf(temp)){
-                temp = temp.get_left1();
-            }
-            return temp;
-        }
-        return null;
-         */
     }
 
     private NodeAndKey findInOrderIntervalSearch(BST23Node node, T key){
@@ -1046,8 +1031,77 @@ public class BST23<T extends  Comparable<T>, V> {
             }
         }else {
             //node je 3 vrchol
-            //TODO dokoncit
-
+            if (key.compareTo((T) node.get_data1()) == 0){
+                if (node.get_right1() == null){
+                    //nema stredneho syna tak nema kam vliezt tak vracia data 2
+                    NodeAndKey nodeAndKey = new NodeAndKey(node, node.get_data2());
+                    return nodeAndKey;
+                }else {
+                    //ma stredneho syna tak vlezie do neho
+                    BST23Node temp = node.get_right1();
+                    while (!isLeaf(temp)){
+                        //lez stale dolava az kym nenarazis na list
+                        temp = temp.get_left1();
+                    }
+                    NodeAndKey nodeAndKey = new NodeAndKey(temp, temp.get_data1());
+                    return nodeAndKey;
+                }
+            }else if(key.compareTo((T) node.get_data2()) == 0){
+                //hladame nasledovnika 2. kluca
+                if (node.get_right2() != null){
+                    //ma praveho syna tak vlezie do neho
+                    BST23Node temp = node.get_right1();
+                    while (!isLeaf(temp)){
+                        //lez stale dolava az kym nenarazis na list
+                        temp = temp.get_left1();
+                    }
+                    NodeAndKey nodeAndKey = new NodeAndKey(temp, temp.get_data1());
+                    return nodeAndKey;
+                }else {
+                    BST23Node temp = node;
+                    while (temp != null){
+                        if (temp.get_parent() != null){
+                            if (temp.get_parent().isThreeNode()){
+                                if (key.compareTo((T) temp.get_parent().get_data1()) > 0){
+                                    NodeAndKey nodeAndKey = new NodeAndKey(temp.get_parent(), temp.get_parent().get_data1());
+                                    return nodeAndKey;
+                                }
+                                if ((key.compareTo((T) temp.get_parent().get_data1()) < 0) &&
+                                        (key.compareTo((T) temp.get_parent().get_data2()) > 0)){
+                                    NodeAndKey nodeAndKey = new NodeAndKey(temp.get_parent(), temp.get_parent().get_data2());
+                                    return nodeAndKey;
+                                }
+                            }else {
+                                if (key.compareTo((T) temp.get_parent().get_data1()) > 0){
+                                    NodeAndKey nodeAndKey = new NodeAndKey(temp.get_parent(), temp.get_parent().get_data1());
+                                    return nodeAndKey;
+                                }
+                            }
+                        }else {
+                            if (!temp.isThreeNode()){
+                                if (key.compareTo((T) temp.get_data1()) > 0){
+                                    NodeAndKey nodeAndKey = new NodeAndKey(temp, temp.get_data1());
+                                    return nodeAndKey;
+                                }else {
+                                    return null;
+                                }
+                            }else {
+                                if (key.compareTo((T) temp.get_data1()) > 0){
+                                    NodeAndKey nodeAndKey = new NodeAndKey(temp, temp.get_data1());
+                                    return nodeAndKey;
+                                }else if ((key.compareTo((T) temp.get_data1()) < 0) &&
+                                        (key.compareTo((T) temp.get_data2()) > 0)){
+                                    NodeAndKey nodeAndKey = new NodeAndKey(temp, temp.get_data2());
+                                    return nodeAndKey;
+                                }else {
+                                    return null;
+                                }
+                            }
+                        }
+                        temp = temp.get_parent();
+                    }
+                }
+            }
         }
         return null;
     }
