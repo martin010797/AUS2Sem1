@@ -1,3 +1,5 @@
+package Tests;
+
 public class TestKey implements Comparable<TestKey> {
     private int key;
 

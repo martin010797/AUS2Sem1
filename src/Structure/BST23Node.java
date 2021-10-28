@@ -1,3 +1,5 @@
+package Structure;
+
 public class BST23Node<T extends Comparable<T>, V> {
     private BST23Node _left1;
     private BST23Node _right1;
@@ -32,10 +34,10 @@ public class BST23Node<T extends Comparable<T>, V> {
         _right2 = null;
     }
 
-    /*public BST23Node(BST23Node pLeft,
-                     BST23Node pRight,
-                     BST23Node pMiddle,
-                     BST23Node pParent,
+    /*public Structure.BST23Node(Structure.BST23Node pLeft,
+                     Structure.BST23Node pRight,
+                     Structure.BST23Node pMiddle,
+                     Structure.BST23Node pParent,
                      T pData1,
                      T pData2,
                      boolean pIsThreeNode){

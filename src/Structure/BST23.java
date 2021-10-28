@@ -1,3 +1,5 @@
+package Structure;
+
 import java.util.ArrayList;
 
 public class BST23<T extends  Comparable<T>, V> {
@@ -900,14 +902,10 @@ public class BST23<T extends  Comparable<T>, V> {
                     temp = prev.get_right1();
                 }else if(temp.get_data1().compareTo(minNode.get_data1()) == 0){
                     //najdeny minimalny node v datach 1
-                    //BST23Node newNode = new BST23Node(temp.get_data1(), temp.get_value1());
-                    //listOfFoundNodes.add(newNode);
                     prev = temp;
                     break;
                 }else if (temp.get_data2().compareTo(minNode.get_data1()) == 0){
                     //najdeny minimalny node v datach 2
-                    //BST23Node newNode = new BST23Node(temp.get_data2(), temp.get_value2());
-                    //listOfFoundNodes.add(newNode);
                     prev = temp;
                     break;
                 }
@@ -924,8 +922,6 @@ public class BST23<T extends  Comparable<T>, V> {
                 if (temp != null){
                     if (temp.get_data1().compareTo(minNode.get_data1()) == 0){
                         //najdeny minimalny node
-                        //BST23Node newNode = new BST23Node(temp.get_data1(), temp.get_value1());
-                        //listOfFoundNodes.add(newNode);
                         prev = temp;
                         break;
                     }
@@ -1050,7 +1046,7 @@ public class BST23<T extends  Comparable<T>, V> {
                 //hladame nasledovnika 2. kluca
                 if (node.get_right2() != null){
                     //ma praveho syna tak vlezie do neho
-                    BST23Node temp = node.get_right1();
+                    BST23Node temp = node.get_right2();
                     while (!isLeaf(temp)){
                         //lez stale dolava az kym nenarazis na list
                         temp = temp.get_left1();

@@ -1,3 +1,5 @@
+package Tests;
+
 public class TestingObjectValue {
     private String name;
     private String testResult;
