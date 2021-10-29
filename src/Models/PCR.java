@@ -1,5 +1,7 @@
 package Models;
 
+import Structure.BST23Node;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,6 +14,7 @@ public class PCR {
     private int regionId;
     private boolean result;
     private String description;
+    private Person testedPerson;
 
     public PCR(int year,
                int month,
@@ -24,7 +27,8 @@ public class PCR {
                int pDistrictId,
                int pRegionId,
                boolean pResult,
-               String pDescription){
+               String pDescription,
+               Person pPerson){
         dateAndTimeOfTest = new Date(year,month-1,day,hour,minute,second);
         patientId = pPatienId;
         PCRId = UUID.randomUUID();
@@ -33,6 +37,7 @@ public class PCR {
         regionId = pRegionId;
         result = pResult;
         description = pDescription;
+        testedPerson = pPerson;
     }
 
     public Date getDateAndTimeOfTest() {
@@ -97,5 +102,13 @@ public class PCR {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Person getPerson() {
+        return testedPerson;
+    }
+
+    public void setPerson(Person person) {
+        this.testedPerson = person;
     }
 }

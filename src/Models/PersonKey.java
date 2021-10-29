@@ -17,7 +17,7 @@ public class PersonKey implements Comparable<PersonKey> {
 
     @Override
     public int compareTo(PersonKey o) {
-        //komparator opacne lebo aj v implementovani stromu som spraavil opacne
+        //komparator opacne lebo aj v implementovani stromu som spravil omylom opacne
         if (idNumber.compareTo(o.idNumber) < 0){
             return 1;
         }else if (idNumber.compareTo(o.idNumber) > 0){

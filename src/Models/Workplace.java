@@ -2,15 +2,12 @@ package Models;
 
 import Structure.BST23;
 
-public class Region {
-    //kraj
-    private int regionId;
-    private String name;
+public class Workplace {
+    private int workplaceId;
     private BST23<PCRKey, PCR> treeOfTests = new BST23<>();
 
-    public Region(int regionId, String name) {
-        this.regionId = regionId;
-        this.name = name;
+    public Workplace(int workplaceId) {
+        this.workplaceId = workplaceId;
     }
 
     public boolean insertTest(PCRData insertedTest){
@@ -21,20 +18,12 @@ public class Region {
         return treeOfTests.delete(deletedTest);
     }
 
-    public int getRegionId() {
-        return regionId;
+    public int getWorkplaceId() {
+        return workplaceId;
     }
 
-    public void setRegionId(int regionId) {
-        this.regionId = regionId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setWorkplaceId(int workplaceId) {
+        this.workplaceId = workplaceId;
     }
 
     public BST23<PCRKey, PCR> getTreeOfTests() {

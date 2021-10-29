@@ -16,16 +16,15 @@ public class Person {
     public Person(String pName, String pSurname, int pYear, int pMonth, int pDay, String pIdNumber){
         name = pName;
         surname = pSurname;
-        //dateOfBirth = new Date(2005, Calendar.DECEMBER,13,12,35,44);
-        dateOfBirth = new GregorianCalendar(2001, 2, 24).getTime();
+        dateOfBirth = new GregorianCalendar(pYear, pMonth, pDay).getTime();
         idNumber = pIdNumber;
     }
 
-    public boolean insertPCRForPerson(BST23Node PCRTest){
+    public boolean insertPCRForPerson(PCRData PCRTest){
         return treeOfTests.insert(PCRTest);
     }
 
-    public boolean deletePCRTest(BST23Node deletedTest){
+    public boolean deletePCRTest(PCRData deletedTest){
         return treeOfTests.delete(deletedTest);
     }
 

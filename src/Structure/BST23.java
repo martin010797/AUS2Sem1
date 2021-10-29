@@ -10,6 +10,7 @@ public class BST23<T extends  Comparable<T>, V> {
         _root = null;
     }
 
+    //robene podla prednaskoveho pseudkokodu v kombinacii s poskytnutou strankou z elearningu na vizualizaciu
     public boolean delete(BST23Node pNode){
         BST23Node deletedNode = find(pNode);
         if (deletedNode != null){
@@ -417,6 +418,7 @@ public class BST23<T extends  Comparable<T>, V> {
         return false;
     }
 
+    //taktiez robene podla prednaskoveho pseudkokodu v kombinacii s poskytnutou strankou z elearningu
     public boolean insert(BST23Node pNode){
         if (_root == null){
             _root = pNode;
@@ -823,6 +825,7 @@ public class BST23<T extends  Comparable<T>, V> {
         return null;
     }
 
+    //podla kodu na find pre klasicky BVS na internete
     public BST23Node find(BST23Node pNode){
         //pomocne vytvoreny pNode kty je posielany ako parameter bude mat hladany kluc v data1
         if (_root == null ||
@@ -878,6 +881,7 @@ public class BST23<T extends  Comparable<T>, V> {
         }
     }
 
+    //ziadna predloha(robene intuitivne)
     public ArrayList<BST23Node> intervalSearch(BST23Node minNode, BST23Node maxNode){
         ArrayList<BST23Node> listOfFoundNodes = new ArrayList<>();
         BST23Node prev = null;
