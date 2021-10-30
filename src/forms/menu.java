@@ -1,10 +1,16 @@
 package forms;
 
+import Main_system.PCRSystem;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class menu {
+    //private PCRSystem pcrSystem;
+    private PersonInsert personInsertForm;
+
+    private JFrame frame;
     private JButton Button1;
     private JPanel MenuPanel;
     private JButton Button2;
@@ -13,6 +19,15 @@ public class menu {
     private JButton Button17;
 
     public menu() {
+        frame = new JFrame("Menu");
+        frame.setContentPane(MenuPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+
+        personInsertForm =  new PersonInsert(this, frame);
+
+        //pcrSystem = new PCRSystem();
         Button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -40,7 +55,10 @@ public class menu {
         Button17.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(personInsertForm.getPersonInsertPanel());
+                frame.pack();
+                frame.setVisible(true);
+                //PersonInsert personInsert = new PersonInsert();
             }
         });
     }

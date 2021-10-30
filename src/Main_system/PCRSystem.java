@@ -104,4 +104,12 @@ public class PCRSystem {
             }
         }
     }
+
+    public boolean insertPerson(String name, String surname, int year, int month, int day, String idNumber){
+        PersonKey pKey = new PersonKey(idNumber);
+        Person pValue = new Person(name,surname,year,month,day,idNumber);
+        PersonData pData = new PersonData(pKey,pValue);
+        PersonData testedPersonNode = (PersonData) treeOfPeople.find(pData);
+        return treeOfPeople.insert(pData);
+    }
 }

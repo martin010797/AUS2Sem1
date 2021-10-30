@@ -19,15 +19,13 @@ public class PCRKey implements Comparable<PCRKey>{
 
     @Override
     public int compareTo(PCRKey o) {
-        //TODO vyriesit porovnanie UUID
-        return 0;
-        /*
-        if (PCRId < o.PCRId){
+        //komparator opacne lebo aj v implementovani stromu som spravil omylom opacne
+        if (PCRId.compareTo(o.PCRId) < 0){
             return 1;
-        }else if (PCRId > o.PCRId ){
+        }else if (PCRId.compareTo(o.PCRId) > 0){
             return -1;
         }else {
             return 0;
-        }*/
+        }
     }
 }
