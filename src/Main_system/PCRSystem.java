@@ -12,9 +12,7 @@ public class PCRSystem {
     private BST23<RegionKey, Region> treeOfRegions = new BST23<>();
     private BST23<WorkplaceKey, Workplace> treeOfWorkplace = new BST23<>();
 
-
-    //ulohy
-    public void insertPCRTest(String personIdNumber,
+    public ResponseAndPCRTestId insertPCRTest(String personIdNumber,
                               int yearOfTest,
                               int monthOfTest,
                               int dayOfTest,
@@ -32,7 +30,7 @@ public class PCRSystem {
         PersonData testedPersonNode = (PersonData) treeOfPeople.find(pData);
         if (testedPersonNode == null){
             //osoba sa v systeme nenachadza
-            //TODO vyhodit nejaku chybu
+            return new ResponseAndPCRTestId(ResponseType.PERSON_DOESNT_EXIST,null);
         }else {
             //vytvorenie testu
             Person person;
@@ -59,19 +57,28 @@ public class PCRSystem {
             PCRKey testKey = new PCRKey(testValue.getPCRId());
             PCRData testData = new PCRData(testKey, testValue);
             //vlozenie testu do stromu testov v osobe
-            person.insertPCRForPerson(testData);
+            if(!person.insertPCRForPerson(testData)){
+                return new ResponseAndPCRTestId(ResponseType.PCR_WITH_ID_EXISTS,testValue.getPCRId().toString());
+            }
             //pre dany okres vlozi test
             DistrictKey dKey = new DistrictKey(districtId);
             DistrictData dData = new DistrictData(dKey,null);
             DistrictData testedDistrictNode = (DistrictData) treeOfDistricts.find(dData);
             if(testedDistrictNode == null){
-                //okres neexistuje
-                //TODO vyhodit nejaku chybu
+                //vymaze sa test z osoby lebo sa nemoze vkladat do systemu pokial neexistuje okes
+                person.deletePCRTest(testData);
+                return new ResponseAndPCRTestId(ResponseType.DISTRICT_DOESNT_EXIST,testValue.getPCRId().toString());
             }else {
                 if (testedDistrictNode.get_data1().getDistrictId() == districtId){
-                    testedDistrictNode.get_value1().insertTest(testData);
+                    if(!testedDistrictNode.get_value1().insertTest(testData)){
+                        person.deletePCRTest(testData);
+                        return new ResponseAndPCRTestId(ResponseType.PCR_WITH_ID_EXISTS,testValue.getPCRId().toString());
+                    }
                 }else {
-                    testedDistrictNode.get_value2().insertTest(testData);
+                    if (!testedDistrictNode.get_value2().insertTest(testData)){
+                        person.deletePCRTest(testData);
+                        return new ResponseAndPCRTestId(ResponseType.PCR_WITH_ID_EXISTS,testValue.getPCRId().toString());
+                    }
                 }
             }
             //pre dany kraj vlozi test
@@ -79,13 +86,41 @@ public class PCRSystem {
             RegionData rData = new RegionData(rKey,null);
             RegionData testedRegionNode = (RegionData) treeOfRegions.find(rData);
             if(testedRegionNode == null){
-                //kraj neexistuje
-                //TODO vyhodit nejaku chybu
+                //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
+                if (testedDistrictNode.get_data1().getDistrictId() == districtId) {
+                    testedDistrictNode.get_value1().deletePCRTest(testData);
+                }else {
+                    testedDistrictNode.get_value2().deletePCRTest(testData);
+                }
+                person.deletePCRTest(testData);
+                return new ResponseAndPCRTestId(ResponseType.REGION_DOESNT_EXIST, testValue.getPCRId().toString());
             }else {
                 if (testedRegionNode.get_data1().getRegionId() == regionId){
-                    testedRegionNode.get_value1().insertTest(testData);
+                    if (!testedRegionNode.get_value1().insertTest(testData)){
+                        //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
+                        if (testedDistrictNode.get_data1().getDistrictId() == districtId) {
+                            testedDistrictNode.get_value1().deletePCRTest(testData);
+                        }else {
+                            testedDistrictNode.get_value2().deletePCRTest(testData);
+                        }
+                        person.deletePCRTest(testData);
+                        return new ResponseAndPCRTestId(
+                                ResponseType.PCR_WITH_ID_EXISTS,
+                                testValue.getPCRId().toString());
+                    }
                 }else {
-                    testedRegionNode.get_value2().insertTest(testData);
+                    if (!testedRegionNode.get_value2().insertTest(testData)){
+                        //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
+                        if (testedDistrictNode.get_data1().getDistrictId() == districtId) {
+                            testedDistrictNode.get_value1().deletePCRTest(testData);
+                        }else {
+                            testedDistrictNode.get_value2().deletePCRTest(testData);
+                        }
+                        person.deletePCRTest(testData);
+                        return new ResponseAndPCRTestId(
+                                ResponseType.PCR_WITH_ID_EXISTS,
+                                testValue.getPCRId().toString());
+                    }
                 }
             }
             //pre dane pracovisko vlozi test
@@ -93,15 +128,61 @@ public class PCRSystem {
             WorkplaceData wData = new WorkplaceData(wKey,null);
             WorkplaceData workplaceNode = (WorkplaceData) treeOfWorkplace.find(wData);
             if(workplaceNode == null){
-                //pracovisko neexistuje
-                //TODO vyhodit nejaku chybu
+                //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
+                if (testedDistrictNode.get_data1().getDistrictId() == districtId) {
+                    testedDistrictNode.get_value1().deletePCRTest(testData);
+                }else {
+                    testedDistrictNode.get_value2().deletePCRTest(testData);
+                }
+                if (testedRegionNode.get_data1().getRegionId() == regionId){
+                    testedRegionNode.get_value1().deletePCRTest(testData);
+                }else {
+                    testedRegionNode.get_value2().deletePCRTest(testData);
+                }
+                person.deletePCRTest(testData);
+                return new ResponseAndPCRTestId(
+                        ResponseType.WORKPLACE_DOESNT_EXIST,
+                        testValue.getPCRId().toString());
             }else {
                 if (workplaceNode.get_data1().getWorkplaceId() == workplaceId){
-                    workplaceNode.get_value1().insertTest(testData);
+                    if (!workplaceNode.get_value1().insertTest(testData)){
+                        //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
+                        if (testedDistrictNode.get_data1().getDistrictId() == districtId) {
+                            testedDistrictNode.get_value1().deletePCRTest(testData);
+                        }else {
+                            testedDistrictNode.get_value2().deletePCRTest(testData);
+                        }
+                        if (testedRegionNode.get_data1().getRegionId() == regionId){
+                            testedRegionNode.get_value1().deletePCRTest(testData);
+                        }else {
+                            testedRegionNode.get_value2().deletePCRTest(testData);
+                        }
+                        person.deletePCRTest(testData);
+                        return new ResponseAndPCRTestId(
+                                ResponseType.PCR_WITH_ID_EXISTS,
+                                testValue.getPCRId().toString());
+                    }
                 }else {
-                    workplaceNode.get_value2().insertTest(testData);
+                    if (!workplaceNode.get_value2().insertTest(testData)){
+                        //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
+                        if (testedDistrictNode.get_data1().getDistrictId() == districtId) {
+                            testedDistrictNode.get_value1().deletePCRTest(testData);
+                        }else {
+                            testedDistrictNode.get_value2().deletePCRTest(testData);
+                        }
+                        if (testedRegionNode.get_data1().getRegionId() == regionId){
+                            testedRegionNode.get_value1().deletePCRTest(testData);
+                        }else {
+                            testedRegionNode.get_value2().deletePCRTest(testData);
+                        }
+                        person.deletePCRTest(testData);
+                        return new ResponseAndPCRTestId(
+                                ResponseType.PCR_WITH_ID_EXISTS,
+                                testValue.getPCRId().toString());
+                    }
                 }
             }
+            return new ResponseAndPCRTestId(ResponseType.SUCCESS,testValue.getPCRId().toString());
         }
     }
 
@@ -109,7 +190,25 @@ public class PCRSystem {
         PersonKey pKey = new PersonKey(idNumber);
         Person pValue = new Person(name,surname,year,month,day,idNumber);
         PersonData pData = new PersonData(pKey,pValue);
-        PersonData testedPersonNode = (PersonData) treeOfPeople.find(pData);
+        //PersonData testedPersonNode = (PersonData) treeOfPeople.find(pData);
         return treeOfPeople.insert(pData);
+    }
+
+    public class ResponseAndPCRTestId{
+        private ResponseType response;
+        private String PCRTestId;
+
+        public ResponseAndPCRTestId(ResponseType response, String PCRTestId) {
+            this.response = response;
+            this.PCRTestId = PCRTestId;
+        }
+
+        public ResponseType getResponse() {
+            return response;
+        }
+
+        public String getPCRTestId() {
+            return PCRTestId;
+        }
     }
 }

@@ -1,0 +1,10 @@
+package Main_system;
+
+public enum ResponseType {
+    PERSON_DOESNT_EXIST,
+    PCR_WITH_ID_EXISTS,
+    DISTRICT_DOESNT_EXIST,
+    REGION_DOESNT_EXIST,
+    WORKPLACE_DOESNT_EXIST,
+    SUCCESS
+}

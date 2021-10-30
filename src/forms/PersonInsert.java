@@ -8,8 +8,7 @@ import java.awt.event.ActionListener;
 
 public class PersonInsert {
 
-    private PCRSystem pcrSystem = new PCRSystem();
-    //private JFrame frame;
+    private PCRSystem pcrSystem;
     private menu m;
     private JFrame frame;
 
@@ -23,9 +22,10 @@ public class PersonInsert {
     private JPanel PersonInsertPanel;
     private JButton goToMenu;
 
-    public PersonInsert(menu pMenu, JFrame pFrame) {
+    public PersonInsert(menu pMenu, JFrame pFrame, PCRSystem pPcrSystem) {
         m = pMenu;
         frame = pFrame;
+        pcrSystem = pPcrSystem;
 
         Insert.addActionListener(new ActionListener() {
             @Override
