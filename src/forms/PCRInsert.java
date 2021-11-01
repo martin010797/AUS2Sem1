@@ -73,7 +73,9 @@ public class PCRInsert {
                             note.getText());
                     switch (responseAndTest.getResponse()){
                         case SUCCESS: {
-                            JOptionPane.showMessageDialog(null, "PCR test vlozeny do systemu.");
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "PCR test vlozeny do systemu.\n Kod testu: " + responseAndTest.getPCRTestId());
                             setFieldsEmpty();
 
                             frame.setContentPane(m.getMenuPanel());

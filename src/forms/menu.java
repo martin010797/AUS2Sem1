@@ -11,6 +11,7 @@ public class menu {
     private PCRSystem pcrSystem = new PCRSystem();
     private PersonInsert personInsertForm;
     private PCRInsert PCRInsertForm;
+    private SearchResultForPerson searchResultForPersonForm;
 
     private JFrame frame;
     private JButton Button1;
@@ -29,6 +30,7 @@ public class menu {
 
         personInsertForm =  new PersonInsert(this, frame, pcrSystem);
         PCRInsertForm = new PCRInsert(this, frame, pcrSystem);
+        searchResultForPersonForm = new SearchResultForPerson(this, frame, pcrSystem);
 
         //pcrSystem = new PCRSystem();
         Button1.addActionListener(new ActionListener() {
@@ -42,7 +44,9 @@ public class menu {
         Button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(searchResultForPersonForm.getSearchResultForPersonPanel());
+                frame.pack();
+                frame.setVisible(true);
             }
         });
         Button4.addActionListener(new ActionListener() {
