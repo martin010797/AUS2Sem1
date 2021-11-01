@@ -12,8 +12,8 @@ public class Main {
         //generator.testInsert(100000);
         //generator.testDelete(100000);
         //generator.testRandomOperation(300000, 0.9);
-        /*TestKey minKey = new TestKey(9950);
-        TestKey maxKey = new TestKey(15000);
+        /*TestKey minKey = new TestKey(5000);
+        TestKey maxKey = new TestKey(10000);
         TestingData minTest = new TestingData(minKey);
         TestingData maxTest = new TestingData(maxKey);
         generator.testIntervalSearch(minTest, maxTest, 100000);*/

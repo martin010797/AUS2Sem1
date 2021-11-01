@@ -42,6 +42,7 @@ public class PCRInsert {
                 frame.setContentPane(m.getMenuPanel());
                 frame.pack();
                 frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
         insertPCRButton.addActionListener(new ActionListener() {
@@ -81,6 +82,7 @@ public class PCRInsert {
                             frame.setContentPane(m.getMenuPanel());
                             frame.pack();
                             frame.setVisible(true);
+                            frame.setLocationRelativeTo(null);
                             break;
                         }
                         case PCR_WITH_ID_EXISTS: {

@@ -47,6 +47,7 @@ public class PersonInsert {
                             frame.setContentPane(m.getMenuPanel());
                             frame.pack();
                             frame.setVisible(true);
+                            frame.setLocationRelativeTo(null);
                         }else {
                             //chyba ze uz existuje
                             JOptionPane.showMessageDialog(
@@ -67,6 +68,7 @@ public class PersonInsert {
                 frame.setContentPane(m.getMenuPanel());
                 frame.pack();
                 frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
     }

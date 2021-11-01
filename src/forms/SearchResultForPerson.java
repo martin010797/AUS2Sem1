@@ -30,6 +30,7 @@ public class SearchResultForPerson {
                 frame.setContentPane(m.getMenuPanel());
                 frame.pack();
                 frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
         searchForResultButton.addActionListener(new ActionListener() {
