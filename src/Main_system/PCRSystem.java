@@ -4,7 +4,11 @@ import Models.*;
 import Structure.BST23;
 import Structure.BST23Node;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PCRSystem {
     //stromy
@@ -257,6 +261,70 @@ public class PCRSystem {
             Workplace wValue = new Workplace(i);
             WorkplaceData wData = new WorkplaceData(wKey,wValue);
             treeOfWorkplace.insert(wData);
+        }
+        for (int i = 0; i < 500; i++){
+            PersonKey pKey = new PersonKey(Integer.toString(i+1));
+            Person pValue = new Person(
+                    "Meno"+(i+1),
+                    "Priezvisko"+(i+1),
+                    1998,
+                    2,
+                    3,
+                    Integer.toString(i+1));
+            PersonData pData = new PersonData(pKey,pValue);
+            treeOfPeople.insert(pData);
+        }
+
+        try {
+            File myObj = new File("rod_cislo_test.txt");
+            myObj.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < 1000; i++){
+            double positivity = Math.random();
+            boolean boolPos;
+            if (positivity < 0.5){
+                boolPos = true;
+            }else {
+                boolPos = false;
+            }
+            int randIdPerson = ThreadLocalRandom.current().nextInt(1, 500 - 1);
+            int randYear = ThreadLocalRandom.current().nextInt(2019, 2021 - 1);
+            int randMonth = ThreadLocalRandom.current().nextInt(1, 12 - 1);
+            int randDay = ThreadLocalRandom.current().nextInt(1, 28 - 1);
+            int randHour = ThreadLocalRandom.current().nextInt(1, 24 - 1);
+            int randMinute = ThreadLocalRandom.current().nextInt(1, 59 - 1);
+            int randWorkplace = ThreadLocalRandom.current().nextInt(0, 300 - 1);
+            int randDistrict = ThreadLocalRandom.current().nextInt(0, 100 - 1);
+            int randRegion = ThreadLocalRandom.current().nextInt(0, 10 - 1);
+            ResponseAndPCRTestId response = insertPCRTest(
+                    Integer.toString(randIdPerson),
+                    randYear,
+                    randMonth,
+                    randDay,
+                    randHour,
+                    randMinute,
+                    0,
+                    randWorkplace,
+                    randDistrict,
+                    randRegion,
+                    boolPos,
+                    ""
+                    );
+            try {
+                FileWriter myWriter;
+                if (i == 0){
+                    myWriter = new FileWriter("rod_cislo_test.txt");
+                    myWriter.write("");
+                }else{
+                    myWriter = new FileWriter("rod_cislo_test.txt", true);
+                }
+                myWriter.write(randIdPerson + " " + response.getPCRTestId() + "\n");
+                myWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
