@@ -252,19 +252,19 @@ public class PCRSystem {
             RegionData rData = new RegionData(rKey,rValue);
             treeOfRegions.insert(rData);
         }
-        for (int i = 0; i < 100; i++){
+        for (int i = 0; i < 200; i++){
             DistrictKey dKey = new DistrictKey(i);
             District dValue = new District(i, "Okres "+i);
             DistrictData dData = new DistrictData(dKey,dValue);
             treeOfDistricts.insert(dData);
         }
-        for (int i = 0; i < 300; i++){
+        for (int i = 0; i < 1000; i++){
             WorkplaceKey wKey = new WorkplaceKey(i);
             Workplace wValue = new Workplace(i);
             WorkplaceData wData = new WorkplaceData(wKey,wValue);
             treeOfWorkplace.insert(wData);
         }
-        for (int i = 0; i < 500; i++){
+        for (int i = 0; i < 100000; i++){
             PersonKey pKey = new PersonKey(Integer.toString(i+1));
             Person pValue = new Person(
                     "Meno"+(i+1),
@@ -283,23 +283,23 @@ public class PCRSystem {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (int i = 0; i < 1000; i++){
+        for (int i = 0; i < 100000; i++){
             double positivity = Math.random();
             boolean boolPos;
-            if (positivity < 0.5){
+            if (positivity < 0.3){
                 boolPos = true;
             }else {
                 boolPos = false;
             }
-            int randIdPerson = ThreadLocalRandom.current().nextInt(1, 500 - 1);
-            int randYear = ThreadLocalRandom.current().nextInt(2019, 2021 - 1);
+            int randIdPerson = ThreadLocalRandom.current().nextInt(1, 100000 - 1);
+            int randYear = ThreadLocalRandom.current().nextInt(2019, 2023 - 1);
             int randMonth = ThreadLocalRandom.current().nextInt(1, 12 - 1);
             int randDay = ThreadLocalRandom.current().nextInt(1, 28 - 1);
             int randHour = ThreadLocalRandom.current().nextInt(1, 24 - 1);
             int randMinute = ThreadLocalRandom.current().nextInt(1, 59 - 1);
             int randSecond = ThreadLocalRandom.current().nextInt(1, 59 - 1);
-            int randWorkplace = ThreadLocalRandom.current().nextInt(0, 300 - 1);
-            int randDistrict = ThreadLocalRandom.current().nextInt(0, 100 - 1);
+            int randWorkplace = ThreadLocalRandom.current().nextInt(0, 1000 - 1);
+            int randDistrict = ThreadLocalRandom.current().nextInt(0, 200 - 1);
             int randRegion = ThreadLocalRandom.current().nextInt(0, 10 - 1);
             ResponseAndPCRTestId response = insertPCRTest(
                     Integer.toString(randIdPerson),
@@ -380,7 +380,7 @@ public class PCRSystem {
                         person.getName() + " " + person.getSurname());
             }else {
                 String resultString = person.getName() + " " + person.getSurname() + "\n" + person.getIdNumber() +
-                        "\nNarodeny:" + person.getDateOfBirth().getDate() + "." + (person.getDateOfBirth().getMonth()+1)
+                        "\nNarodeny: " + person.getDateOfBirth().getDate() + "." + (person.getDateOfBirth().getMonth()+1)
                         + "." + person.getDateOfBirth().getYear();
                 String res;
                 if (((PCR) testNode.get_value1()).isResult()){
@@ -389,7 +389,7 @@ public class PCRSystem {
                     res = "NEGATIVNY";
                 }
                 if (((PCRKey) testNode.get_data1()).getPCRId().toString().equals(pcrId)) {
-                    resultString += "\nKod testu: " + ((PCR) testNode.get_value1()).getPCRId() + "\nDatum a cas testu:"
+                    resultString += "\nKod testu: " + ((PCR) testNode.get_value1()).getPCRId() + "\nDatum a cas testu: "
                             + ((PCR) testNode.get_value1()).getDateAndTimeOfTest().getDate() + "."
                             + (((PCR) testNode.get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
                             + ((PCR) testNode.get_value1()).getDateAndTimeOfTest().getYear() + " "
@@ -402,7 +402,7 @@ public class PCRSystem {
                     return new PersonPCRResult(
                             ResponseType.SUCCESS, resultString);
                 } else {
-                    resultString += "\nKod testu: " + ((PCR) testNode.get_value2()).getPCRId() + "\n Datum a cas testu:"
+                    resultString += "\nKod testu: " + ((PCR) testNode.get_value2()).getPCRId() + "\n Datum a cas testu: "
                             + ((PCR) testNode.get_value2()).getDateAndTimeOfTest().getDate() + "."
                             + (((PCR) testNode.get_value2()).getDateAndTimeOfTest().getMonth()+1) + "."
                             + ((PCR) testNode.get_value2()).getDateAndTimeOfTest().getYear() + " "
@@ -447,11 +447,11 @@ public class PCRSystem {
                     Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
                     resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
                             + "\n" + person.getIdNumber() +
-                            "\nNarodeny:" + person.getDateOfBirth().getDate() + "."
+                            "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                             + (person.getDateOfBirth().getMonth()+1)
                             + "." + person.getDateOfBirth().getYear() + "\n"
                             + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value1()).getPCRId()
-                            + "\nDatum a cas testu:"
+                            + "\nDatum a cas testu: "
                             + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getDate() + "."
                             + (((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
                             + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getYear() + " "
@@ -463,7 +463,10 @@ public class PCRSystem {
                             + ((PCR) listOfFoundNodes.get(i).get_value1()).getRegionId() + "\nVysledok testu: "
                             + res + "\nPoznamka k testu: "
                             + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
-                            + "-----------------------------------------\n";
+                            + "\n-----------------------------------------\n";
+                }
+                if (listOfFoundNodes.size() == 0){
+                    resultString = "Ziadne najdene testy pre pracovisko v zadanych datumoch.";
                 }
                 return new PersonPCRResult(ResponseType.SUCCESS,resultString);
             }else {
@@ -479,7 +482,7 @@ public class PCRSystem {
                     Person person = ((PCR) listOfFoundNodes.get(i).get_value2()).getPerson();
                     resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
                             + "\n" + person.getIdNumber() +
-                            "\nNarodeny:" + person.getDateOfBirth().getDate() + "."
+                            "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                             + (person.getDateOfBirth().getMonth()+1)
                             + "." + person.getDateOfBirth().getYear() + "\n"
                             + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value2()).getPCRId()
@@ -496,6 +499,9 @@ public class PCRSystem {
                             + res + "\nPoznamka k testu: "
                             + ((PCR) listOfFoundNodes.get(i).get_value2()).getDescription()
                             + "-----------------------------------------\n";
+                }
+                if (listOfFoundNodes.size() == 0){
+                    resultString = "Ziadne najdene testy pre pracovisko v zadanych datumoch.";
                 }
                 return new PersonPCRResult(ResponseType.SUCCESS,resultString);
             }
