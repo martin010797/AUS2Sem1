@@ -19,11 +19,5 @@ public class Main {
         generator.testIntervalSearch(minTest, maxTest, 100000);*/
 
         menu m = new menu();
-
-        /*JFrame frame = new JFrame("Menu");
-        frame.setContentPane(new menu().getMenuPanel());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);*/
     }
 }

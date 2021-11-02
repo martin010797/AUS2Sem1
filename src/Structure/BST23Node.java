@@ -34,22 +34,6 @@ public class BST23Node<T extends Comparable<T>, V> {
         _right2 = null;
     }
 
-    /*public Structure.BST23Node(Structure.BST23Node pLeft,
-                     Structure.BST23Node pRight,
-                     Structure.BST23Node pMiddle,
-                     Structure.BST23Node pParent,
-                     T pData1,
-                     T pData2,
-                     boolean pIsThreeNode){
-        _left = pLeft;
-        _right = pRight;
-        _middle = pMiddle;
-        _parent = pParent;
-        _data1 = pData1;
-        _data2 = pData2;
-        _isThreeNode = pIsThreeNode;
-    }*/
-
     public BST23Node get_parent() {
         return _parent;
     }

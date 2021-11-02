@@ -840,18 +840,15 @@ public class BST23<T extends  Comparable<T>, V> {
                     if (temp.get_data1().compareTo(pNode.get_data1()) < 0){
                         //hladany kluc je mensi ako lavy vrchol(teda data1)
                         prev = temp;
-                        //temp = prev.get_left();
                         temp = prev.get_left1();
                     }else if (temp.get_data2().compareTo(pNode.get_data1()) > 0){
                         //hladany kluc je vacsi ako pravy vrchol
                         prev = temp;
-                        //temp = prev.get_right();
                         temp = prev.get_right2();
                     }else if ((temp.get_data1().compareTo(pNode.get_data1()) > 0) &&
                             (temp.get_data2().compareTo(pNode.get_data1()) < 0)){
                         //hladany kluc je medzi pravym a lavym klucom
                         prev = temp;
-                        //temp = prev.get_middle();
                         temp = prev.get_right1();
                     }else if ((temp.get_data1().compareTo(pNode.get_data1()) == 0) ||
                             (temp.get_data2().compareTo(pNode.get_data1()) == 0)){
@@ -862,12 +859,10 @@ public class BST23<T extends  Comparable<T>, V> {
                     if (temp.get_data1().compareTo(pNode.get_data1()) > 0){
                         //ak pnode data1 je vacsie ako tempdata
                         prev = temp;
-                        //temp = prev.get_right();
                         temp = prev.get_right1();
                     }else if(temp.get_data1().compareTo(pNode.get_data1()) < 0){
                         //ak pnode data1 je mensie ako tempdata
                         prev = temp;
-                        //temp = prev.get_left();
                         temp = prev.get_left1();
                     }
                     if (temp != null){

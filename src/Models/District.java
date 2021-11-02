@@ -3,21 +3,20 @@ package Models;
 import Structure.BST23;
 
 public class District {
-    //okres
     private int districtId;
     private String name;
-    private BST23<PCRKey, PCR> treeOfTests = new BST23<>();
+    private BST23<PCRKeyDistrict, PCR> treeOfTests = new BST23<>();
 
     public District(int districtId, String name) {
         this.districtId = districtId;
         this.name = name;
     }
 
-    public boolean insertTest(PCRData insertedTest){
+    public boolean insertTest(PCRDistrictPositiveData insertedTest){
         return treeOfTests.insert(insertedTest);
     }
 
-    public boolean deletePCRTest(PCRData deletedTest){
+    public boolean deletePCRTest(PCRDistrictPositiveData deletedTest){
         return treeOfTests.delete(deletedTest);
     }
 
@@ -37,11 +36,11 @@ public class District {
         this.name = name;
     }
 
-    public BST23<PCRKey, PCR> getTreeOfTestedPeople() {
+    public BST23<PCRKeyDistrict, PCR> getTreeOfTestedPeople() {
         return treeOfTests;
     }
 
-    public void setTreeOfTestedPeople(BST23<PCRKey, PCR> treeOfTests) {
+    public void setTreeOfTestedPeople(BST23<PCRKeyDistrict, PCR> treeOfTests) {
         this.treeOfTests = treeOfTests;
     }
 }

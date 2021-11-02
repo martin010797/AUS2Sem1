@@ -65,9 +65,6 @@ public class PCRSystem {
                     description,
                     person);
             PCRKey testKey = new PCRKey(testValue.getPCRId());
-            //TODO testdata musia byt asi vzdy pred vkladanim do roznych stromov vytvori nanovo lebo vsade sa tym padom vklada ta ista referencia
-            //TODO opatrne s vkladanim tych istych premennych do inych stromov(mozu sa navzajom ovplyvnovat)
-            //TODO ak by sa objavovali prvky na inych miestach ako by mali byt tak moze byt problem tu
             PCRData personTestData = new PCRData(testKey, testValue);
             //vlozenie testu do stromu testov v osobe
             if(!person.insertPCRForPerson(personTestData)){
@@ -76,8 +73,6 @@ public class PCRSystem {
             //pre dany okres vlozi test
             DistrictKey dKey = new DistrictKey(districtId);
             DistrictData dData = new DistrictData(dKey,null);
-            //DistrictData testedDistrictNode;
-            //DistrictData testedDistrictNode = (DistrictData) treeOfDistricts.find(dData);
             BST23Node testedDistrictNode = treeOfDistricts.find(dData);
             if(testedDistrictNode == null){
                 //vymaze sa test z osoby lebo sa nemoze vkladat do systemu pokial neexistuje okes
@@ -85,12 +80,8 @@ public class PCRSystem {
                 person.deletePCRTest(deletedPersonTestData);
                 return new ResponseAndPCRTestId(ResponseType.DISTRICT_DOESNT_EXIST,testValue.getPCRId().toString());
             }else {
-                /*testedDistrictNode = new DistrictData(
-                        ((DistrictKey) districtParentNode.get_data1()),
-                        ((District) districtParentNode.get_value1()));
-                testedDistrictNode.set_data2((DistrictKey) districtParentNode.get_data2());
-                testedDistrictNode.set_value2((District) districtParentNode.get_value2());*/
-                PCRData districtTestData = new PCRData(testKey, testValue);
+                PCRKeyDistrict districtPCRKey = new PCRKeyDistrict(testValue.isResult(),testValue.getDateAndTimeOfTest());
+                PCRDistrictPositiveData districtTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                 if (((DistrictKey) testedDistrictNode.get_data1()).getDistrictId() == districtId){
                     if(!((District) testedDistrictNode.get_value1()).insertTest(districtTestData)){
                         PCRData deletedPersonTestData = new PCRData(testKey, testValue);
@@ -110,12 +101,13 @@ public class PCRSystem {
             RegionData rData = new RegionData(rKey,null);
             BST23Node testedRegionNode = treeOfRegions.find(rData);
             if(testedRegionNode == null){
+                PCRKeyDistrict districtPCRKey = new PCRKeyDistrict(testValue.isResult(),testValue.getDateAndTimeOfTest());
                 //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
                 if (((DistrictKey) testedDistrictNode.get_data1()).getDistrictId() == districtId) {
-                    PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                    PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                     ((District) testedDistrictNode.get_value1()).deletePCRTest(deletedDistrictTestData);
                 }else {
-                    PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                    PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                     ((District) testedDistrictNode.get_value2()).deletePCRTest(deletedDistrictTestData);
                 }
                 PCRData deletedPersonTestData = new PCRData(testKey, testValue);
@@ -125,12 +117,13 @@ public class PCRSystem {
                 PCRData regionTestData = new PCRData(testKey, testValue);
                 if (((RegionKey) testedRegionNode.get_data1()).getRegionId() == regionId){
                     if (!((Region) testedRegionNode.get_value1()).insertTest(regionTestData)){
+                        PCRKeyDistrict districtPCRKey = new PCRKeyDistrict(testValue.isResult(),testValue.getDateAndTimeOfTest());
                         //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
                         if (((DistrictKey) testedDistrictNode.get_data1()).getDistrictId() == districtId) {
-                            PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                            PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value1()).deletePCRTest(deletedDistrictTestData);
                         }else {
-                            PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                            PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value2()).deletePCRTest(deletedDistrictTestData);
                         }
                         PCRData deletedPersonTestData = new PCRData(testKey, testValue);
@@ -141,12 +134,13 @@ public class PCRSystem {
                     }
                 }else {
                     if (!((Region) testedRegionNode.get_value2()).insertTest(regionTestData)){
+                        PCRKeyDistrict districtPCRKey = new PCRKeyDistrict(testValue.isResult(),testValue.getDateAndTimeOfTest());
                         //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
                         if (((DistrictKey) testedDistrictNode.get_data1()).getDistrictId() == districtId) {
-                            PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                            PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value1()).deletePCRTest(deletedDistrictTestData);
                         }else {
-                            PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                            PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value2()).deletePCRTest(deletedDistrictTestData);
                         }
                         PCRData deletedPersonTestData = new PCRData(testKey, testValue);
@@ -162,12 +156,13 @@ public class PCRSystem {
             WorkplaceData wData = new WorkplaceData(wKey,null);
             BST23Node workplaceNode = treeOfWorkplace.find(wData);
             if(workplaceNode == null){
+                PCRKeyDistrict districtPCRKey = new PCRKeyDistrict(testValue.isResult(),testValue.getDateAndTimeOfTest());
                 //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
                 if (((DistrictKey) testedDistrictNode.get_data1()).getDistrictId() == districtId) {
-                    PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                    PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                     ((District) testedDistrictNode.get_value1()).deletePCRTest(deletedDistrictTestData);
                 }else {
-                    PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                    PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                     ((District) testedDistrictNode.get_value2()).deletePCRTest(deletedDistrictTestData);
                 }
                 if (((RegionKey) testedRegionNode.get_data1()).getRegionId() == regionId){
@@ -187,12 +182,13 @@ public class PCRSystem {
                 PCRWorkplaceData workplaceTestData = new PCRWorkplaceData(testWorkplaceKey, testValue);
                 if (((WorkplaceKey) workplaceNode.get_data1()).getWorkplaceId() == workplaceId){
                     if (!((Workplace) workplaceNode.get_value1()).insertTest(workplaceTestData)){
+                        PCRKeyDistrict districtPCRKey = new PCRKeyDistrict(testValue.isResult(),testValue.getDateAndTimeOfTest());
                         //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
                         if (((DistrictKey) testedDistrictNode.get_data1()).getDistrictId() == districtId) {
-                            PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                            PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value1()).deletePCRTest(deletedDistrictTestData);
                         }else {
-                            PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                            PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value2()).deletePCRTest(deletedDistrictTestData);
                         }
                         if (((RegionKey) testedRegionNode.get_data1()).getRegionId() == regionId){
@@ -210,12 +206,13 @@ public class PCRSystem {
                     }
                 }else {
                     if (!((Workplace) workplaceNode.get_value2()).insertTest(workplaceTestData)){
+                        PCRKeyDistrict districtPCRKey = new PCRKeyDistrict(testValue.isResult(),testValue.getDateAndTimeOfTest());
                         //mazania kvoli tomu aby neostali data ked sa nemoze vkladat
                         if (((DistrictKey) testedDistrictNode.get_data1()).getDistrictId() == districtId) {
-                            PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                            PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value1()).deletePCRTest(deletedDistrictTestData);
                         }else {
-                            PCRData deletedDistrictTestData = new PCRData(testKey, testValue);
+                            PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value2()).deletePCRTest(deletedDistrictTestData);
                         }
                         if (((RegionKey) testedRegionNode.get_data1()).getRegionId() == regionId){
@@ -241,7 +238,6 @@ public class PCRSystem {
         PersonKey pKey = new PersonKey(idNumber);
         Person pValue = new Person(name,surname,year,month,day,idNumber);
         PersonData pData = new PersonData(pKey,pValue);
-        //PersonData testedPersonNode = (PersonData) treeOfPeople.find(pData);
         return treeOfPeople.insert(pData);
     }
 
@@ -502,6 +498,95 @@ public class PCRSystem {
                 }
                 if (listOfFoundNodes.size() == 0){
                     resultString = "Ziadne najdene testy pre pracovisko v zadanych datumoch.";
+                }
+                return new PersonPCRResult(ResponseType.SUCCESS,resultString);
+            }
+        }
+    }
+
+    public PersonPCRResult searchPositiveInDistrict(int districtId, Date dateFrom, Date dateTo){
+        String resultString = "";
+        DistrictKey dKey = new DistrictKey(districtId);
+        DistrictData dData = new DistrictData(dKey,null);
+        BST23Node districtNode = treeOfDistricts.find(dData);
+        if (districtNode == null){
+            return new PersonPCRResult(ResponseType.DISTRICT_DOESNT_EXIST,null);
+        }else {
+            if (dateFrom.compareTo(dateTo) > 0){
+                return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
+            }
+            PCRKeyDistrict pKeyFrom = new PCRKeyDistrict(true,dateFrom);
+            PCRDistrictPositiveData pDataFrom = new PCRDistrictPositiveData(pKeyFrom,null);
+            PCRKeyDistrict pKeyTo = new PCRKeyDistrict(true,dateTo);
+            PCRDistrictPositiveData pDataTo = new PCRDistrictPositiveData(pKeyTo,null);
+            if (((DistrictKey) districtNode.get_data1()).getDistrictId() == districtId){
+                ArrayList<BST23Node> listOfFoundNodes;
+                listOfFoundNodes = ((District) districtNode.get_value1()).getTreeOfTestedPeople().intervalSearch(pDataFrom,pDataTo);
+                for (int i = 0; i < listOfFoundNodes.size(); i++){
+                    String res;
+                    if (((PCR) listOfFoundNodes.get(i).get_value1()).isResult()){
+                        res = "POZITIVNY";
+                    }else {
+                        res = "NEGATIVNY";
+                    }
+                    Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
+                    resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                            + "\n" + person.getIdNumber() +
+                            "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
+                            + (person.getDateOfBirth().getMonth()+1)
+                            + "." + person.getDateOfBirth().getYear() + "\n"
+                            + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value1()).getPCRId()
+                            + "\nDatum a cas testu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getDate() + "."
+                            + (((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getYear() + " "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getHours() + ":"
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMinutes()
+                            + "\nKod pracoviska: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getWorkplaceId() + "\nKod okresu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDistrictId() + "\nKod kraja: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getRegionId() + "\nVysledok testu: "
+                            + res + "\nPoznamka k testu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
+                            + "\n-----------------------------------------\n";
+                }
+                if (listOfFoundNodes.size() == 0){
+                    resultString = "Ziadne najdene pozitivne testy pre okres v zadanych datumoch.";
+                }
+                return new PersonPCRResult(ResponseType.SUCCESS,resultString);
+            }else {
+                ArrayList<BST23Node> listOfFoundNodes;
+                listOfFoundNodes = ((District) districtNode.get_value2()).getTreeOfTestedPeople().intervalSearch(pDataFrom,pDataTo);
+                for (int i = 0; i < listOfFoundNodes.size(); i++){
+                    String res;
+                    if (((PCR) listOfFoundNodes.get(i).get_value2()).isResult()){
+                        res = "POZITIVNY";
+                    }else {
+                        res = "NEGATIVNY";
+                    }
+                    Person person = ((PCR) listOfFoundNodes.get(i).get_value2()).getPerson();
+                    resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                            + "\n" + person.getIdNumber() +
+                            "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
+                            + (person.getDateOfBirth().getMonth()+1)
+                            + "." + person.getDateOfBirth().getYear() + "\n"
+                            + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value2()).getPCRId()
+                            + "\nDatum a cas testu:"
+                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getDate() + "."
+                            + (((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getMonth()+1) + "."
+                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getYear() + " "
+                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getHours() + ":"
+                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getMinutes()
+                            + "\nKod pracoviska: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getWorkplaceId() + "\nKod okresu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDistrictId() + "\nKod kraja: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getRegionId() + "\nVysledok testu: "
+                            + res + "\nPoznamka k testu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDescription()
+                            + "-----------------------------------------\n";
+                }
+                if (listOfFoundNodes.size() == 0){
+                    resultString = "Ziadne najdene pozitivne testy pre okres v zadanych datumoch.";
                 }
                 return new PersonPCRResult(ResponseType.SUCCESS,resultString);
             }
