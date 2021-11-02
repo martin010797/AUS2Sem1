@@ -6,6 +6,7 @@ import Main_system.ResponseType;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PCRInsert {
     private PCRSystem pcrSystem;
@@ -66,7 +67,7 @@ public class PCRInsert {
                             Integer.parseInt(day.getText()),
                             Integer.parseInt(hour.getText()),
                             Integer.parseInt(minute.getText()),
-                            0,
+                            ThreadLocalRandom.current().nextInt(1, 59 - 1),
                             Integer.parseInt(workplaceId.getText()),
                             Integer.parseInt(districtId.getText()),
                             Integer.parseInt(regionId.getText()),
@@ -87,6 +88,12 @@ public class PCRInsert {
                         }
                         case PCR_WITH_ID_EXISTS: {
                             JOptionPane.showMessageDialog(null, "PCR test je duplicitny!");
+                            break;
+                        }
+                        case PCR_EXISTS_FOR_THAT_TIME: {
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "PCR test v danom case a na danom pracovisku uz existuje.");
                             break;
                         }
                         case PERSON_DOESNT_EXIST:{

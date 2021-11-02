@@ -4,13 +4,13 @@ import Structure.BST23;
 
 public class Workplace {
     private int workplaceId;
-    private BST23<PCRKey, PCR> treeOfTests = new BST23<>();
+    private BST23<PCRKeyDate, PCR> treeOfTests = new BST23<>();
 
     public Workplace(int workplaceId) {
         this.workplaceId = workplaceId;
     }
 
-    public boolean insertTest(PCRData insertedTest){
+    public boolean insertTest(PCRWorkplaceData insertedTest){
         return treeOfTests.insert(insertedTest);
     }
 
@@ -26,11 +26,11 @@ public class Workplace {
         this.workplaceId = workplaceId;
     }
 
-    public BST23<PCRKey, PCR> getTreeOfTests() {
+    public BST23<PCRKeyDate, PCR> getTreeOfTests() {
         return treeOfTests;
     }
 
-    public void setTreeOfTests(BST23<PCRKey, PCR> treeOfTests) {
+    public void setTreeOfTests(BST23<PCRKeyDate, PCR> treeOfTests) {
         this.treeOfTests = treeOfTests;
     }
 }
