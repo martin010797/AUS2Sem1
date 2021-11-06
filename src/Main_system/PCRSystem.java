@@ -506,31 +506,31 @@ public class PCRSystem {
                 listOfFoundNodes = ((Workplace) workplaceNode.get_value2()).getTreeOfTests().intervalSearch(pDataFrom,pDataTo);
                 for (int i = 0; i < listOfFoundNodes.size(); i++){
                     String res;
-                    if (((PCR) listOfFoundNodes.get(i).get_value2()).isResult()){
+                    if (((PCR) listOfFoundNodes.get(i).get_value1()).isResult()){
                         res = "POZITIVNY";
                     }else {
                         res = "NEGATIVNY";
                     }
-                    Person person = ((PCR) listOfFoundNodes.get(i).get_value2()).getPerson();
+                    Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
                     resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
                             + "\n" + person.getIdNumber() +
                             "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                             + (person.getDateOfBirth().getMonth()+1)
                             + "." + person.getDateOfBirth().getYear() + "\n"
-                            + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value2()).getPCRId()
+                            + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value1()).getPCRId()
                             + "\nDatum a cas testu:"
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getDate() + "."
-                            + (((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getMonth()+1) + "."
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getYear() + " "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getHours() + ":"
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getMinutes()
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getDate() + "."
+                            + (((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getYear() + " "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getHours() + ":"
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMinutes()
                             + "\nKod pracoviska: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getWorkplaceId() + "\nKod okresu: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDistrictId() + "\nKod kraja: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getRegionId() + "\nVysledok testu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getWorkplaceId() + "\nKod okresu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDistrictId() + "\nKod kraja: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getRegionId() + "\nVysledok testu: "
                             + res + "\nPoznamka k testu: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDescription()
-                            + "-----------------------------------------\n";
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
+                            + "\n-----------------------------------------\n";
                 }
                 if (listOfFoundNodes.size() == 0){
                     resultString = "Ziadne najdene testy pre pracovisko v zadanych datumoch.";
@@ -595,31 +595,31 @@ public class PCRSystem {
                 listOfFoundNodes = ((District) districtNode.get_value2()).getTreeOfTestedPeople().intervalSearch(pDataFrom,pDataTo);
                 for (int i = 0; i < listOfFoundNodes.size(); i++){
                     String res;
-                    if (((PCR) listOfFoundNodes.get(i).get_value2()).isResult()){
+                    if (((PCR) listOfFoundNodes.get(i).get_value1()).isResult()){
                         res = "POZITIVNY";
                     }else {
                         res = "NEGATIVNY";
                     }
-                    Person person = ((PCR) listOfFoundNodes.get(i).get_value2()).getPerson();
+                    Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
                     resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
                             + "\n" + person.getIdNumber() +
                             "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                             + (person.getDateOfBirth().getMonth()+1)
                             + "." + person.getDateOfBirth().getYear() + "\n"
-                            + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value2()).getPCRId()
+                            + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value1()).getPCRId()
                             + "\nDatum a cas testu:"
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getDate() + "."
-                            + (((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getMonth()+1) + "."
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getYear() + " "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getHours() + ":"
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getMinutes()
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getDate() + "."
+                            + (((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getYear() + " "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getHours() + ":"
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMinutes()
                             + "\nKod pracoviska: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getWorkplaceId() + "\nKod okresu: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDistrictId() + "\nKod kraja: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getRegionId() + "\nVysledok testu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getWorkplaceId() + "\nKod okresu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDistrictId() + "\nKod kraja: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getRegionId() + "\nVysledok testu: "
                             + res + "\nPoznamka k testu: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDescription()
-                            + "-----------------------------------------\n";
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
+                            + "\n-----------------------------------------\n";
                 }
                 if (listOfFoundNodes.size() == 0){
                     resultString = "Ziadne najdene testy v zadanych datumoch.";
@@ -678,34 +678,34 @@ public class PCRSystem {
                 listOfFoundNodes = ((Person) personNode.get_value2()).getTreeOfTests().inOrder();
                 for (int i = 0; i < listOfFoundNodes.size(); i++){
                     String res;
-                    if (((PCR) listOfFoundNodes.get(i).get_value2()).isResult()){
+                    if (((PCR) listOfFoundNodes.get(i).get_value1()).isResult()){
                         res = "POZITIVNY";
                     }else {
                         res = "NEGATIVNY";
                     }
-                    Person person = ((PCR) listOfFoundNodes.get(i).get_value2()).getPerson();
+                    Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
                     resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
                             + "\n" + person.getIdNumber() +
                             "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                             + (person.getDateOfBirth().getMonth()+1)
                             + "." + person.getDateOfBirth().getYear() + "\n"
-                            + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value2()).getPCRId()
+                            + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value1()).getPCRId()
                             + "\nDatum a cas testu:"
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getDate() + "."
-                            + (((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getMonth()+1) + "."
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getYear() + " "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getHours() + ":"
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDateAndTimeOfTest().getMinutes()
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getDate() + "."
+                            + (((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getYear() + " "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getHours() + ":"
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMinutes()
                             + "\nKod pracoviska: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getWorkplaceId() + "\nKod okresu: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDistrictId() + "\nKod kraja: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getRegionId() + "\nVysledok testu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getWorkplaceId() + "\nKod okresu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDistrictId() + "\nKod kraja: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getRegionId() + "\nVysledok testu: "
                             + res + "\nPoznamka k testu: "
-                            + ((PCR) listOfFoundNodes.get(i).get_value2()).getDescription()
-                            + "-----------------------------------------\n";
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
+                            + "\n-----------------------------------------\n";
                 }
                 if (listOfFoundNodes.size() == 0){
-                    resultString = "Ziadne najdene testy pre osobu" +
+                    resultString = "Ziadne najdene testy pre osobu " +
                             ((Person) personNode.get_value2()).getName() + " " +
                             ((Person) personNode.get_value2()).getSurname() + ".";
                 }
