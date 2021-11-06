@@ -70,26 +70,44 @@ public class PCRSystem {
             if(!person.insertPCRForPerson(personTestData)){
                 return new ResponseAndPCRTestId(ResponseType.PCR_WITH_ID_EXISTS,testValue.getPCRId().toString());
             }
+            //vlozenie testu do stromov v osobe podla datumu
+            PCRKeyDate pKeyDate = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+            PCRWorkplaceData pDateData = new PCRWorkplaceData(pKeyDate,testValue);
+            if (!person.insertPCRByDateForPerson(pDateData)){
+                //nepodarilo sa vlozit tak vymaz z testov pre osobu podla id testu
+                PCRData deletedPersonTestData = new PCRData(testKey, testValue);
+                person.deletePCRTest(deletedPersonTestData);
+                return new ResponseAndPCRTestId(ResponseType.PCR_EXISTS_FOR_THAT_TIME, testValue.getPCRId().toString());
+            }
             //pre dany okres vlozi test
             DistrictKey dKey = new DistrictKey(districtId);
             DistrictData dData = new DistrictData(dKey,null);
             BST23Node testedDistrictNode = treeOfDistricts.find(dData);
             if(testedDistrictNode == null){
-                //vymaze sa test z osoby lebo sa nemoze vkladat do systemu pokial neexistuje okes
+                //vymaze sa test z osoby lebo sa nemoze vkladat do systemu pokial neexistuje okres
                 PCRData deletedPersonTestData = new PCRData(testKey, testValue);
                 person.deletePCRTest(deletedPersonTestData);
+                PCRKeyDate pKeyDateDeleted = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+                PCRWorkplaceData deletedPersonDateTestData = new PCRWorkplaceData(pKeyDateDeleted,testValue);
+                person.deletePCRTestByDate(deletedPersonDateTestData);
                 return new ResponseAndPCRTestId(ResponseType.DISTRICT_DOESNT_EXIST,testValue.getPCRId().toString());
             }else {
                 PCRKeyDistrict districtPCRKey = new PCRKeyDistrict(testValue.isResult(),testValue.getDateAndTimeOfTest());
                 PCRDistrictPositiveData districtTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                 if (((DistrictKey) testedDistrictNode.get_data1()).getDistrictId() == districtId){
                     if(!((District) testedDistrictNode.get_value1()).insertTest(districtTestData)){
+                        PCRKeyDate pKeyDateDeleted = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+                        PCRWorkplaceData deletedPersonDateTestData = new PCRWorkplaceData(pKeyDateDeleted,testValue);
+                        person.deletePCRTestByDate(deletedPersonDateTestData);
                         PCRData deletedPersonTestData = new PCRData(testKey, testValue);
                         person.deletePCRTest(deletedPersonTestData);
                         return new ResponseAndPCRTestId(ResponseType.PCR_WITH_ID_EXISTS,testValue.getPCRId().toString());
                     }
                 }else {
                     if (!((District) testedDistrictNode.get_value2()).insertTest(districtTestData)){
+                        PCRKeyDate pKeyDateDeleted = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+                        PCRWorkplaceData deletedPersonDateTestData = new PCRWorkplaceData(pKeyDateDeleted,testValue);
+                        person.deletePCRTestByDate(deletedPersonDateTestData);
                         PCRData deletedPersonTestData = new PCRData(testKey, testValue);
                         person.deletePCRTest(deletedPersonTestData);
                         return new ResponseAndPCRTestId(ResponseType.PCR_WITH_ID_EXISTS,testValue.getPCRId().toString());
@@ -110,6 +128,9 @@ public class PCRSystem {
                     PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                     ((District) testedDistrictNode.get_value2()).deletePCRTest(deletedDistrictTestData);
                 }
+                PCRKeyDate pKeyDateDeleted = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+                PCRWorkplaceData deletedPersonDateTestData = new PCRWorkplaceData(pKeyDateDeleted,testValue);
+                person.deletePCRTestByDate(deletedPersonDateTestData);
                 PCRData deletedPersonTestData = new PCRData(testKey, testValue);
                 person.deletePCRTest(deletedPersonTestData);
                 return new ResponseAndPCRTestId(ResponseType.REGION_DOESNT_EXIST, testValue.getPCRId().toString());
@@ -126,6 +147,9 @@ public class PCRSystem {
                             PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value2()).deletePCRTest(deletedDistrictTestData);
                         }
+                        PCRKeyDate pKeyDateDeleted = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+                        PCRWorkplaceData deletedPersonDateTestData = new PCRWorkplaceData(pKeyDateDeleted,testValue);
+                        person.deletePCRTestByDate(deletedPersonDateTestData);
                         PCRData deletedPersonTestData = new PCRData(testKey, testValue);
                         person.deletePCRTest(deletedPersonTestData);
                         return new ResponseAndPCRTestId(
@@ -143,6 +167,9 @@ public class PCRSystem {
                             PCRDistrictPositiveData deletedDistrictTestData = new PCRDistrictPositiveData(districtPCRKey, testValue);
                             ((District) testedDistrictNode.get_value2()).deletePCRTest(deletedDistrictTestData);
                         }
+                        PCRKeyDate pKeyDateDeleted = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+                        PCRWorkplaceData deletedPersonDateTestData = new PCRWorkplaceData(pKeyDateDeleted,testValue);
+                        person.deletePCRTestByDate(deletedPersonDateTestData);
                         PCRData deletedPersonTestData = new PCRData(testKey, testValue);
                         person.deletePCRTest(deletedPersonTestData);
                         return new ResponseAndPCRTestId(
@@ -172,6 +199,9 @@ public class PCRSystem {
                     PCRData deletedRegionTestData = new PCRData(testKey, testValue);
                     ((Region) testedRegionNode.get_value2()).deletePCRTest(deletedRegionTestData);
                 }
+                PCRKeyDate pKeyDateDeleted = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+                PCRWorkplaceData deletedPersonDateTestData = new PCRWorkplaceData(pKeyDateDeleted,testValue);
+                person.deletePCRTestByDate(deletedPersonDateTestData);
                 PCRData deletedPersonTestData = new PCRData(testKey, testValue);
                 person.deletePCRTest(deletedPersonTestData);
                 return new ResponseAndPCRTestId(
@@ -198,6 +228,9 @@ public class PCRSystem {
                             PCRData deletedRegionTestData = new PCRData(testKey, testValue);
                             ((Region) testedRegionNode.get_value2()).deletePCRTest(deletedRegionTestData);
                         }
+                        PCRKeyDate pKeyDateDeleted = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+                        PCRWorkplaceData deletedPersonDateTestData = new PCRWorkplaceData(pKeyDateDeleted,testValue);
+                        person.deletePCRTestByDate(deletedPersonDateTestData);
                         PCRData deletedPersonTestData = new PCRData(testKey, testValue);
                         person.deletePCRTest(deletedPersonTestData);
                         return new ResponseAndPCRTestId(
@@ -222,6 +255,9 @@ public class PCRSystem {
                             PCRData deletedRegionTestData = new PCRData(testKey, testValue);
                             ((Region) testedRegionNode.get_value2()).deletePCRTest(deletedRegionTestData);
                         }
+                        PCRKeyDate pKeyDateDeleted = new PCRKeyDate(testValue.getDateAndTimeOfTest());
+                        PCRWorkplaceData deletedPersonDateTestData = new PCRWorkplaceData(pKeyDateDeleted,testValue);
+                        person.deletePCRTestByDate(deletedPersonDateTestData);
                         PCRData deletedPersonTestData = new PCRData(testKey, testValue);
                         person.deletePCRTest(deletedPersonTestData);
                         return new ResponseAndPCRTestId(
@@ -260,7 +296,7 @@ public class PCRSystem {
             WorkplaceData wData = new WorkplaceData(wKey,wValue);
             treeOfWorkplace.insert(wData);
         }
-        for (int i = 0; i < 1000; i++){
+        for (int i = 0; i < 5000; i++){
             PersonKey pKey = new PersonKey(Integer.toString(i+1));
             Person pValue = new Person(
                     "Meno"+(i+1),
@@ -282,12 +318,12 @@ public class PCRSystem {
         for (int i = 0; i < 10000; i++){
             double positivity = Math.random();
             boolean boolPos;
-            if (positivity < 0.3){
+            if (positivity < 0.5){
                 boolPos = true;
             }else {
                 boolPos = false;
             }
-            int randIdPerson = ThreadLocalRandom.current().nextInt(1, 1000 - 1);
+            int randIdPerson = ThreadLocalRandom.current().nextInt(1, 5000 - 1);
             int randYear = ThreadLocalRandom.current().nextInt(2019, 2023 - 1);
             int randMonth = ThreadLocalRandom.current().nextInt(1, 12 - 1);
             int randDay = ThreadLocalRandom.current().nextInt(1, 28 - 1);
@@ -602,7 +638,7 @@ public class PCRSystem {
         }else {
             if (((PersonKey) personNode.get_data1()).getIdNumber().equals(personId)){
                 ArrayList<BST23Node> listOfFoundNodes;
-                listOfFoundNodes = ((Person) personNode.get_value1()).getTreeOfTests().inOrder();
+                listOfFoundNodes = ((Person) personNode.get_value1()).getTreeOfTestsByDate().inOrder();
                 for (int i = 0; i < listOfFoundNodes.size(); i++){
                     String res;
                     if (((PCR) listOfFoundNodes.get(i).get_value1()).isResult()){
@@ -632,7 +668,7 @@ public class PCRSystem {
                             + "\n-----------------------------------------\n";
                 }
                 if (listOfFoundNodes.size() == 0){
-                    resultString = "Ziadne najdene testy pre osobu" +
+                    resultString = "Ziadne najdene testy pre osobu " +
                             ((Person) personNode.get_value1()).getName() + " " +
                             ((Person) personNode.get_value1()).getSurname() + ".";
                 }

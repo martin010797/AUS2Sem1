@@ -12,6 +12,7 @@ public class Person {
     private Date dateOfBirth;
     private String idNumber;
     private BST23<PCRKey, PCR> treeOfTests = new BST23<>();
+    private BST23<PCRKeyDate, PCR> treeOfTestsByDate = new BST23<>();
 
     public Person(String pName, String pSurname, int pYear, int pMonth, int pDay, String pIdNumber){
         name = pName;
@@ -24,8 +25,16 @@ public class Person {
         return treeOfTests.insert(PCRTest);
     }
 
+    public boolean insertPCRByDateForPerson(PCRWorkplaceData PCRTest){
+        return treeOfTestsByDate.insert(PCRTest);
+    }
+
     public boolean deletePCRTest(PCRData deletedTest){
         return treeOfTests.delete(deletedTest);
+    }
+
+    public boolean deletePCRTestByDate(PCRWorkplaceData deletedTest){
+        return treeOfTestsByDate.delete(deletedTest);
     }
 
     public String getName() {
@@ -66,5 +75,9 @@ public class Person {
 
     public void setTreeOfTests(BST23<PCRKey, PCR> treeOfTests) {
         this.treeOfTests = treeOfTests;
+    }
+
+    public BST23<PCRKeyDate, PCR> getTreeOfTestsByDate() {
+        return treeOfTestsByDate;
     }
 }

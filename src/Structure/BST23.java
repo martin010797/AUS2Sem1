@@ -880,6 +880,7 @@ public class BST23<T extends  Comparable<T>, V> {
     public ArrayList<BST23Node> intervalSearch(BST23Node minNode, BST23Node maxNode){
         ArrayList<BST23Node> listOfFoundNodes = new ArrayList<>();
         BST23Node prev = null;
+        T prevKey = null;
         BST23Node temp = _root;
         if (temp == null){
             return listOfFoundNodes;
@@ -889,50 +890,65 @@ public class BST23<T extends  Comparable<T>, V> {
                 if (temp.get_data1().compareTo(minNode.get_data1()) < 0){
                     //hladany kluc je mensi ako lavy vrchol(teda data1)
                     prev = temp;
+                    prevKey = (T) prev.get_data1();
                     temp = prev.get_left1();
                 }else if (temp.get_data2().compareTo(minNode.get_data1()) > 0){
                     //hladany kluc je vacsi ako pravy vrchol
                     prev = temp;
+                    prevKey = (T) prev.get_data2();
                     temp = prev.get_right2();
                 }else if ((temp.get_data1().compareTo(minNode.get_data1()) > 0) &&
                         (temp.get_data2().compareTo(minNode.get_data1()) < 0)){
                     //hladany kluc je medzi pravym a lavym klucom
                     prev = temp;
+                    prevKey = (T) prev.get_data1();
                     temp = prev.get_right1();
                 }else if(temp.get_data1().compareTo(minNode.get_data1()) == 0){
                     //najdeny minimalny node v datach 1
                     prev = temp;
+                    prevKey = (T) prev.get_data1();
                     break;
                 }else if (temp.get_data2().compareTo(minNode.get_data1()) == 0){
                     //najdeny minimalny node v datach 2
                     prev = temp;
+                    prevKey = (T) prev.get_data2();
                     break;
                 }
             }else {
                 if (temp.get_data1().compareTo(minNode.get_data1()) > 0){
                     //ak min data1 je vacsie ako tempdata
                     prev = temp;
+                    prevKey = (T) prev.get_data1();
                     temp = prev.get_right1();
                 }else if(temp.get_data1().compareTo(minNode.get_data1()) < 0){
                     //ak min data1 je mensie ako tempdata
                     prev = temp;
+                    prevKey = (T) prev.get_data1();
                     temp = prev.get_left1();
                 }
                 if (temp != null){
                     if (temp.get_data1().compareTo(minNode.get_data1()) == 0){
                         //najdeny minimalny node
                         prev = temp;
+                        prevKey = (T) prev.get_data1();
                         break;
                     }
                 }
             }
         }
-        if (belongsToInterval(minNode, maxNode, (T) prev.get_data1())){
-            //prvy kluc patri do intervalu
-            BST23Node newNode = new BST23Node(prev.get_data1(), prev.get_value1());
-            listOfFoundNodes.add(newNode);
+        if (belongsToInterval(minNode, maxNode, prevKey)){
+            //kluc patri do intervalu
+            if (prev.get_data1().compareTo(prevKey) == 0){
+                BST23Node newNode = new BST23Node(prev.get_data1(), prev.get_value1());
+                listOfFoundNodes.add(newNode);
+            }else {
+                BST23Node newNode = new BST23Node(prev.get_data2(), prev.get_value2());
+                listOfFoundNodes.add(newNode);
+            }
+
         }
-        NodeAndKey inOrderNode = findInOrderIntervalSearch(prev, (T) prev.get_data1());
+        //chyba
+        NodeAndKey inOrderNode = findInOrderIntervalSearch(prev, prevKey);
         while (inOrderNode != null){
             if (belongsToInterval(minNode, maxNode, (T) inOrderNode.getKey())){
                 if (inOrderNode.getNode().isThreeNode()){
