@@ -14,6 +14,12 @@ public class menu {
     private SearchResultForPerson searchResultForPersonForm;
     private SearchTestForWorkplace_15 searchTestForWorkplace_15form;
     private SearchPositiveTestsForDistrict_4 searchPositiveTestsForDistrict_4form;
+    private FindTestsForPatient_3 findTestsForPatient_3forml;
+    private SearchForTestsInDistrict_5 searchForTestsInDistrict_5form;
+    private SearchPositiveTestsForRegion_6 searchPositiveTestsForRegion_6form;
+    private SearchForTestsInRegion_7 searchForTestsInRegion_7form;
+    private SearchPositiveTests_8 searchPositiveTests_8form;
+    private SearchTests_9 searchTests_9form;
 
     private OutputForTests outputForTestsForm;
 
@@ -24,6 +30,20 @@ public class menu {
     private JButton Button4;
     private JButton Button15;
     private JButton Button17;
+    private JButton Button3;
+    private JButton Button5;
+    private JButton Button6;
+    private JButton Button7;
+    private JButton Button8;
+    private JButton Button9;
+    private JButton Button10;
+    private JButton Button11;
+    private JButton Button12;
+    private JButton Button13;
+    private JButton Button14;
+    private JButton Button16;
+    private JButton Button18;
+    private JButton Button19;
 
     public menu() {
         frame = new JFrame("Menu");
@@ -44,8 +64,16 @@ public class menu {
                 frame,
                 pcrSystem,
                 outputForTestsForm);
-
-
+        findTestsForPatient_3forml = new FindTestsForPatient_3(this,frame,pcrSystem,outputForTestsForm);
+        searchForTestsInDistrict_5form = new SearchForTestsInDistrict_5(this,frame,pcrSystem,outputForTestsForm);
+        searchPositiveTestsForRegion_6form = new SearchPositiveTestsForRegion_6(
+                this,
+                frame,
+                pcrSystem,
+                outputForTestsForm);
+        searchForTestsInRegion_7form = new SearchForTestsInRegion_7(this,frame,pcrSystem,outputForTestsForm);
+        searchPositiveTests_8form = new SearchPositiveTests_8(this,frame,pcrSystem,outputForTestsForm);
+        searchTests_9form = new SearchTests_9(this,frame,pcrSystem,outputForTestsForm);
 
         //pcrSystem = new PCRSystem();
         Button1.addActionListener(new ActionListener() {
@@ -91,6 +119,108 @@ public class menu {
                 frame.pack();
                 frame.setVisible(true);
                 frame.setLocationRelativeTo(null);
+            }
+        });
+        Button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(findTestsForPatient_3forml.getFindTestForPatientPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
+            }
+        });
+        Button5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(searchForTestsInDistrict_5form.getSearchForTestsInDistrictPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
+            }
+        });
+        Button6.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(searchPositiveTestsForRegion_6form.getSearchPositiveTestsForRegionPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
+            }
+        });
+        Button7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(searchForTestsInRegion_7form.getSearchForTestsInRegionPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
+            }
+        });
+        Button8.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(searchPositiveTests_8form.getSearchPositiveTestsPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
+            }
+        });
+        Button9.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(searchTests_9form.getSearchTestsPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
+            }
+        });
+        Button10.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        Button11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        Button12.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        Button13.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        Button14.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        Button16.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        Button18.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        Button19.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
     }
