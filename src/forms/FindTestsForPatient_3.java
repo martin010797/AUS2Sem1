@@ -1,6 +1,7 @@
 package forms;
 
 import Main_system.PCRSystem;
+import Main_system.PersonPCRResult;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +27,30 @@ public class FindTestsForPatient_3 {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (personIdTextField.getText().equals("")){
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Vypln rodne cislo osoby.");
+                }else {
+                    PersonPCRResult response = pcrSystem.searchTestsForPerson(personIdTextField.getText());
+                    switch (response.getResponseType()){
+                        case PERSON_DOESNT_EXIST:{
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Osoba s danym rodnym cislom v systeme neexistuje.");
+                            break;
+                        }
+                        case SUCCESS:{
+                            outputForTestsForm.setTextForOutputPane(response.getResultInfo());
+                            frame.setContentPane(outputForTestsForm.getOutputForTestsPanel());
+                            frame.pack();
+                            frame.setVisible(true);
+                            frame.setLocationRelativeTo(null);
+                            personIdTextField.setText("");
+                            break;
+                        }
+                    }
+                }
             }
         });
         goBackToMenuButton.addActionListener(new ActionListener() {

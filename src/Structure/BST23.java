@@ -1101,6 +1101,52 @@ public class BST23<T extends  Comparable<T>, V> {
         return null;
     }
 
+    public ArrayList<BST23Node> inOrder(){
+        ArrayList<BST23Node> listOfFoundNodes = new ArrayList<>();
+        BST23Node temp = _root;
+        if (_root == null){
+            return listOfFoundNodes;
+        }
+        while (!isLeaf(temp)){
+            temp = temp.get_left1();
+        }
+        BST23Node newNode = new BST23Node(temp.get_data1(), temp.get_value1());
+        listOfFoundNodes.add(newNode);
+        //pouziviame hladanie in order nasledovnika z intervaloveho hladania
+        NodeAndKey inOrderNode = findInOrderIntervalSearch(temp, (T) temp.get_data1());
+        while (inOrderNode != null){
+            if (inOrderNode.getNode().isThreeNode()){
+                if (inOrderNode.getNode().get_data1().compareTo((T) inOrderNode.getKey()) == 0){
+                    //prve data
+                    BST23Node new_Node =
+                            new BST23Node(inOrderNode.getNode().get_data1(), inOrderNode.getNode().get_value1());
+                    listOfFoundNodes.add(new_Node);
+                    inOrderNode = findInOrderIntervalSearch(
+                            inOrderNode.getNode(),
+                            (T) inOrderNode.getNode().get_data1());
+                }else if (inOrderNode.getNode().get_data2().compareTo((T) inOrderNode.getKey()) == 0){
+                    //druhe data
+                    BST23Node new_Node =
+                            new BST23Node(inOrderNode.getNode().get_data2(), inOrderNode.getNode().get_value2());
+                    listOfFoundNodes.add(new_Node);
+                    inOrderNode = findInOrderIntervalSearch(
+                            inOrderNode.getNode(),
+                            (T) inOrderNode.getNode().get_data2());
+                }
+            }else {
+                if (inOrderNode.getNode().get_data1().compareTo((T) inOrderNode.getKey()) == 0){
+                    BST23Node new_Node =
+                            new BST23Node(inOrderNode.getNode().get_data1(), inOrderNode.getNode().get_value1());
+                    listOfFoundNodes.add(new_Node);
+                    inOrderNode = findInOrderIntervalSearch(
+                            inOrderNode.getNode(),
+                            (T) inOrderNode.getNode().get_data1());
+                }
+            }
+        }
+        return listOfFoundNodes;
+    }
+
     private boolean belongsToInterval(BST23Node minNode, BST23Node maxNode, T key){
         if (key.compareTo((T) minNode.get_data1()) <= 0 &&
                 key.compareTo((T) maxNode.get_data1()) >= 0){

@@ -53,10 +53,11 @@ public class SearchPositiveTestsForDistrict_4 {
                             23,
                             59,
                             59);
-                    PersonPCRResult response = pcrSystem.searchPositiveInDistrict(
+                    PersonPCRResult response = pcrSystem.searchTestsInDistrict(
                             Integer.parseInt(districtIdTextField.getText()),
                             dateFrom,
-                            dateTo);
+                            dateTo,
+                            true);
                     switch (response.getResponseType()){
                         case DISTRICT_DOESNT_EXIST:{
                             JOptionPane.showMessageDialog(
