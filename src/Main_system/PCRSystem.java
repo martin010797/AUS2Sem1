@@ -337,7 +337,7 @@ public class PCRSystem {
             int randSecond = ThreadLocalRandom.current().nextInt(1, 59 - 1);
             int randWorkplace = ThreadLocalRandom.current().nextInt(0, 1000 - 1);
             int randDistrict = ThreadLocalRandom.current().nextInt(0, 200 - 1);
-            int randRegion = ThreadLocalRandom.current().nextInt(0, 10 - 1);
+            int randRegion = ThreadLocalRandom.current().nextInt(0, 10);
             ResponseAndPCRTestId response = insertPCRTest(
                     Integer.toString(randIdPerson),
                     randYear,
