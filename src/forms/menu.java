@@ -20,6 +20,9 @@ public class menu {
     private SearchForTestsInRegion_7 searchForTestsInRegion_7form;
     private SearchPositiveTests_8 searchPositiveTests_8form;
     private SearchTests_9 searchTests_9form;
+    private SearchSickInDistrict_10 searchSickInDistrict_10form;
+    private SearchSickInRegion_11 searchSickInRegion_11form;
+    private SearchSickInAllRegions_12 searchSickInAllRegions_12form;
 
     private OutputForTests outputForTestsForm;
 
@@ -74,6 +77,9 @@ public class menu {
         searchForTestsInRegion_7form = new SearchForTestsInRegion_7(this,frame,pcrSystem,outputForTestsForm);
         searchPositiveTests_8form = new SearchPositiveTests_8(this,frame,pcrSystem,outputForTestsForm);
         searchTests_9form = new SearchTests_9(this,frame,pcrSystem,outputForTestsForm);
+        searchSickInDistrict_10form = new SearchSickInDistrict_10(this,frame,pcrSystem,outputForTestsForm);
+        searchSickInRegion_11form = new SearchSickInRegion_11(this,frame,pcrSystem,outputForTestsForm);
+        searchSickInAllRegions_12form = new SearchSickInAllRegions_12(this,frame,pcrSystem,outputForTestsForm);
 
         //pcrSystem = new PCRSystem();
         Button1.addActionListener(new ActionListener() {
@@ -178,19 +184,28 @@ public class menu {
         Button10.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(searchSickInDistrict_10form.getSearchSickInDistrictPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
         Button11.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(searchSickInRegion_11form.getSearchSickInRegionPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
         Button12.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(searchSickInAllRegions_12form.getSearchSickInAllRegionsPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
         Button13.addActionListener(new ActionListener() {
