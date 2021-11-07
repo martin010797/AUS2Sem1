@@ -6,18 +6,18 @@ public class Region {
     //kraj
     private int regionId;
     private String name;
-    private BST23<PCRKey, PCR> treeOfTests = new BST23<>();
+    private BST23<PCRKeyRegion, PCR> treeOfTests = new BST23<>();
 
     public Region(int regionId, String name) {
         this.regionId = regionId;
         this.name = name;
     }
 
-    public boolean insertTest(PCRData insertedTest){
+    public boolean insertTest(PCRRegionData insertedTest){
         return treeOfTests.insert(insertedTest);
     }
 
-    public boolean deletePCRTest(PCRData deletedTest){
+    public boolean deletePCRTest(PCRRegionData deletedTest){
         return treeOfTests.delete(deletedTest);
     }
 
@@ -37,11 +37,11 @@ public class Region {
         this.name = name;
     }
 
-    public BST23<PCRKey, PCR> getTreeOfTests() {
+    public BST23<PCRKeyRegion, PCR> getTreeOfTests() {
         return treeOfTests;
     }
 
-    public void setTreeOfTests(BST23<PCRKey, PCR> treeOfTests) {
+    public void setTreeOfTests(BST23<PCRKeyRegion, PCR> treeOfTests) {
         this.treeOfTests = treeOfTests;
     }
 }
