@@ -1163,6 +1163,27 @@ public class BST23<T extends  Comparable<T>, V> {
         return listOfFoundNodes;
     }
 
+    public NodeWithKey getFirst(){
+        BST23Node temp = _root;
+        if (_root == null){
+            return null;
+        }
+        while (!isLeaf(temp)){
+            temp = temp.get_left1();
+        }
+        return new NodeWithKey(temp, temp.get_data1());
+    }
+
+    public NodeWithKey getNext(BST23Node pNode, T key){
+        NodeAndKey temp = findInOrderIntervalSearch(pNode, key);
+        if (temp == null){
+            return null;
+        }else {
+            NodeWithKey nodeWithKey = new NodeWithKey(temp.getNode(),temp.getKey());
+            return nodeWithKey;
+        }
+    }
+
     private boolean belongsToInterval(BST23Node minNode, BST23Node maxNode, T key){
         if (key.compareTo((T) minNode.get_data1()) <= 0 &&
                 key.compareTo((T) maxNode.get_data1()) >= 0){

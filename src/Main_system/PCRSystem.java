@@ -3,6 +3,7 @@ package Main_system;
 import Models.*;
 import Structure.BST23;
 import Structure.BST23Node;
+import Structure.NodeWithKey;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -724,6 +725,98 @@ public class PCRSystem {
                 }
                 return new PersonPCRResult(ResponseType.SUCCESS,resultString);
             }
+        }
+    }
+
+    public PersonPCRResult searchTestsInAllRegions(Date dateFrom, Date dateTo, boolean positivity){
+        if (dateFrom.compareTo(dateTo) > 0){
+            return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
+        }
+        String resultString = "";
+        NodeWithKey firstNode = treeOfRegions.getFirst();
+        if (firstNode == null){
+            return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+        }else {
+            resultString += getTestsStringForRegion(firstNode, dateFrom, dateTo, positivity);
+        }
+        NodeWithKey nextNode = treeOfRegions.getNext(firstNode.getNode(), (RegionKey) firstNode.getKey());
+        while (nextNode != null){
+            resultString += getTestsStringForRegion(nextNode, dateFrom, dateTo, positivity);
+            nextNode = treeOfRegions.getNext(nextNode.getNode(), (RegionKey) nextNode.getKey());
+        }
+        return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+    }
+
+    public String getTestsStringForRegion(NodeWithKey pNodeWithKey, Date dateFrom, Date dateTo, boolean positivity){
+        String resultString = "";
+        PCRKeyRegion pKeyFrom = new PCRKeyRegion(positivity,dateFrom);
+        PCRRegionData pDataFrom = new PCRRegionData(pKeyFrom,null);
+        PCRKeyRegion pKeyTo = new PCRKeyRegion(positivity,dateTo);
+        PCRRegionData pDataTo = new PCRRegionData(pKeyTo,null);
+        if (((RegionKey) pNodeWithKey.getNode().get_data1()).getRegionId() == ((RegionKey) pNodeWithKey.getKey()).getRegionId()){
+            ArrayList<BST23Node> listOfFoundNodes;
+            listOfFoundNodes = ((Region) pNodeWithKey.getNode().get_value1()).getTreeOfTests().intervalSearch(pDataFrom,pDataTo);
+            for (int i = 0; i < listOfFoundNodes.size(); i++){
+                String res;
+                if (((PCR) listOfFoundNodes.get(i).get_value1()).isResult()){
+                    res = "POZITIVNY";
+                }else {
+                    res = "NEGATIVNY";
+                }
+                Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
+                resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                        + "\n" + person.getIdNumber() +
+                        "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
+                        + (person.getDateOfBirth().getMonth()+1)
+                        + "." + person.getDateOfBirth().getYear() + "\n"
+                        + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value1()).getPCRId()
+                        + "\nDatum a cas testu: "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getDate() + "."
+                        + (((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getYear() + " "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getHours() + ":"
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMinutes()
+                        + "\nKod pracoviska: "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getWorkplaceId() + "\nKod okresu: "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDistrictId() + "\nKod kraja: "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getRegionId() + "\nVysledok testu: "
+                        + res + "\nPoznamka k testu: "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
+                        + "\n-----------------------------------------\n";
+            }
+            return resultString;
+        }else {
+            ArrayList<BST23Node> listOfFoundNodes;
+            listOfFoundNodes = ((Region) pNodeWithKey.getNode().get_value2()).getTreeOfTests().intervalSearch(pDataFrom,pDataTo);
+            for (int i = 0; i < listOfFoundNodes.size(); i++){
+                String res;
+                if (((PCR) listOfFoundNodes.get(i).get_value1()).isResult()){
+                    res = "POZITIVNY";
+                }else {
+                    res = "NEGATIVNY";
+                }
+                Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
+                resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                        + "\n" + person.getIdNumber() +
+                        "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
+                        + (person.getDateOfBirth().getMonth()+1)
+                        + "." + person.getDateOfBirth().getYear() + "\n"
+                        + "Kod testu: " + ((PCR) listOfFoundNodes.get(i).get_value1()).getPCRId()
+                        + "\nDatum a cas testu:"
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getDate() + "."
+                        + (((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getYear() + " "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getHours() + ":"
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMinutes()
+                        + "\nKod pracoviska: "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getWorkplaceId() + "\nKod okresu: "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDistrictId() + "\nKod kraja: "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getRegionId() + "\nVysledok testu: "
+                        + res + "\nPoznamka k testu: "
+                        + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
+                        + "\n-----------------------------------------\n";
+            }
+            return resultString;
         }
     }
 
