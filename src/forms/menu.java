@@ -23,6 +23,11 @@ public class menu {
     private SearchSickInDistrict_10 searchSickInDistrict_10form;
     private SearchSickInRegion_11 searchSickInRegion_11form;
     private SearchSickInAllRegions_12 searchSickInAllRegions_12form;
+    private DistrictsOrderedBySickPeople_13 districtsOrderedBySickPeople_13form;
+    private RegionsOrderedBySickPeople_14 regionsOrderedBySickPeople_14form;
+    private FindPCRTest_16 findPCRTest_16form;
+    private DeletePCRTest_18 deletePCRTest_18form;
+    private DeletePerson_19 deletePerson_19form;
 
     private OutputForTests outputForTestsForm;
 
@@ -80,6 +85,19 @@ public class menu {
         searchSickInDistrict_10form = new SearchSickInDistrict_10(this,frame,pcrSystem,outputForTestsForm);
         searchSickInRegion_11form = new SearchSickInRegion_11(this,frame,pcrSystem,outputForTestsForm);
         searchSickInAllRegions_12form = new SearchSickInAllRegions_12(this,frame,pcrSystem,outputForTestsForm);
+        districtsOrderedBySickPeople_13form = new DistrictsOrderedBySickPeople_13(
+                this,
+                frame,
+                pcrSystem,
+                outputForTestsForm);
+        regionsOrderedBySickPeople_14form = new RegionsOrderedBySickPeople_14(
+                this,
+                frame,
+                pcrSystem,
+                outputForTestsForm);
+        findPCRTest_16form = new FindPCRTest_16(this, frame, pcrSystem);
+        deletePCRTest_18form = new DeletePCRTest_18(this, frame, pcrSystem);
+        deletePerson_19form = new DeletePerson_19(this, frame, pcrSystem);
 
         //pcrSystem = new PCRSystem();
         Button1.addActionListener(new ActionListener() {
@@ -211,31 +229,46 @@ public class menu {
         Button13.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(districtsOrderedBySickPeople_13form.getDistrictsOrderedBySickPeoplePanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
         Button14.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(regionsOrderedBySickPeople_14form.getRegionsOrderedBySickPeoplePanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
         Button16.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(findPCRTest_16form.getFindPCRTestPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
         Button18.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(deletePCRTest_18form.getDeletePCRTestPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
         Button19.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                frame.setContentPane(deletePerson_19form.getDeletePersonPanel());
+                frame.pack();
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
             }
         });
     }
