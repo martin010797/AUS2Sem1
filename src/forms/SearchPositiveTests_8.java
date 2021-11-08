@@ -69,12 +69,12 @@ public class SearchPositiveTests_8 {
                                         "Ziadne najdene pozitivne testy v zadanych datumoch");
                             }else {
                                 outputForTestsForm.setTextForOutputPane(response.getResultInfo());
-                                frame.setContentPane(outputForTestsForm.getOutputForTestsPanel());
-                                frame.pack();
-                                frame.setVisible(true);
-                                frame.setLocationRelativeTo(null);
-                                setFieldsEmpty();
                             }
+                            frame.setContentPane(outputForTestsForm.getOutputForTestsPanel());
+                            frame.pack();
+                            frame.setVisible(true);
+                            frame.setLocationRelativeTo(null);
+                            setFieldsEmpty();
                             break;
                         }
                     }

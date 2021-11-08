@@ -550,6 +550,89 @@ public class PCRSystem {
         }
     }
 
+    public PersonPCRResult searchSickPeopleInRegion(int regionId, Date dateFrom, Date dateTo, boolean positivity){
+        String resultString = "";
+        RegionKey rKey = new RegionKey(regionId);
+        RegionData rData = new RegionData(rKey,null);
+        BST23Node regionNode = treeOfRegions.find(rData);
+        if (regionNode == null){
+            return new PersonPCRResult(ResponseType.REGION_DOESNT_EXIST,null);
+        }else {
+            if (dateFrom.compareTo(dateTo) > 0){
+                return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
+            }
+            PCRKeyRegion pKeyFrom = new PCRKeyRegion(positivity,dateFrom);
+            PCRRegionData pDataFrom = new PCRRegionData(pKeyFrom,null);
+            PCRKeyRegion pKeyTo = new PCRKeyRegion(positivity,dateTo);
+            PCRRegionData pDataTo = new PCRRegionData(pKeyTo,null);
+            if (((RegionKey) regionNode.get_data1()).getRegionId() == regionId){
+                ArrayList<BST23Node> listOfFoundNodes;
+                listOfFoundNodes = ((Region) regionNode.get_value1()).getTreeOfTests().intervalSearch(pDataFrom,pDataTo);
+                for (int i = 0; i < listOfFoundNodes.size(); i++){
+                    String res;
+                    if (((PCR) listOfFoundNodes.get(i).get_value1()).isResult()){
+                        res = "POZITIVNY";
+                    }else {
+                        res = "NEGATIVNY";
+                    }
+                    Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
+                    resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                            + "\n" + person.getIdNumber() +
+                            "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
+                            + (person.getDateOfBirth().getMonth()+1)
+                            + "." + person.getDateOfBirth().getYear() + "\n"
+                            + "Chory na zaklade testu: " + ((PCR) listOfFoundNodes.get(i).get_value1()).getPCRId()
+                            + "\nDatum a cas testu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getDate() + "."
+                            + (((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getYear() + " "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getHours() + ":"
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMinutes()
+                            + "\nKod pracoviska: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getWorkplaceId() + "\nKod okresu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDistrictId() + "\nKod kraja: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getRegionId() + "\nVysledok testu: "
+                            + res + "\nPoznamka k testu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
+                            + "\n-----------------------------------------\n";
+                }
+                return new PersonPCRResult(ResponseType.SUCCESS,resultString);
+            }else {
+                ArrayList<BST23Node> listOfFoundNodes;
+                listOfFoundNodes = ((Region) regionNode.get_value2()).getTreeOfTests().intervalSearch(pDataFrom,pDataTo);
+                for (int i = 0; i < listOfFoundNodes.size(); i++){
+                    String res;
+                    if (((PCR) listOfFoundNodes.get(i).get_value1()).isResult()){
+                        res = "POZITIVNY";
+                    }else {
+                        res = "NEGATIVNY";
+                    }
+                    Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
+                    resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                            + "\n" + person.getIdNumber() +
+                            "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
+                            + (person.getDateOfBirth().getMonth()+1)
+                            + "." + person.getDateOfBirth().getYear() + "\n"
+                            + "Chory na zaklade testu: " + ((PCR) listOfFoundNodes.get(i).get_value1()).getPCRId()
+                            + "\nDatum a cas testu:"
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getDate() + "."
+                            + (((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMonth()+1) + "."
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getYear() + " "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getHours() + ":"
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDateAndTimeOfTest().getMinutes()
+                            + "\nKod pracoviska: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getWorkplaceId() + "\nKod okresu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDistrictId() + "\nKod kraja: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getRegionId() + "\nVysledok testu: "
+                            + res + "\nPoznamka k testu: "
+                            + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
+                            + "\n-----------------------------------------\n";
+                }
+                return new PersonPCRResult(ResponseType.SUCCESS,resultString);
+            }
+        }
+    }
+
     public PersonPCRResult searchSickPeopleInDistrict(int districtId, Date dateFrom, Date dateTo, boolean positivity){
         String resultString = "";
         DistrictKey dKey = new DistrictKey(districtId);

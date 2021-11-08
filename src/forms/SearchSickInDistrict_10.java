@@ -38,7 +38,6 @@ public class SearchSickInDistrict_10 {
                             null,
                             "Vypln vsetky polia.");
                 }else {
-
                     Date dateTo = new Date(
                             Integer.parseInt(yearTextField.getText()),
                             (Integer.parseInt(monthTextField.getText())-1),
