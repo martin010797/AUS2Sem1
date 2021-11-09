@@ -1,6 +1,7 @@
 package forms;
 
 import Main_system.PCRSystem;
+import Main_system.PersonPCRResult;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,7 +25,37 @@ public class FindPCRTest_16 {
         findTestButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (PCRIdTextField.getText().equals("")){
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Vypln kod testu.");
+                }else {
+                    PersonPCRResult response = pcrSystem.findPCRTestById(PCRIdTextField.getText());
+                    switch (response.getResponseType()){
+                        case INCORRECT_PCR_FORMAT:{
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Nespravny format kodu PCR testu.");
+                            break;
+                        }
+                        case PCR_DOESNT_EXIST:{
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Kod s danym kodom neexistuje.");
+                            break;
+                        }
+                        case SUCCESS:{
+                            if (response.getResultInfo() == null){
+                                JOptionPane.showMessageDialog(
+                                        null,
+                                        "Ziadne osoby sa v systeme nenachadzaju, tak neexistuju ani testy.");
+                            }else {
+                                JOptionPane.showMessageDialog(null, response.getResultInfo());
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         });
         goBackToMenuButton.addActionListener(new ActionListener() {
