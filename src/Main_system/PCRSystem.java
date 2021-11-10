@@ -336,7 +336,7 @@ public class PCRSystem {
             int randMinute = ThreadLocalRandom.current().nextInt(1, 59 - 1);
             int randSecond = ThreadLocalRandom.current().nextInt(1, 59 - 1);
             int randWorkplace = ThreadLocalRandom.current().nextInt(0, 1000 - 1);
-            int randDistrict = ThreadLocalRandom.current().nextInt(0, 200 - 1);
+            int randDistrict = ThreadLocalRandom.current().nextInt(0, 200);
             int randRegion = ThreadLocalRandom.current().nextInt(0, 10);
             ResponseAndPCRTestId response = insertPCRTest(
                     Integer.toString(randIdPerson),
@@ -693,6 +693,101 @@ public class PCRSystem {
         }
     }
 
+    public PersonPCRResult getSortedDistrictsBySickPeople(Date dateFrom, Date dateTo){
+        if (dateFrom.compareTo(dateTo) > 0){
+            return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
+        }
+        String resultString = "";
+        int numberOfSickePeople = 0;
+        BST23<DistrictSickCountKey, District> districtSortedByNumberOfSickPeople = new BST23<>();
+        NodeWithKey firstNode = treeOfDistricts.getFirst();
+        if (firstNode == null){
+            //ziadne okresy tak vrati prazdne
+            return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+        }else {
+            numberOfSickePeople = getNumberOfSickInDistrict(
+                    ((District) firstNode.getNode().get_value1()),
+                    dateFrom,
+                    dateTo);
+            //vlozenie okresu do stromu kde sa usporiadava podla poctu chorych
+            DistrictSickCountKey key = new DistrictSickCountKey(
+                    numberOfSickePeople, ((DistrictKey) firstNode.getKey()).getDistrictId());
+            District value = ((District) firstNode.getNode().get_value1());
+            DistrictSickCountData data = new DistrictSickCountData(key,value);
+            districtSortedByNumberOfSickPeople.insert(data);
+        }
+        NodeWithKey nextNode = treeOfDistricts.getNext(firstNode.getNode(), (DistrictKey) firstNode.getKey());
+        while (nextNode != null){
+            if (((DistrictKey) nextNode.getKey()).getDistrictId() == ((DistrictKey) nextNode.getNode().get_data1()).getDistrictId()){
+                numberOfSickePeople = getNumberOfSickInDistrict(
+                        ((District) nextNode.getNode().get_value1()),
+                        dateFrom,
+                        dateTo);
+                //vlozenie okresu do stromu kde sa usporiadava podla poctu chorych
+                DistrictSickCountKey key = new DistrictSickCountKey(
+                        numberOfSickePeople, ((DistrictKey) nextNode.getKey()).getDistrictId());
+                District value = ((District) nextNode.getNode().get_value1());
+                DistrictSickCountData data = new DistrictSickCountData(key,value);
+                districtSortedByNumberOfSickPeople.insert(data);
+            }else {
+                numberOfSickePeople = getNumberOfSickInDistrict(
+                        ((District) nextNode.getNode().get_value2()),
+                        dateFrom,
+                        dateTo);
+                //vlozenie okresu do stromu kde sa usporiadava podla poctu chorych
+                DistrictSickCountKey key = new DistrictSickCountKey(
+                        numberOfSickePeople, ((DistrictKey) nextNode.getKey()).getDistrictId());
+                District value = ((District) nextNode.getNode().get_value2());
+                DistrictSickCountData data = new DistrictSickCountData(key,value);
+                districtSortedByNumberOfSickPeople.insert(data);
+            }
+            nextNode = treeOfDistricts.getNext(nextNode.getNode(), ((DistrictKey) nextNode.getKey()));
+        }
+        //prejdenie stromu s okresmi zoradenymi podla poctu chorych
+        NodeWithKey firstDistrict = districtSortedByNumberOfSickPeople.getFirst();
+        int order = 0;
+        if (firstDistrict == null){
+            return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+        }else {
+            order++;
+            resultString += getStringOfDistrictsBySickCount(firstDistrict, order);
+        }
+        NodeWithKey nextDistrict = districtSortedByNumberOfSickPeople.getNext(
+                firstDistrict.getNode(), ((DistrictSickCountKey) firstDistrict.getKey()));
+        while (nextDistrict != null){
+            order++;
+            resultString += getStringOfDistrictsBySickCount(nextDistrict, order);
+            nextDistrict = districtSortedByNumberOfSickPeople.getNext(
+                    nextDistrict.getNode(), ((DistrictSickCountKey) nextDistrict.getKey()));
+        }
+        return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+    }
+
+    private String getStringOfDistrictsBySickCount(NodeWithKey pNodeWithKey, int nextValue){
+        String resultString = "";
+        if (((DistrictSickCountKey) pNodeWithKey.getNode().get_data1()).equals(((DistrictSickCountKey) pNodeWithKey.getKey()))){
+            resultString += nextValue + ". " + ((District) pNodeWithKey.getNode().get_value1()).getName() + "\n" +
+                    "Pocet chorych = " +
+                    ((DistrictSickCountKey) pNodeWithKey.getNode().get_data1()).getNumberOfSickPeople() + "\n" +
+                    "---------------------------------\n";
+        }else {
+            resultString += nextValue + ". " + ((District) pNodeWithKey.getNode().get_value2()).getName() + "\n" +
+                    "Pocet chorych = " +
+                    ((DistrictSickCountKey) pNodeWithKey.getNode().get_data2()).getNumberOfSickPeople() + "\n" +
+                    "---------------------------------\n";
+        }
+        return resultString;
+    }
+
+    private int getNumberOfSickInDistrict(District district, Date dateFrom, Date dateTo){
+        PCRKeyDistrict pKeyFrom = new PCRKeyDistrict(true,dateFrom);
+        PCRDistrictPositiveData pDataFrom = new PCRDistrictPositiveData(pKeyFrom,null);
+        PCRKeyDistrict pKeyTo = new PCRKeyDistrict(true,dateTo);
+        PCRDistrictPositiveData pDataTo = new PCRDistrictPositiveData(pKeyTo,null);
+        ArrayList<BST23Node> listOfFoundNodes = district.getTreeOfTestedPeople().intervalSearch(pDataFrom,pDataTo);
+        return listOfFoundNodes.size();
+    }
+
     public PersonPCRResult searchSickPeopleInDistrict(int districtId, Date dateFrom, Date dateTo, boolean positivity){
         String resultString = "";
         DistrictKey dKey = new DistrictKey(districtId);
@@ -979,7 +1074,6 @@ public class PCRSystem {
         if (firstNode == null){
             return new PersonPCRResult(ResponseType.SUCCESS, null);
         }else {
-            //result = findTestResultForPerson(((Person) firstNode.getNode().get_value1()).getIdNumber(), PCRId);
             result = findTestResultForPerson(((Person) firstNode.getNode().get_value1()), PCRId);
             if (result.getResponseType() == ResponseType.SUCCESS){
                 return result;
@@ -990,13 +1084,11 @@ public class PCRSystem {
         }
         NodeWithKey nextNode = treeOfPeople.getNext(firstNode.getNode(), ((PersonKey) firstNode.getKey()));
         while (nextNode != null){
-            //if (((RegionKey) pNodeWithKey.getNode().get_data1()).getRegionId() == ((RegionKey) pNodeWithKey.getKey()).getRegionId()){
             if (((PersonKey) nextNode.getKey()).getIdNumber().equals(((PersonKey) nextNode.getNode().get_data1()).getIdNumber())){
                 result = findTestResultForPerson(((Person) nextNode.getNode().get_value1()), PCRId);
             }else {
                 result = findTestResultForPerson(((Person) nextNode.getNode().get_value2()), PCRId);
             }
-            //result = findTestResultForPerson(((PersonKey) nextNode.getKey()).getIdNumber(),PCRId);
             if (result.getResponseType() == ResponseType.SUCCESS){
                 return result;
             }
