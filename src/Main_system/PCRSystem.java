@@ -693,25 +693,120 @@ public class PCRSystem {
         }
     }
 
+    public PersonPCRResult getSortedRegionsBySickPeople(Date dateFrom, Date dateTo){
+        if (dateFrom.compareTo(dateTo) > 0){
+            return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
+        }
+        String resultString = "";
+        int numberOfSickPeople = 0;
+        BST23<RegionSickCountKey, Region> regionsSortedByNumberOfSickPeople = new BST23<>();
+        NodeWithKey firstNode = treeOfRegions.getFirst();
+        if (firstNode == null){
+            //ziadne kraje tak vrati prazdne
+            return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+        }else {
+            numberOfSickPeople = getNumberOfSickInRegion(
+                    ((Region) firstNode.getNode().get_value1()),
+                    dateFrom,
+                    dateTo);
+            //vlozenie kraju do stromu kde sa usporiadava podla poctu chorych
+            RegionSickCountKey key = new RegionSickCountKey(
+                    numberOfSickPeople, ((RegionKey) firstNode.getKey()).getRegionId());
+            Region value = ((Region) firstNode.getNode().get_value1());
+            RegionSickCountData data = new RegionSickCountData(key,value);
+            regionsSortedByNumberOfSickPeople.insert(data);
+        }
+        NodeWithKey nextNode = treeOfRegions.getNext(firstNode.getNode(), (RegionKey) firstNode.getKey());
+        while (nextNode != null){
+            if (((RegionKey) nextNode.getKey()).getRegionId() == ((RegionKey) nextNode.getNode().get_data1()).getRegionId()){
+                numberOfSickPeople = getNumberOfSickInRegion(
+                        ((Region) nextNode.getNode().get_value1()),
+                        dateFrom,
+                        dateTo);
+                //vlozenie kraju do stromu kde sa usporiadava podla poctu chorych
+                RegionSickCountKey key = new RegionSickCountKey(
+                        numberOfSickPeople, ((RegionKey) nextNode.getKey()).getRegionId());
+                Region value = ((Region) nextNode.getNode().get_value1());
+                RegionSickCountData data = new RegionSickCountData(key,value);
+                regionsSortedByNumberOfSickPeople.insert(data);
+            }else {
+                numberOfSickPeople = getNumberOfSickInRegion(
+                        ((Region) nextNode.getNode().get_value2()),
+                        dateFrom,
+                        dateTo);
+                //vlozenie kraju do stromu kde sa usporiadava podla poctu chorych
+                RegionSickCountKey key = new RegionSickCountKey(
+                        numberOfSickPeople, ((RegionKey) nextNode.getKey()).getRegionId());
+                Region value = ((Region) nextNode.getNode().get_value2());
+                RegionSickCountData data = new RegionSickCountData(key,value);
+                regionsSortedByNumberOfSickPeople.insert(data);
+            }
+            nextNode = treeOfRegions.getNext(nextNode.getNode(), ((RegionKey) nextNode.getKey()));
+        }
+        //prejdenie stromu s krajmi zoradenymi podla poctu chorych
+        NodeWithKey firstRegion = regionsSortedByNumberOfSickPeople.getFirst();
+        int order = 0;
+        if (firstRegion == null){
+            return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+        }else {
+            order++;
+            resultString += getStringOfRegionsBySickCount(firstRegion, order);
+        }
+        NodeWithKey nextRegion = regionsSortedByNumberOfSickPeople.getNext(
+                firstRegion.getNode(), ((RegionSickCountKey) firstRegion.getKey()));
+        while (nextRegion != null){
+            order++;
+            resultString += getStringOfRegionsBySickCount(nextRegion, order);
+            nextRegion = regionsSortedByNumberOfSickPeople.getNext(
+                    nextRegion.getNode(), ((RegionSickCountKey) nextRegion.getKey()));
+        }
+        return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+    }
+
+    private String getStringOfRegionsBySickCount(NodeWithKey pNodeWithKey, int nextValue){
+        String resultString = "";
+        if (((RegionSickCountKey) pNodeWithKey.getNode().get_data1()).equals(((RegionSickCountKey) pNodeWithKey.getKey()))){
+            resultString += nextValue + ". " + ((Region) pNodeWithKey.getNode().get_value1()).getName() + "\n" +
+                    "Pocet chorych = " +
+                    ((RegionSickCountKey) pNodeWithKey.getNode().get_data1()).getNumberOfSickPeople() + "\n" +
+                    "---------------------------------\n";
+        }else {
+            resultString += nextValue + ". " + ((Region) pNodeWithKey.getNode().get_value2()).getName() + "\n" +
+                    "Pocet chorych = " +
+                    ((RegionSickCountKey) pNodeWithKey.getNode().get_data2()).getNumberOfSickPeople() + "\n" +
+                    "---------------------------------\n";
+        }
+        return resultString;
+    }
+
+    private int getNumberOfSickInRegion(Region region, Date dateFrom, Date dateTo){
+        PCRKeyRegion pKeyFrom = new PCRKeyRegion(true,dateFrom);
+        PCRRegionData pDataFrom = new PCRRegionData(pKeyFrom,null);
+        PCRKeyRegion pKeyTo = new PCRKeyRegion(true,dateTo);
+        PCRRegionData pDataTo = new PCRRegionData(pKeyTo,null);
+        ArrayList<BST23Node> listOfFoundNodes = region.getTreeOfTests().intervalSearch(pDataFrom,pDataTo);
+        return listOfFoundNodes.size();
+    }
+
     public PersonPCRResult getSortedDistrictsBySickPeople(Date dateFrom, Date dateTo){
         if (dateFrom.compareTo(dateTo) > 0){
             return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
         }
         String resultString = "";
-        int numberOfSickePeople = 0;
+        int numberOfSickPeople = 0;
         BST23<DistrictSickCountKey, District> districtSortedByNumberOfSickPeople = new BST23<>();
         NodeWithKey firstNode = treeOfDistricts.getFirst();
         if (firstNode == null){
             //ziadne okresy tak vrati prazdne
             return new PersonPCRResult(ResponseType.SUCCESS, resultString);
         }else {
-            numberOfSickePeople = getNumberOfSickInDistrict(
+            numberOfSickPeople = getNumberOfSickInDistrict(
                     ((District) firstNode.getNode().get_value1()),
                     dateFrom,
                     dateTo);
             //vlozenie okresu do stromu kde sa usporiadava podla poctu chorych
             DistrictSickCountKey key = new DistrictSickCountKey(
-                    numberOfSickePeople, ((DistrictKey) firstNode.getKey()).getDistrictId());
+                    numberOfSickPeople, ((DistrictKey) firstNode.getKey()).getDistrictId());
             District value = ((District) firstNode.getNode().get_value1());
             DistrictSickCountData data = new DistrictSickCountData(key,value);
             districtSortedByNumberOfSickPeople.insert(data);
@@ -719,24 +814,24 @@ public class PCRSystem {
         NodeWithKey nextNode = treeOfDistricts.getNext(firstNode.getNode(), (DistrictKey) firstNode.getKey());
         while (nextNode != null){
             if (((DistrictKey) nextNode.getKey()).getDistrictId() == ((DistrictKey) nextNode.getNode().get_data1()).getDistrictId()){
-                numberOfSickePeople = getNumberOfSickInDistrict(
+                numberOfSickPeople = getNumberOfSickInDistrict(
                         ((District) nextNode.getNode().get_value1()),
                         dateFrom,
                         dateTo);
                 //vlozenie okresu do stromu kde sa usporiadava podla poctu chorych
                 DistrictSickCountKey key = new DistrictSickCountKey(
-                        numberOfSickePeople, ((DistrictKey) nextNode.getKey()).getDistrictId());
+                        numberOfSickPeople, ((DistrictKey) nextNode.getKey()).getDistrictId());
                 District value = ((District) nextNode.getNode().get_value1());
                 DistrictSickCountData data = new DistrictSickCountData(key,value);
                 districtSortedByNumberOfSickPeople.insert(data);
             }else {
-                numberOfSickePeople = getNumberOfSickInDistrict(
+                numberOfSickPeople = getNumberOfSickInDistrict(
                         ((District) nextNode.getNode().get_value2()),
                         dateFrom,
                         dateTo);
                 //vlozenie okresu do stromu kde sa usporiadava podla poctu chorych
                 DistrictSickCountKey key = new DistrictSickCountKey(
-                        numberOfSickePeople, ((DistrictKey) nextNode.getKey()).getDistrictId());
+                        numberOfSickPeople, ((DistrictKey) nextNode.getKey()).getDistrictId());
                 District value = ((District) nextNode.getNode().get_value2());
                 DistrictSickCountData data = new DistrictSickCountData(key,value);
                 districtSortedByNumberOfSickPeople.insert(data);

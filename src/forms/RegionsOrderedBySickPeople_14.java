@@ -1,10 +1,13 @@
 package forms;
 
 import Main_system.PCRSystem;
+import Main_system.PersonPCRResult;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.Date;
 
 public class RegionsOrderedBySickPeople_14 {
     private PCRSystem pcrSystem;
@@ -29,7 +32,51 @@ public class RegionsOrderedBySickPeople_14 {
         listRegionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (emptyFields()){
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Vypln vsetky polia.");
+                }else {
+                    Date dateTo = new Date(
+                            Integer.parseInt(yearTextField.getText()),
+                            (Integer.parseInt(monthTextField.getText())-1),
+                            Integer.parseInt(dayTextField.getText()),
+                            23,
+                            59,
+                            59);
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(dateTo);
+                    cal.add(Calendar.DATE, -Integer.parseInt(numberOfDaysTextField.getText()));
+                    cal.add(Calendar.SECOND, 2);
+                    Date dateFrom = cal.getTime();
+                    PersonPCRResult response = pcrSystem.getSortedRegionsBySickPeople(dateFrom, dateTo);
+                    switch (response.getResponseType()){
+                        case LOWER_FROM_DATE:{
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Chyba s vyskladanim datumu.");
+                            break;
+                        }
+                        case SUCCESS:{
+                            if (response.getResultInfo().compareTo("") == 0){
+                                outputForTestsForm.setTextForOutputPane(
+                                        "Ziadne najdene kraje.");
+                            }else {
+                                String resultText = "Kraje zoradene podla poctu chorych pre datum  " +
+                                        dayTextField.getText() + "." + monthTextField.getText() + "." +
+                                        yearTextField.getText() + ":\n";
+                                resultText += response.getResultInfo();
+                                outputForTestsForm.setTextForOutputPane(resultText);
+                            }
+                            frame.setContentPane(outputForTestsForm.getOutputForTestsPanel());
+                            frame.pack();
+                            frame.setVisible(true);
+                            frame.setLocationRelativeTo(null);
+                            setFieldsEmpty();
+                            break;
+                        }
+                    }
+                }
             }
         });
         goBackToMenuButton.addActionListener(new ActionListener() {
