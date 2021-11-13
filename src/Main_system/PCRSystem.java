@@ -288,6 +288,47 @@ public class PCRSystem {
         return treeOfPeople.insert(pData);
     }
 
+    public ResponseType deletePerson(String personId){
+        //najdenie osoby
+        PersonKey personKey = new PersonKey(personId);
+        PersonData personData = new PersonData(personKey, null);
+        BST23Node personNode = treeOfPeople.find(personData);
+        if (personNode == null){
+            return ResponseType.PERSON_DOESNT_EXIST;
+        }
+        Person person;
+        if(((PersonKey) personNode.get_data1()).getIdNumber().equals(personId)){
+            person = ((Person) personNode.get_value1());
+        }else {
+            person = ((Person) personNode.get_value2());
+        }
+
+        //prechadzanie vsetkych testov a ich mazanie
+        ArrayList<NodeWithKey> listOfTests = new ArrayList<NodeWithKey>();
+        NodeWithKey nextTestNode = person.getTreeOfTests().getFirst();
+        if (nextTestNode != null){
+            //pridavanie testov do docasneho array listu
+            listOfTests.add(nextTestNode);
+            nextTestNode = person.getTreeOfTests().getNext(nextTestNode.getNode(), ((PCRKey) nextTestNode.getKey()));
+            while (nextTestNode != null){
+                listOfTests.add(nextTestNode);
+                nextTestNode = person.getTreeOfTests().getNext(nextTestNode.getNode(), ((PCRKey) nextTestNode.getKey()));
+            }
+            //mazanie testov
+            for (int i = 0; i < listOfTests.size(); i++){
+                NodeWithKey personNodeWithKey = new NodeWithKey(personNode,personKey);
+                if (!deleteTestInAllTrees(personNodeWithKey, listOfTests.get(i).getNode(), (PCRKey) listOfTests.get(i).getKey())){
+                    return ResponseType.PROBLEM_WITH_DELETING;
+                }
+            }
+        }
+        //vymazanie osoby
+        if (!treeOfPeople.delete(personData)){
+            return ResponseType.PROBLEM_WITH_DELETING;
+        }
+        return ResponseType.SUCCESS;
+    }
+
     public ResponseType deletePCRTest(String PCRId){
         //vytvorenie UUID kluca a vyskladanie data objektu pre test ktory budeme chciet mazat
         PCRKey tKey;
