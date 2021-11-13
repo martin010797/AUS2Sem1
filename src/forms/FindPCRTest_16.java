@@ -41,7 +41,7 @@ public class FindPCRTest_16 {
                         case PCR_DOESNT_EXIST:{
                             JOptionPane.showMessageDialog(
                                     null,
-                                    "Kod s danym kodom neexistuje.");
+                                    "Test s danym kodom neexistuje.");
                             break;
                         }
                         case SUCCESS:{

@@ -308,10 +308,27 @@ public class PCRSystem {
         NodeWithKey nextTestNode = person.getTreeOfTests().getFirst();
         if (nextTestNode != null){
             //pridavanie testov do docasneho array listu
-            listOfTests.add(nextTestNode);
+            PCRKey tempPCRKey = new PCRKey(((PCRKey) nextTestNode.getKey()).getPCRId());
+            PCR tempPCRValue;
+            if (((PCRKey) nextTestNode.getNode().get_data1()).compareTo(((PCRKey) nextTestNode.getKey())) == 0){
+                tempPCRValue = ((PCR) nextTestNode.getNode().get_value1());
+            }else {
+                tempPCRValue = ((PCR) nextTestNode.getNode().get_value2());
+            }
+            BST23Node tempNode = new PCRData(tempPCRKey,tempPCRValue);
+            //listOfTests.add(nextTestNode);
+            listOfTests.add(new NodeWithKey(tempNode,tempPCRKey));
             nextTestNode = person.getTreeOfTests().getNext(nextTestNode.getNode(), ((PCRKey) nextTestNode.getKey()));
             while (nextTestNode != null){
-                listOfTests.add(nextTestNode);
+                tempPCRKey = new PCRKey(((PCRKey) nextTestNode.getKey()).getPCRId());
+                if (((PCRKey) nextTestNode.getNode().get_data1()).compareTo(((PCRKey) nextTestNode.getKey())) == 0){
+                    tempPCRValue = ((PCR) nextTestNode.getNode().get_value1());
+                }else {
+                    tempPCRValue = ((PCR) nextTestNode.getNode().get_value2());
+                }
+                tempNode = new PCRData(tempPCRKey,tempPCRValue);
+                listOfTests.add(new NodeWithKey(tempNode,tempPCRKey));
+                //listOfTests.add(nextTestNode);
                 nextTestNode = person.getTreeOfTests().getNext(nextTestNode.getNode(), ((PCRKey) nextTestNode.getKey()));
             }
             //mazanie testov
@@ -374,14 +391,11 @@ public class PCRSystem {
     }
 
     private boolean deleteTestInAllTrees(NodeWithKey personNode, BST23Node testResult, PCRKey testKey){
-        PCRKey testId;
         PCR testValue;
         Person person;
         if (((PCRKey) testResult.get_data1()).compareTo(testKey) == 0){
-            testId = ((PCRKey) testResult.get_data1());
             testValue = ((PCR) testResult.get_value1());
         }else {
-            testId = ((PCRKey) testResult.get_data2());
             testValue = ((PCR) testResult.get_value2());
         }
         if (((PersonKey) personNode.getKey()).getIdNumber().equals(((PersonKey) personNode.getNode().get_data1()).getIdNumber())){
