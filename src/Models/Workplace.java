@@ -14,7 +14,7 @@ public class Workplace {
         return treeOfTests.insert(insertedTest);
     }
 
-    public boolean deletePCRTest(PCRData deletedTest){
+    public boolean deletePCRTest(PCRWorkplaceData deletedTest){
         return treeOfTests.delete(deletedTest);
     }
 

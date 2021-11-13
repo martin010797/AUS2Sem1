@@ -10,5 +10,6 @@ public enum ResponseType {
     PCR_DOESNT_EXIST,
     LOWER_FROM_DATE,
     INCORRECT_PCR_FORMAT,
+    PROBLEM_WITH_DELETING,
     SUCCESS
 }

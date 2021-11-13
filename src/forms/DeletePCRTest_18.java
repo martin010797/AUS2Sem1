@@ -1,6 +1,7 @@
 package forms;
 
 import Main_system.PCRSystem;
+import Main_system.ResponseType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,7 +25,45 @@ public class DeletePCRTest_18 {
         deleteTestButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (PCRIdTextField.getText().equals("")){
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Vypln Id PCR testu.");
+                }else {
+                    ResponseType response = pcrSystem.deletePCRTest(PCRIdTextField.getText());
+                    switch (response){
+                        case INCORRECT_PCR_FORMAT:{
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Neplatne Id PCR testu.");
+                            break;
+                        }
+                        case PERSON_DOESNT_EXIST:{
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Ziadne osoby neexistuju.");
+                            break;
+                        }
+                        case PCR_DOESNT_EXIST:{
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Test so zadanym Id neexistuje.");
+                            break;
+                        }
+                        case PROBLEM_WITH_DELETING:{
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "Nastal problem pri mazani.");
+                            break;
+                        }
+                        case SUCCESS:{
+                            JOptionPane.showMessageDialog(
+                                    null,
+                                    "PCR test vymazany.");
+                            break;
+                        }
+                    }
+                }
             }
         });
         goBackToMenuButton.addActionListener(new ActionListener() {

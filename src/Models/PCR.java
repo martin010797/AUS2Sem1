@@ -16,6 +16,10 @@ public class PCR {
     private String description;
     private Person testedPerson;
 
+    private Workplace workplace;
+    private Region region;
+    private District district;
+
     public PCR(int year,
                int month,
                int day,
@@ -110,5 +114,29 @@ public class PCR {
 
     public void setPerson(Person person) {
         this.testedPerson = person;
+    }
+
+    public Workplace getWorkplace() {
+        return workplace;
+    }
+
+    public void setWorkplace(Workplace workplace) {
+        this.workplace = workplace;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
+    public District getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(District district) {
+        this.district = district;
     }
 }
