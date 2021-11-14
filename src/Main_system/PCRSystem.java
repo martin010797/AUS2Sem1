@@ -36,6 +36,91 @@ public class PCRSystem {
                 pNumberOfTests);
     }
 
+    public boolean saveDataToFile() throws IOException {
+        FileWriter csvWriter = new FileWriter("okresy.csv");
+
+        NodeWithKey firstDistrict = treeOfDistricts.getFirst();
+        if (firstDistrict != null){
+            csvWriter.append(""+ ((DistrictKey) firstDistrict.getKey()).getDistrictId());
+            csvWriter.append(",");
+            csvWriter.append(((District) firstDistrict.getNode().get_value1()).getName());
+            csvWriter.append("\n");
+        }
+        NodeWithKey nextDistrict = treeOfDistricts.getNext(
+                firstDistrict.getNode(), ((DistrictKey) firstDistrict.getKey()));
+        while (nextDistrict != null){
+            if (nextDistrict.getKey().compareTo(((DistrictKey) nextDistrict.getNode().get_data1())) == 0){
+                csvWriter.append(""+ ((DistrictKey) nextDistrict.getKey()).getDistrictId());
+                csvWriter.append(",");
+                csvWriter.append(((District) nextDistrict.getNode().get_value1()).getName());
+                csvWriter.append("\n");
+            }else {
+                csvWriter.append(""+ ((DistrictKey) nextDistrict.getKey()).getDistrictId());
+                csvWriter.append(",");
+                csvWriter.append(((District) nextDistrict.getNode().get_value2()).getName());
+                csvWriter.append("\n");
+            }
+            nextDistrict = treeOfDistricts.getNext(
+                    nextDistrict.getNode(), ((DistrictKey) nextDistrict.getKey()));
+        }
+
+        csvWriter.flush();
+        csvWriter.close();
+
+        csvWriter = new FileWriter("kraje.csv");
+
+        NodeWithKey firstRegion = treeOfRegions.getFirst();
+        if (firstRegion != null){
+            csvWriter.append(""+ ((RegionKey) firstRegion.getKey()).getRegionId());
+            csvWriter.append(",");
+            csvWriter.append(((Region) firstRegion.getNode().get_value1()).getName());
+            csvWriter.append("\n");
+        }
+        NodeWithKey nextRegion = treeOfRegions.getNext(
+                firstRegion.getNode(), ((RegionKey) firstRegion.getKey()));
+        while (nextRegion != null){
+            if (nextRegion.getKey().compareTo(((RegionKey) nextRegion.getNode().get_data1())) == 0){
+                csvWriter.append(""+ ((RegionKey) nextRegion.getKey()).getRegionId());
+                csvWriter.append(",");
+                csvWriter.append(((Region) nextRegion.getNode().get_value1()).getName());
+                csvWriter.append("\n");
+            }else {
+                csvWriter.append(""+ ((RegionKey) nextRegion.getKey()).getRegionId());
+                csvWriter.append(",");
+                csvWriter.append(((Region) nextRegion.getNode().get_value2()).getName());
+                csvWriter.append("\n");
+            }
+            nextRegion = treeOfRegions.getNext(
+                    nextRegion.getNode(), ((RegionKey) nextRegion.getKey()));
+        }
+
+        csvWriter.flush();
+        csvWriter.close();
+
+        csvWriter = new FileWriter("pracoviska.csv");
+
+        NodeWithKey firstWorkplace = treeOfWorkplace.getFirst();
+        if (firstWorkplace != null){
+            csvWriter.append(""+ ((WorkplaceKey) firstWorkplace.getKey()).getWorkplaceId());
+            csvWriter.append("\n");
+        }
+        NodeWithKey nextWorkplace = treeOfWorkplace.getNext(
+                firstWorkplace.getNode(), ((WorkplaceKey) firstWorkplace.getKey()));
+        while (nextWorkplace != null){
+            csvWriter.append(""+ ((WorkplaceKey) nextWorkplace.getKey()).getWorkplaceId());
+            csvWriter.append("\n");
+            nextWorkplace = treeOfWorkplace.getNext(
+                    nextWorkplace.getNode(), ((WorkplaceKey) nextWorkplace.getKey()));
+        }
+
+        csvWriter.flush();
+        csvWriter.close();
+        //TODO
+
+
+        return true;
+    }
+
     public ResponseAndPCRTestId insertPCRTest(String personIdNumber,
                               int yearOfTest,
                               int monthOfTest,

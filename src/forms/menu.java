@@ -5,6 +5,7 @@ import Main_system.PCRSystem;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class menu {
     private PCRSystem pcrSystem;
@@ -277,7 +278,21 @@ public class menu {
         saveDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    if (pcrSystem.saveDataToFile()){
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Udaje ulozene do suboru.");
+                    }else {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Udaje sa neulozili spravne.");
+                    }
+                }catch (IOException exception){
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Chyba pri praci so subormi.");
+                }
             }
         });
     }
