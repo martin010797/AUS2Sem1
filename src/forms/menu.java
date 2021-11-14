@@ -7,8 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class menu {
-    //private PCRSystem pcrSystem;
-    private PCRSystem pcrSystem = new PCRSystem();
+    private PCRSystem pcrSystem;
     private PersonInsert personInsertForm;
     private PCRInsert PCRInsertForm;
     private SearchResultForPerson searchResultForPersonForm;
@@ -52,14 +51,12 @@ public class menu {
     private JButton Button16;
     private JButton Button18;
     private JButton Button19;
+    private JButton loadDataButton;
+    private JButton saveDataButton;
 
-    public menu() {
-        frame = new JFrame("Menu");
-        frame.setContentPane(MenuPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
+    public menu(JFrame pFrame, PCRSystem pPcrSystem) {
+        pcrSystem = pPcrSystem;
+        frame = pFrame;
 
         outputForTestsForm = new OutputForTests(this, frame, pcrSystem);
 
@@ -271,6 +268,18 @@ public class menu {
                 frame.setLocationRelativeTo(null);
             }
         });
+        loadDataButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        saveDataButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     public JPanel getMenuPanel() {
@@ -279,6 +288,14 @@ public class menu {
 
     public void setMenuPanel(JPanel menuPanel) {
         MenuPanel = menuPanel;
+    }
+
+    public void setPcrSystem(PCRSystem pcrSystem) {
+        this.pcrSystem = pcrSystem;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
     }
 }
 

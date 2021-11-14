@@ -20,8 +20,20 @@ public class PCRSystem {
     private BST23<RegionKey, Region> treeOfRegions = new BST23<>();
     private BST23<WorkplaceKey, Workplace> treeOfWorkplace = new BST23<>();
 
-    public PCRSystem(){
-        generateDistrictsRegionsAndWorkplaces();
+    public PCRSystem() {
+    }
+
+    public PCRSystem(int pNumberOfRegions,
+                     int pNumberOfDistricts,
+                     int pNumberOfWorkplaces,
+                     int pNumberOfPeople,
+                     int pNumberOfTests){
+        generateDistrictsRegionsAndWorkplaces(
+                pNumberOfRegions,
+                pNumberOfDistricts,
+                pNumberOfWorkplaces,
+                pNumberOfPeople,
+                pNumberOfTests);
     }
 
     public ResponseAndPCRTestId insertPCRTest(String personIdNumber,
@@ -435,26 +447,31 @@ public class PCRSystem {
         return true;
     }
 
-    private void generateDistrictsRegionsAndWorkplaces(){
-        for (int i = 0; i < 10; i++){
+    private void generateDistrictsRegionsAndWorkplaces(
+            int pNumberOfRegions,
+            int pNumberOfDistricts,
+            int pNumberOfWorkplaces,
+            int pNumberOfPeople,
+            int pNumberOfTests){
+        for (int i = 0; i < pNumberOfRegions; i++){
             RegionKey rKey = new RegionKey(i);
             Region rValue = new Region(i,"Kraj "+i);
             RegionData rData = new RegionData(rKey,rValue);
             treeOfRegions.insert(rData);
         }
-        for (int i = 0; i < 200; i++){
+        for (int i = 0; i < pNumberOfDistricts; i++){
             DistrictKey dKey = new DistrictKey(i);
             District dValue = new District(i, "Okres "+i);
             DistrictData dData = new DistrictData(dKey,dValue);
             treeOfDistricts.insert(dData);
         }
-        for (int i = 0; i < 1000; i++){
+        for (int i = 0; i < pNumberOfWorkplaces; i++){
             WorkplaceKey wKey = new WorkplaceKey(i);
             Workplace wValue = new Workplace(i);
             WorkplaceData wData = new WorkplaceData(wKey,wValue);
             treeOfWorkplace.insert(wData);
         }
-        for (int i = 0; i < 5000; i++){
+        for (int i = 0; i < pNumberOfPeople; i++){
             PersonKey pKey = new PersonKey(Integer.toString(i+1));
             Person pValue = new Person(
                     "Meno"+(i+1),
@@ -467,13 +484,13 @@ public class PCRSystem {
             treeOfPeople.insert(pData);
         }
 
-        try {
+        /*try {
             File myObj = new File("rod_cislo_test.txt");
             myObj.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        for (int i = 0; i < 10000; i++){
+        }*/
+        for (int i = 0; i < pNumberOfTests; i++){
             double positivity = Math.random();
             boolean boolPos;
             if (positivity < 0.5){
@@ -481,16 +498,16 @@ public class PCRSystem {
             }else {
                 boolPos = false;
             }
-            int randIdPerson = ThreadLocalRandom.current().nextInt(1, 5000 - 1);
-            int randYear = ThreadLocalRandom.current().nextInt(2019, 2023 - 1);
+            int randIdPerson = ThreadLocalRandom.current().nextInt(1, pNumberOfPeople+1);
+            int randYear = ThreadLocalRandom.current().nextInt(2019, 2022);
             int randMonth = ThreadLocalRandom.current().nextInt(1, 13);
             int randDay = ThreadLocalRandom.current().nextInt(1, 29);
-            int randHour = ThreadLocalRandom.current().nextInt(1, 25);
-            int randMinute = ThreadLocalRandom.current().nextInt(1, 59 - 1);
-            int randSecond = ThreadLocalRandom.current().nextInt(1, 59 - 1);
-            int randWorkplace = ThreadLocalRandom.current().nextInt(0, 1000 - 1);
-            int randDistrict = ThreadLocalRandom.current().nextInt(0, 200);
-            int randRegion = ThreadLocalRandom.current().nextInt(0, 10);
+            int randHour = ThreadLocalRandom.current().nextInt(0, 24);
+            int randMinute = ThreadLocalRandom.current().nextInt(0, 60);
+            int randSecond = ThreadLocalRandom.current().nextInt(0, 60);
+            int randWorkplace = ThreadLocalRandom.current().nextInt(0, pNumberOfWorkplaces);
+            int randDistrict = ThreadLocalRandom.current().nextInt(0, pNumberOfDistricts);
+            int randRegion = ThreadLocalRandom.current().nextInt(0, pNumberOfRegions);
             ResponseAndPCRTestId response = insertPCRTest(
                     Integer.toString(randIdPerson),
                     randYear,
@@ -503,9 +520,9 @@ public class PCRSystem {
                     randDistrict,
                     randRegion,
                     boolPos,
-                    ""
-                    );
-            try {
+                    "nejaky popis"
+            );
+            /* {
                 FileWriter myWriter;
                 if (i == 0){
                     myWriter = new FileWriter("rod_cislo_test.txt");
@@ -517,7 +534,7 @@ public class PCRSystem {
                 myWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 

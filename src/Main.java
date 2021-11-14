@@ -18,6 +18,7 @@ public class Main {
         TestingData maxTest = new TestingData(maxKey);
         generator.testIntervalSearch(minTest, maxTest, 100000);*/
 
-        menu m = new menu();
+        //menu m = new menu();
+        forms.GeneratorOfData system = new forms.GeneratorOfData();
     }
 }
