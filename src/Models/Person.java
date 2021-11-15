@@ -17,7 +17,8 @@ public class Person {
     public Person(String pName, String pSurname, int pYear, int pMonth, int pDay, String pIdNumber){
         name = pName;
         surname = pSurname;
-        dateOfBirth = new GregorianCalendar(pYear, pMonth-1, pDay).getTime();
+        dateOfBirth = new Date(pYear,pMonth-1,pDay);
+        //dateOfBirth = new GregorianCalendar(pYear, pMonth-1, pDay).getTime();
         idNumber = pIdNumber;
     }
 

@@ -5,9 +5,7 @@ import Structure.BST23;
 import Structure.BST23Node;
 import Structure.NodeWithKey;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -37,17 +35,18 @@ public class PCRSystem {
     }
 
     public ResponseAndPCRTestId insertPCRTest(String personIdNumber,
-                              int yearOfTest,
-                              int monthOfTest,
-                              int dayOfTest,
-                              int hourOfTest,
-                              int minuteOfTest,
-                              int secondOfTest,
-                              int workplaceId,
-                              int districtId,
-                              int regionId,
-                              boolean result,
-                              String description){
+                                              int yearOfTest,
+                                              int monthOfTest,
+                                              int dayOfTest,
+                                              int hourOfTest,
+                                              int minuteOfTest,
+                                              int secondOfTest,
+                                              int workplaceId,
+                                              int districtId,
+                                              int regionId,
+                                              boolean result,
+                                              String description,
+                                              String pTestId){
         //overuje sa ci osoba pre dany system existuje. ak nie tak hod chybu
         PersonKey pKey = new PersonKey(personIdNumber);
         PersonData pData = new PersonData(pKey,null);
@@ -76,7 +75,8 @@ public class PCRSystem {
                     regionId,
                     result,
                     description,
-                    person);
+                    person,
+                    pTestId);
             PCRKey testKey = new PCRKey(testValue.getPCRId());
             PCRData personTestData = new PCRData(testKey, testValue);
             //vlozenie testu do stromu testov v osobe
@@ -520,7 +520,8 @@ public class PCRSystem {
                     randDistrict,
                     randRegion,
                     boolPos,
-                    "nejaky popis"
+                    "nejaky popis",
+                    null
             );
             /* {
                 FileWriter myWriter;
@@ -1850,5 +1851,111 @@ public class PCRSystem {
             nextTest = pPerson.getTreeOfTests().getNext(
                     nextTest.getNode(), ((PCRKey) nextTest.getKey()));
         }
+    }
+
+    public boolean loadDataFromFile() throws IOException {
+        BST23<PersonKey, Person> newTreeOfPeople = new BST23<>();
+        BST23<RegionKey, Region> newTreeOfRegions = new BST23<>();
+        BST23<DistrictKey, District> newTreeOfDistricts = new BST23<>();
+        BST23<WorkplaceKey, Workplace> newTreeOfWorkplace = new BST23<>();
+
+        //nacitavanie krajov
+        BufferedReader regionsReader = new BufferedReader(new FileReader("kraje.csv"));
+        String row;
+        while ((row = regionsReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0] != null && data[1] != null){
+                RegionKey rKey = new RegionKey(Integer.parseInt(data[0]));
+                Region rValue = new Region(Integer.parseInt(data[0]), data[1]);
+                RegionData rData = new RegionData(rKey,rValue);
+                newTreeOfRegions.insert(rData);
+            }
+
+        }
+        regionsReader.close();
+
+        //nacitavanie okresov
+        BufferedReader districtsReader = new BufferedReader(new FileReader("okresy.csv"));
+        while ((row = districtsReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0] != null && data[1] != null){
+                DistrictKey dKey = new DistrictKey(Integer.parseInt(data[0]));
+                District dValue = new District(Integer.parseInt(data[0]), data[1]);
+                DistrictData dData = new DistrictData(dKey,dValue);
+                newTreeOfDistricts.insert(dData);
+            }
+
+        }
+        districtsReader.close();
+
+        //nacitavanie pracovisk
+        BufferedReader workplaceReader = new BufferedReader(new FileReader("pracoviska.csv"));
+        while ((row = workplaceReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0] != null){
+                WorkplaceKey wKey = new WorkplaceKey(Integer.parseInt(data[0]));
+                Workplace wValue = new Workplace(Integer.parseInt(data[0]));
+                WorkplaceData wData = new WorkplaceData(wKey,wValue);
+                newTreeOfWorkplace.insert(wData);
+            }
+
+        }
+        workplaceReader.close();
+
+        //nacitavanie osob
+        BufferedReader personReader = new BufferedReader(new FileReader("osoby.csv"));
+        while ((row = personReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0] != null){
+                PersonKey pKey = new PersonKey(data[0]);
+                Person pValue = new Person(
+                        data[1],
+                        data[2],
+                        Integer.parseInt(data[5]),
+                        Integer.parseInt(data[4]),
+                        Integer.parseInt(data[3]),
+                        data[0]);
+                PersonData pData = new PersonData(pKey,pValue);
+                newTreeOfPeople.insert(pData);
+            }
+        }
+        personReader.close();
+
+        //priradenie novych stromov
+        treeOfRegions = newTreeOfRegions;
+        treeOfDistricts = newTreeOfDistricts;
+        treeOfWorkplace = newTreeOfWorkplace;
+        treeOfPeople = newTreeOfPeople;
+
+        //nacitavanie testov
+        //TODO
+        BufferedReader testReader = new BufferedReader(new FileReader("testy.csv"));
+        while ((row = testReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0] != null){
+                boolean result = false;
+                if (data[11] != null && data[11].equals("true")){
+                    result = true;
+                }
+                insertPCRTest(
+                        data[7],
+                        Integer.parseInt(data[3]),
+                        Integer.parseInt(data[2]),
+                        Integer.parseInt(data[1]),
+                        Integer.parseInt(data[4]),
+                        Integer.parseInt(data[5]),
+                        Integer.parseInt(data[6]),
+                        Integer.parseInt(data[8]),
+                        Integer.parseInt(data[9]),
+                        Integer.parseInt(data[10]),
+                        result,
+                        data[12],
+                        data[0]);
+            }
+        }
+        testReader.close();
+
+
+        return true;
     }
 }

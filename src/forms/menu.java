@@ -272,7 +272,21 @@ public class menu {
         loadDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    if (pcrSystem.loadDataFromFile()){
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Udaje boli nacitane.");
+                    }else {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Udaje sa nepodarilo nacitat.");
+                    }
+                }catch (IOException exception){
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Chyba pri nacitani dat.");
+                }
             }
         });
         saveDataButton.addActionListener(new ActionListener() {

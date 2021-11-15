@@ -72,7 +72,8 @@ public class PCRInsert {
                             Integer.parseInt(districtId.getText()),
                             Integer.parseInt(regionId.getText()),
                             res,
-                            note.getText());
+                            note.getText(),
+                            null);
                     switch (responseAndTest.getResponse()){
                         case SUCCESS: {
                             JOptionPane.showMessageDialog(

@@ -1,5 +1,6 @@
 package Models;
 
+import Main_system.ResponseType;
 import Structure.BST23Node;
 
 import java.util.Date;
@@ -32,10 +33,19 @@ public class PCR {
                int pRegionId,
                boolean pResult,
                String pDescription,
-               Person pPerson){
+               Person pPerson,
+               String pTestID){
         dateAndTimeOfTest = new Date(year,month-1,day,hour,minute,second);
         patientId = pPatienId;
-        PCRId = UUID.randomUUID();
+        if(pTestID == null){
+            PCRId = UUID.randomUUID();
+        }else {
+            try{
+                PCRId = UUID.fromString(pTestID);
+            }catch (Exception exception){
+                PCRId = UUID.randomUUID();
+            }
+        }
         workplaceId = pWorkplaceId;
         districtId = pDistrictId;
         regionId = pRegionId;
