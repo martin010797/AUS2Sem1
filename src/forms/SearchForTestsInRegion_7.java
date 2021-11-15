@@ -3,6 +3,7 @@ package forms;
 import Main_system.PCRSystem;
 import Main_system.PersonPCRResult;
 import Main_system.ResponseType;
+import Main_system.ResultWIthNumberOfResults;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -54,12 +55,12 @@ public class SearchForTestsInRegion_7 {
                             23,
                             59,
                             59);
-                    PersonPCRResult responsePositive = pcrSystem.searchTestsInRegion(
+                    ResultWIthNumberOfResults responsePositive = pcrSystem.searchTestsInRegion(
                             Integer.parseInt(regionIdTextField.getText()),
                             dateFrom,
                             dateTo,
                             true);
-                    PersonPCRResult responseNegative = pcrSystem.searchTestsInRegion(
+                    ResultWIthNumberOfResults responseNegative = pcrSystem.searchTestsInRegion(
                             Integer.parseInt(regionIdTextField.getText()),
                             dateFrom,
                             dateTo,
@@ -100,6 +101,9 @@ public class SearchForTestsInRegion_7 {
                             if (result.equals("")){
                                 result = "Ziadne najdene testy pre kraj v zadanych datumoch.";
                             }
+                            result+= "Pocet testov = "
+                                    + (responseNegative.getNumberOfResults()
+                                    + responsePositive.getNumberOfResults());
                             outputForTestsForm.setTextForOutputPane(result);
                             frame.setContentPane(outputForTestsForm.getOutputForTestsPanel());
                             frame.pack();

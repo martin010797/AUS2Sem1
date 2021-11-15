@@ -2,6 +2,7 @@ package forms;
 
 import Main_system.PCRSystem;
 import Main_system.PersonPCRResult;
+import Main_system.ResultWIthNumberOfResults;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -52,7 +53,7 @@ public class SearchPositiveTests_8 {
                             23,
                             59,
                             59);
-                    PersonPCRResult response = pcrSystem.searchTestsInAllRegions(
+                    ResultWIthNumberOfResults response = pcrSystem.searchTestsInAllRegions(
                             dateFrom,
                             dateTo,
                             true);
@@ -68,7 +69,8 @@ public class SearchPositiveTests_8 {
                                 outputForTestsForm.setTextForOutputPane(
                                         "Ziadne najdene pozitivne testy v zadanych datumoch");
                             }else {
-                                outputForTestsForm.setTextForOutputPane(response.getResultInfo());
+                                outputForTestsForm.setTextForOutputPane(
+                                        response.getResultInfo()+("Pocet testov = "+response.getNumberOfResults()));
                             }
                             frame.setContentPane(outputForTestsForm.getOutputForTestsPanel());
                             frame.pack();

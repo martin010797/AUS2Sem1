@@ -1137,16 +1137,16 @@ public class PCRSystem {
         }
     }
 
-    public PersonPCRResult searchTestsInDistrict(int districtId, Date dateFrom, Date dateTo, boolean positivity){
+    public ResultWIthNumberOfResults searchTestsInDistrict(int districtId, Date dateFrom, Date dateTo, boolean positivity){
         String resultString = "";
         DistrictKey dKey = new DistrictKey(districtId);
         DistrictData dData = new DistrictData(dKey,null);
         BST23Node districtNode = treeOfDistricts.find(dData);
         if (districtNode == null){
-            return new PersonPCRResult(ResponseType.DISTRICT_DOESNT_EXIST,null);
+            return new ResultWIthNumberOfResults(ResponseType.DISTRICT_DOESNT_EXIST,null, 0);
         }else {
             if (dateFrom.compareTo(dateTo) > 0){
-                return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
+                return new ResultWIthNumberOfResults(ResponseType.LOWER_FROM_DATE,null, 0);
             }
             PCRKeyDistrict pKeyFrom = new PCRKeyDistrict(positivity,dateFrom);
             PCRDistrictPositiveData pDataFrom = new PCRDistrictPositiveData(pKeyFrom,null);
@@ -1163,7 +1163,7 @@ public class PCRSystem {
                         res = "NEGATIVNY";
                     }
                     Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
-                    resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                    resultString += "" + person.getName() + " " + person.getSurname()
                             + "\n" + person.getIdNumber() +
                             "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                             + (person.getDateOfBirth().getMonth()+1)
@@ -1184,9 +1184,9 @@ public class PCRSystem {
                             + "\n-----------------------------------------\n";
                 }
                 if (listOfFoundNodes.size() == 0){
-                    resultString = "Ziadne najdene testy v zadanych datumoch.";
+                    resultString = "Ziadne najdene testy v zadanych datumoch.\n";
                 }
-                return new PersonPCRResult(ResponseType.SUCCESS,resultString);
+                return new ResultWIthNumberOfResults(ResponseType.SUCCESS,resultString, listOfFoundNodes.size());
             }else {
                 ArrayList<BST23Node> listOfFoundNodes;
                 listOfFoundNodes = ((District) districtNode.get_value2()).getTreeOfTestedPeople().intervalSearch(pDataFrom,pDataTo);
@@ -1198,7 +1198,7 @@ public class PCRSystem {
                         res = "NEGATIVNY";
                     }
                     Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
-                    resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                    resultString += "" + person.getName() + " " + person.getSurname()
                             + "\n" + person.getIdNumber() +
                             "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                             + (person.getDateOfBirth().getMonth()+1)
@@ -1219,23 +1219,23 @@ public class PCRSystem {
                             + "\n-----------------------------------------\n";
                 }
                 if (listOfFoundNodes.size() == 0){
-                    resultString = "Ziadne najdene testy v zadanych datumoch.";
+                    resultString = "Ziadne najdene testy v zadanych datumoch.\n";
                 }
-                return new PersonPCRResult(ResponseType.SUCCESS,resultString);
+                return new ResultWIthNumberOfResults(ResponseType.SUCCESS,resultString, listOfFoundNodes.size());
             }
         }
     }
 
-    public PersonPCRResult searchTestsInRegion(int regionId, Date dateFrom, Date dateTo, boolean positivity){
+    public ResultWIthNumberOfResults searchTestsInRegion(int regionId, Date dateFrom, Date dateTo, boolean positivity){
         String resultString = "";
         RegionKey rKey = new RegionKey(regionId);
         RegionData rData = new RegionData(rKey,null);
         BST23Node regionNode = treeOfRegions.find(rData);
         if (regionNode == null){
-            return new PersonPCRResult(ResponseType.REGION_DOESNT_EXIST,null);
+            return new ResultWIthNumberOfResults(ResponseType.REGION_DOESNT_EXIST,null,0);
         }else {
             if (dateFrom.compareTo(dateTo) > 0){
-                return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
+                return new ResultWIthNumberOfResults(ResponseType.LOWER_FROM_DATE,null,0);
             }
             PCRKeyRegion pKeyFrom = new PCRKeyRegion(positivity,dateFrom);
             PCRRegionData pDataFrom = new PCRRegionData(pKeyFrom,null);
@@ -1252,7 +1252,7 @@ public class PCRSystem {
                         res = "NEGATIVNY";
                     }
                     Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
-                    resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                    resultString += person.getName() + " " + person.getSurname()
                             + "\n" + person.getIdNumber() +
                             "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                             + (person.getDateOfBirth().getMonth()+1)
@@ -1273,9 +1273,9 @@ public class PCRSystem {
                             + "\n-----------------------------------------\n";
                 }
                 if (listOfFoundNodes.size() == 0){
-                    resultString = "Ziadne najdene testy v zadanych datumoch.";
+                    resultString = "Ziadne najdene testy v zadanych datumoch.\n";
                 }
-                return new PersonPCRResult(ResponseType.SUCCESS,resultString);
+                return new ResultWIthNumberOfResults(ResponseType.SUCCESS,resultString, listOfFoundNodes.size());
             }else {
                 ArrayList<BST23Node> listOfFoundNodes;
                 listOfFoundNodes = ((Region) regionNode.get_value2()).getTreeOfTests().intervalSearch(pDataFrom,pDataTo);
@@ -1287,7 +1287,7 @@ public class PCRSystem {
                         res = "NEGATIVNY";
                     }
                     Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
-                    resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                    resultString += person.getName() + " " + person.getSurname()
                             + "\n" + person.getIdNumber() +
                             "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                             + (person.getDateOfBirth().getMonth()+1)
@@ -1308,30 +1308,35 @@ public class PCRSystem {
                             + "\n-----------------------------------------\n";
                 }
                 if (listOfFoundNodes.size() == 0){
-                    resultString = "Ziadne najdene testy v zadanych datumoch.";
+                    resultString = "Ziadne najdene testy v zadanych datumoch.\n";
                 }
-                return new PersonPCRResult(ResponseType.SUCCESS,resultString);
+                return new ResultWIthNumberOfResults(ResponseType.SUCCESS,resultString, listOfFoundNodes.size());
             }
         }
     }
 
-    public PersonPCRResult searchTestsInAllRegions(Date dateFrom, Date dateTo, boolean positivity){
+    public ResultWIthNumberOfResults searchTestsInAllRegions(Date dateFrom, Date dateTo, boolean positivity){
         if (dateFrom.compareTo(dateTo) > 0){
-            return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
+            return new ResultWIthNumberOfResults(ResponseType.LOWER_FROM_DATE,null, 0);
         }
+        int numberOfResults = 0;
         String resultString = "";
         NodeWithKey firstNode = treeOfRegions.getFirst();
         if (firstNode == null){
-            return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+            return new ResultWIthNumberOfResults(ResponseType.SUCCESS, resultString,0);
         }else {
-            resultString += getTestsStringForRegion(firstNode, dateFrom, dateTo, positivity);
+            ResultWIthNumberOfResults result = getTestsStringForRegion(firstNode, dateFrom, dateTo, positivity);
+            resultString += result.getResultInfo();
+            numberOfResults += result.getNumberOfResults();
         }
         NodeWithKey nextNode = treeOfRegions.getNext(firstNode.getNode(), (RegionKey) firstNode.getKey());
         while (nextNode != null){
-            resultString += getTestsStringForRegion(nextNode, dateFrom, dateTo, positivity);
+            ResultWIthNumberOfResults result = getTestsStringForRegion(nextNode, dateFrom, dateTo, positivity);
+            resultString += result.getResultInfo();
+            numberOfResults += result.getNumberOfResults();
             nextNode = treeOfRegions.getNext(nextNode.getNode(), (RegionKey) nextNode.getKey());
         }
-        return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+        return new ResultWIthNumberOfResults(ResponseType.SUCCESS, resultString, numberOfResults);
     }
 
     public PersonPCRResult findPCRTestById(String PCRId){
@@ -1366,26 +1371,31 @@ public class PCRSystem {
         return new PersonPCRResult(ResponseType.PCR_DOESNT_EXIST, null);
     }
 
-    public PersonPCRResult searchSickPeopleInAllRegions(Date dateFrom, Date dateTo){
+    public ResultWIthNumberOfResults searchSickPeopleInAllRegions(Date dateFrom, Date dateTo){
         if (dateFrom.compareTo(dateTo) > 0){
-            return new PersonPCRResult(ResponseType.LOWER_FROM_DATE,null);
+            return new ResultWIthNumberOfResults(ResponseType.LOWER_FROM_DATE,null, 0);
         }
+        int numberOfResults = 0;
         String resultString = "";
         NodeWithKey firstNode = treeOfRegions.getFirst();
         if (firstNode == null){
-            return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+            return new ResultWIthNumberOfResults(ResponseType.SUCCESS, resultString, 0);
         }else {
-            resultString += getSickPeopleStringForRegion(firstNode, dateFrom, dateTo);
+            ResultWIthNumberOfResults result = getSickPeopleStringForRegion(firstNode, dateFrom, dateTo);
+            resultString += result.getResultInfo();
+            numberOfResults += result.getNumberOfResults();
         }
         NodeWithKey nextNode = treeOfRegions.getNext(firstNode.getNode(), (RegionKey) firstNode.getKey());
         while (nextNode != null){
-            resultString += getSickPeopleStringForRegion(nextNode, dateFrom, dateTo);
+            ResultWIthNumberOfResults result = getSickPeopleStringForRegion(nextNode, dateFrom, dateTo);
+            resultString += result.getResultInfo();
+            numberOfResults += result.getNumberOfResults();
             nextNode = treeOfRegions.getNext(nextNode.getNode(), (RegionKey) nextNode.getKey());
         }
-        return new PersonPCRResult(ResponseType.SUCCESS, resultString);
+        return new ResultWIthNumberOfResults(ResponseType.SUCCESS, resultString, numberOfResults);
     }
 
-    private String getSickPeopleStringForRegion(NodeWithKey pNodeWithKey, Date dateFrom, Date dateTo){
+    private ResultWIthNumberOfResults getSickPeopleStringForRegion(NodeWithKey pNodeWithKey, Date dateFrom, Date dateTo){
         String resultString = "";
         PCRKeyRegion pKeyFrom = new PCRKeyRegion(true,dateFrom);
         PCRRegionData pDataFrom = new PCRRegionData(pKeyFrom,null);
@@ -1422,7 +1432,7 @@ public class PCRSystem {
                         + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
                         + "\n-----------------------------------------\n";
             }
-            return resultString;
+            return new ResultWIthNumberOfResults(null,resultString, listOfFoundNodes.size());
         }else {
             ArrayList<BST23Node> listOfFoundNodes;
             listOfFoundNodes = ((Region) pNodeWithKey.getNode().get_value2()).getTreeOfTests().intervalSearch(pDataFrom,pDataTo);
@@ -1454,11 +1464,11 @@ public class PCRSystem {
                         + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
                         + "\n-----------------------------------------\n";
             }
-            return resultString;
+            return new ResultWIthNumberOfResults(null,resultString, listOfFoundNodes.size());
         }
     }
 
-    private String getTestsStringForRegion(NodeWithKey pNodeWithKey, Date dateFrom, Date dateTo, boolean positivity){
+    private ResultWIthNumberOfResults getTestsStringForRegion(NodeWithKey pNodeWithKey, Date dateFrom, Date dateTo, boolean positivity){
         String resultString = "";
         PCRKeyRegion pKeyFrom = new PCRKeyRegion(positivity,dateFrom);
         PCRRegionData pDataFrom = new PCRRegionData(pKeyFrom,null);
@@ -1475,7 +1485,7 @@ public class PCRSystem {
                     res = "NEGATIVNY";
                 }
                 Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
-                resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                resultString += person.getName() + " " + person.getSurname()
                         + "\n" + person.getIdNumber() +
                         "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                         + (person.getDateOfBirth().getMonth()+1)
@@ -1495,7 +1505,8 @@ public class PCRSystem {
                         + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
                         + "\n-----------------------------------------\n";
             }
-            return resultString;
+            return new ResultWIthNumberOfResults(null, resultString, listOfFoundNodes.size());
+            //return resultString;
         }else {
             ArrayList<BST23Node> listOfFoundNodes;
             listOfFoundNodes = ((Region) pNodeWithKey.getNode().get_value2()).getTreeOfTests().intervalSearch(pDataFrom,pDataTo);
@@ -1507,7 +1518,7 @@ public class PCRSystem {
                     res = "NEGATIVNY";
                 }
                 Person person = ((PCR) listOfFoundNodes.get(i).get_value1()).getPerson();
-                resultString += (i+1) + ". \n" + person.getName() + " " + person.getSurname()
+                resultString += person.getName() + " " + person.getSurname()
                         + "\n" + person.getIdNumber() +
                         "\nNarodeny: " + person.getDateOfBirth().getDate() + "."
                         + (person.getDateOfBirth().getMonth()+1)
@@ -1527,7 +1538,8 @@ public class PCRSystem {
                         + ((PCR) listOfFoundNodes.get(i).get_value1()).getDescription()
                         + "\n-----------------------------------------\n";
             }
-            return resultString;
+            return new ResultWIthNumberOfResults(null, resultString, listOfFoundNodes.size());
+            //return resultString;
         }
     }
 
@@ -1928,7 +1940,6 @@ public class PCRSystem {
         treeOfPeople = newTreeOfPeople;
 
         //nacitavanie testov
-        //TODO
         BufferedReader testReader = new BufferedReader(new FileReader("testy.csv"));
         while ((row = testReader.readLine()) != null) {
             String[] data = row.split(",");

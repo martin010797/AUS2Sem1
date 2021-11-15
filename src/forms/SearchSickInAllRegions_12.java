@@ -3,6 +3,7 @@ package forms;
 import Main_system.PCRSystem;
 import Main_system.PersonPCRResult;
 import Main_system.ResponseType;
+import Main_system.ResultWIthNumberOfResults;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -45,7 +46,7 @@ public class SearchSickInAllRegions_12 {
                 cal.add(Calendar.DATE, -Integer.parseInt(numberOfDaysTextField.getText()));
                 cal.add(Calendar.SECOND, 2);
                 Date dateFrom = cal.getTime();
-                PersonPCRResult response = pcrSystem.searchSickPeopleInAllRegions(
+                ResultWIthNumberOfResults response = pcrSystem.searchSickPeopleInAllRegions(
                         dateFrom,
                         dateTo);
                 switch (response.getResponseType()){
@@ -63,6 +64,7 @@ public class SearchSickInAllRegions_12 {
                             String resultText = "Najdene chore osoby pre datum " + dayTextField.getText()
                                     + "." + monthTextField.getText() + "." + yearTextField.getText() + ":\n";
                             resultText += response.getResultInfo();
+                            resultText += "Pocet chorych osob = "+response.getNumberOfResults();
                             outputForTestsForm.setTextForOutputPane(resultText);
                         }
                         frame.setContentPane(outputForTestsForm.getOutputForTestsPanel());

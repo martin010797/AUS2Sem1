@@ -2,6 +2,7 @@ package forms;
 
 import Main_system.PCRSystem;
 import Main_system.PersonPCRResult;
+import Main_system.ResultWIthNumberOfResults;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -53,7 +54,7 @@ public class SearchPositiveTestsForDistrict_4 {
                             23,
                             59,
                             59);
-                    PersonPCRResult response = pcrSystem.searchTestsInDistrict(
+                    ResultWIthNumberOfResults response = pcrSystem.searchTestsInDistrict(
                             Integer.parseInt(districtIdTextField.getText()),
                             dateFrom,
                             dateTo,
@@ -72,7 +73,8 @@ public class SearchPositiveTestsForDistrict_4 {
                             break;
                         }
                         case SUCCESS:{
-                            outputForTestsForm.setTextForOutputPane(response.getResultInfo());
+                            outputForTestsForm.setTextForOutputPane(
+                                    response.getResultInfo()+("Pocet testov = "+response.getNumberOfResults()));
                             frame.setContentPane(outputForTestsForm.getOutputForTestsPanel());
                             frame.pack();
                             frame.setVisible(true);
