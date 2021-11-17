@@ -947,7 +947,6 @@ public class BST23<T extends  Comparable<T>, V> {
             }
 
         }
-        //chyba
         NodeAndKey inOrderNode = findInOrderIntervalSearch(prev, prevKey);
         while (inOrderNode != null){
             if (belongsToInterval(minNode, maxNode, (T) inOrderNode.getKey())){

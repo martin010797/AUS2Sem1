@@ -12,7 +12,6 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PCRSystem {
-    //stromy
     private BST23<PersonKey, Person> treeOfPeople = new BST23<>();
     private BST23<DistrictKey, District> treeOfDistricts = new BST23<>();
     private BST23<RegionKey, Region> treeOfRegions = new BST23<>();
@@ -328,7 +327,6 @@ public class PCRSystem {
                 tempPCRValue = ((PCR) nextTestNode.getNode().get_value2());
             }
             BST23Node tempNode = new PCRData(tempPCRKey,tempPCRValue);
-            //listOfTests.add(nextTestNode);
             listOfTests.add(new NodeWithKey(tempNode,tempPCRKey));
             nextTestNode = person.getTreeOfTests().getNext(nextTestNode.getNode(), ((PCRKey) nextTestNode.getKey()));
             while (nextTestNode != null){
@@ -340,7 +338,6 @@ public class PCRSystem {
                 }
                 tempNode = new PCRData(tempPCRKey,tempPCRValue);
                 listOfTests.add(new NodeWithKey(tempNode,tempPCRKey));
-                //listOfTests.add(nextTestNode);
                 nextTestNode = person.getTreeOfTests().getNext(nextTestNode.getNode(), ((PCRKey) nextTestNode.getKey()));
             }
             //mazanie testov
@@ -393,6 +390,8 @@ public class PCRSystem {
                     return ResponseType.PCR_DOESNT_EXIST;
                 }
             }
+        }else{
+            nextNode = firstNode;
         }
         //aktualne je v nextNode osoba a v testResult test ktory chceme mazat
         if(deleteTestInAllTrees(nextNode, testResult, tKey)){
